@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<style>
+  .datetimepicker-input {
+    font-size: 8px; /* Atur ukuran font sesuai keinginan */
+  }
+</style>
+
+<style>
+  /* Ganti angka 300px sesuai dengan lebar yang diinginkan */
+  .input-group.col-sm-12 .form-control {
+    width: 150px; height: 10px; font-size: 8px;
+  }
+</style>
+
+<style>
+  @keyframes blink {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.blinking {
+  animation: blink 1s infinite;
+}
+</style>
+
+
+<body>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-">
+          <div class="col-sm-5 col-7">
+            <h1>Evaluasi Inspektorat</h1>
+          </div>
+          <div class="col-sm-7 col-5">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Evaluasi Inspektorat</li>
+            </ol>
+          </div>
+        </div>
+      </div><!-- /.container-fluid -->
+    </section>
+
+    <!-- Main content -->
+
+    
+    <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-md-12">
+           <div class="card">
+              <div class="card-header">
+                
+                <div <?php if($this->session->userdata('id_unit') == ""){echo "hidden";}else{echo "";}; ?> class="col-">
+
+
+                  <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7) && !empty($loadtu)): ?>
+                    <?php foreach ($loadtu as $load): ?>
+                        <button type="button" class="btn btn-primary" <?php if($load['id_ev'] == ""){echo "";} elseif($load['id_ev'] != ""){echo "disabled";}  else {echo "disabled";}; ?>
+                      data-toggle="modal" data-target="<?php if ($load['id_ev'] == "") { echo "#InsertData"; } elseif ($load['id_ev'] != "") { echo "#"; } else { echo "#"; }; ?>">
+                      Load Data Evaluasi
+                  </button>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                    
+
+                <?php foreach ($loadtu as $load): ?>
+                    <?php if ($load['id_ev'] != "" && ($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 6)): ?>
+                    <a class="btn btn-success" href="<?php echo base_url('ev/excel') ?>">Hasil Penilain.xlsx</a>
+                    <?php endif; ?>
+                   <?php endforeach; ?>
+
+                </div>   
+              </div>
+              <!-- /.card-header -->
+
+                <div class="card-body table-responsive">
+
+                <div class="dataTables_wrapper dt-bootstrap4">
+                  <div class="row">
+                    <div class="row col-md-12" >
+               
+                  <tbody >
+                    
+                    
+
+                      
+                    <tr>
+                      
+                      <td >
+
+              <div class="card-body p-0">
+                
+                <table class="table table-hover">
+                  <thead class="thead-dark">
+                    <tr>
+                      <th class="text-center align-middle" style="width: 50px" >Kode</th>
+                      <th class="text-center align-middle" style="width: 950px">Komponen</th>
+                      <th class="text-center align-middle" style="width: 50px" >Bobot</th>
+                      <th class="text-center align-middle" style="width: 50px" colspan="2" >Nilai Akuntabilitas Kinerja</th>
+                      
+                      
+                  </thead>
+                  <tbody>
+                    
+
+                    <?php foreach ($komp as $kom): ?>
+
+                     <tr data-widget="expandable-table" elementId="k<?php echo $kom['id_komponen']; ?>" aria-expanded="false">
+                      <td class="text-center align-middle"><?php echo $kom['kd_komponen']; ?></td>
+                      <td>
+                        <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                        <?php echo $kom['uraian_komponen']; ?>
+                      </td>
+                      <td class="text-center align-middle" style="width: 50px"><?php echo $kom['bobot']; ?></td>
+                      <td class="text-center align-middle" style="width: 50px"><?php $format = number_format((float)$kom['nilaik'],2,",","."); echo $format; ?></td>
+                      <td class="text-center align-middle" style="width: 50px"><?php $format = number_format((float)$kom['nilaikpersen'],2,",","."); echo $format; ?>%</td>
+                     
+                    </tr>
+
+                 
+
+                    <tr class="expandable-body">
+                      <td colspan="5">
+                        <div class="p-0" style="display: none;">
+                          <table class="table table-hover table-bordered">
+                            <thead class="table-dark">
+                    <tr>
+                      <th class="text-center align-middle" style="width: 50px" >Kode</th>
+                      <th class="text-center align-middle" style="width: 950px">Subkomponen</th>
+                      <th class="text-center align-middle" style="width: 50px" >Nilai Akhir Unit</th>
+                      <th class="text-center align-middle" style="width: 50px" >Penjelasan Jawaban</th>
+                      <th class="text-center align-middle" style="width: 20px" colspan="2" >Bukti Unit (Link/File)</th>
+                      <th class="text-center align-middle" style="width: 50px" >Bobot</th>
+                      <th class="text-center align-middle" style="width: 50px" colspan="2" >Keberadaan, Kualitas dan Pemanfaatan</th>
+                      <th class="text-center align-middle" style="width: 50px" >Jwbn Antara</th>
+                      <th class="text-center align-middle" style="width: 50px" >Nilai Akhir</th>
+                      <th class="text-center align-middle" style="width: 50px" colspan="2" >Nilai Akuntabilitas Kinerja</th>
+                      <th class="text-center align-middle" style="width: 50px" >Catatan Evalauasi</th>
+                      <th class="text-center align-middle" style="width: 20px" >Konfir-
+                      masi</th>
+                      <th class="text-center align-middle" style="width: 20px" >Aksi</th>
+                      
+                      
+                      </tr>
+                  </thead>
+                            
+                  <tbody>
+                    
+                    <?php foreach ($sub as $subk): ?>
+                      <?php if ($subk['id_komponen'] === $kom['id_komponen']): ?>
+                     <tr data-widget="expandable-table" elementId="s<?php echo $subk['id_subkomponen']; ?>" aria-expanded="false">
+                      <td class="text-center align-middle"><?php echo $subk['kd_subkomponen']; ?></td>
+                      <td class="text-justify">
+                        <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                        <?php echo $subk['uraian_subkomponen']; ?>
+                      </td>
+                      <td class="text-center align-middle"><?php 
+                      if ($subk['jawaban0'] == "100"){echo "AA";} elseif ($subk['jawaban0'] == "90"){echo "A";} elseif ($subk['jawaban0'] == "80"){echo "BB";} elseif ($subk['jawaban0'] == "70"){echo "B";} elseif ($subk['jawaban0'] == "60"){echo "CC";} elseif ($subk['jawaban0'] == "50"){echo "C";} elseif ($subk['jawaban0'] == "30"){echo "D";} elseif ($subk['jawaban0'] == "0"){echo "E";} else {echo "";}; ?></td>
+                      <td title="<?php echo htmlspecialchars($subk['uraian_jawaban0'], ENT_QUOTES, 'UTF-8'); ?>" class="text-center align-middle"style="width: 50px">
+                                  <i class="expandable-table-caret"></i>
+                                 <?php
+                                    $fullText = htmlspecialchars($subk['uraian_jawaban0'], ENT_QUOTES, 'UTF-8');
+                                    $shortText = (strlen($fullText) > 3) ? substr($fullText, 0, 3) . '...' : $fullText;
+                                    echo $shortText;
+                                    if (strlen($fullText) > 3) {
+                                        echo ' <a href="#" class="read-more" data-fulltext="' . $fullText . '" data-toggle="modal" data-target="#readMoreModal">more</a>';
+                                    }
+                                    ?>
+                                </td>
+                      <td title="<?php echo $subk['dok_pendukung']; ?>" class="text-truncate align-middle" style="max-width: 100px;" style="width: 100px">
+                                  <i class="expandable-table-caret "></i>
+                                        <div class="text-truncate">
+                                        <?php
+                                        $url = $subk['link_bukti0'];
+                                        
+                                        // Pemeriksaan protokol, jika tidak ada, tambahkan "http://"
+                                        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+                                            $url = "http://" . $url;
+                                        }
+                                        ?>
+                                        <a href="<?php echo $url; ?>" target="_blank"><?php echo htmlspecialchars($subk['link_bukti0'], ENT_QUOTES, 'UTF-8'); ?></a>
+                                      </div>
+                                      <div class="text-truncate">
+                                        <?php
+                                        $url = $subk['link_bukti03'];
+                                        
+                                        // Pemeriksaan protokol, jika tidak ada, tambahkan "http://"
+                                        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+                                            $url = "http://" . $url;
+                                        }
+                                        ?>
+                                        <a href="<?php echo $url; ?>" target="_blank"><?php echo htmlspecialchars($subk['link_bukti03'], ENT_QUOTES, 'UTF-8'); ?></a>
+                                      </div>
+                                </td>
+                                <td class="text-center align-middle" style="width: 30px">
+                                <?php if ($subk['link_bukti02'] != ""): ?>
+                                 <button class="btn btn-secondary btn-xs view-files-btn-pm0" data-files="<?php echo $subk['link_bukti02']; ?>" data-id_pm0="<?php echo $subk['id_pm0']; ?>"><i class="fas fa-search"></i></button>
+                                <?php endif; ?>
+                            </td>
+
+                      <td class="text-center align-middle"><?php echo $subk['bobot2']; ?></td>
+                      <td class="text-center align-middle"><?php $format = number_format($subk['skorpersen'],2,",","."); echo $format; ?>%</td>
+                      <td class="text-center align-middle"><?php $format = number_format($subk['skor'],2,",","."); echo $format; ?></td>
+                      <td class="text-center align-middle"><?php echo $subk['jawabanantara']; ?></td>
+                      <td class="text-center align-middle"><?php 
+                      if ($subk['jawaban0ev'] == "100"){echo "AA";} elseif ($subk['jawaban0ev'] == "90"){echo "A";} elseif ($subk['jawaban0ev'] == "80"){echo "BB";} elseif ($subk['jawaban0ev'] == "70"){echo "B";} elseif ($subk['jawaban0ev'] == "60"){echo "CC";} elseif ($subk['jawaban0ev'] == "50"){echo "C";} elseif ($subk['jawaban0ev'] == "30"){echo "D";} elseif ($subk['jawaban0ev'] == "0"){echo "E";} else {echo "";}; ?></td>
+                      <td class="text-center align-middle"><?php $format = number_format((float)$subk['nilai'],2,",","."); echo $format; ?></td>
+                      <td class="text-center align-middle"><?php $format = number_format($subk['nilaipersen'],2,",","."); echo $format; ?>%</td>
+                       <td title="<?php echo htmlspecialchars($subk['catatan_ev0'], ENT_QUOTES, 'UTF-8'); ?>" class="text-center align-middle"style="width: 50px">
+                                  <i class="expandable-table-caret"></i>
+                                 <?php
+                                    $fullText = htmlspecialchars($subk['catatan_ev0'], ENT_QUOTES, 'UTF-8');
+                                    $shortText = (strlen($fullText) > 3) ? substr($fullText, 0, 3) . '...' : $fullText;
+                                    echo $shortText;
+                                    if (strlen($fullText) > 3) {
+                                        echo ' <a href="#" class="read-more" data-fulltext="' . $fullText . '" data-toggle="modal" data-target="#readMoreModal">more</a>';
+                                    }
+                                    ?>
+                                </td>
+                      <td  class="text-center align-middle" style="width: 30px">
+                                 <?php if ($subk['status_data'] == "1"  && $subk['perbaikan0'] == "1"): ?>
+                                 <div class="btn btn-xs open-modal02" data-id_ev0="<?php echo $subk['id_ev0']; ?>" onclick="setSessionIdEv0('<?php echo $subk['id_ev0']; ?>')"><i class="fas fa-comments text-danger"></i>
+                                   <?php foreach ($konfirmasi0notif as $k0n): ?>
+                                    <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 1 || $k0n['id_role'] == 5)): ?>
+                                  <span class="badge badge-danger blinking">!</span>
+                                   <?php endif; ?>
+                                    <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 3 || $k0n['id_role'] == 7)): ?>
+                                  <span class="badge badge-danger blinking">!</span>
+                                   <?php endif; ?>
+                                  <?php endforeach; ?>
+                                </div>
+                              <?php endif; ?>
+                            </td>
+                     
+
+                          <td class="text-center align-middle" style="width: 30px">
+                         <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $subk['status_data'] == "1" && $subk['status_data1'] == "0"): ?>
+                             <div 
+                                 <?php if ($subk['ev_modified_by'] != ""): ?>
+                                 title="last modified by: <?php echo $subk['ev_modified_by']; ?>" 
+                                 <?php endif; ?>
+                                 class="btn btn-info btn-xs open-modal0" data-id_ev0="<?php echo $subk['id_ev0']; ?>"><i class="fas fa-edit"></i>
+                               </div>
+                          <?php else: ?>
+                              <div 
+                              <?php if ($subk['ev_modified_by'] != ""): ?>
+                                 title="last modified by: <?php echo $subk['ev_modified_by']; ?>" 
+                                 <?php endif; ?>
+                                 class="btn btn-info btn-xs open-modal0" data-id_ev0="<?php echo $subk['id_ev0']; ?>">
+                                  <i class="fas fa-search"></i>
+                              </div>
+                          <?php endif; ?>
+                      </td>
+
+                    </tr>
+
+                   
+
+                    <tr class="expandable-body">
+                      <td colspan="16">
+                        <div class="p-0" style="display: none;">
+                          <table class="table table-hover table-bordered">
+                            <thead class="table-dark">
+
+
+                              
+
+                    <tr>
+                      <th class="text-center align-middle" style="width: 20px" >Kode</th>
+                      <th class="text-center align-middle" style="width: 200px">Kriteria yang dinilai</th>
+                      <th class="text-center align-middle" style="width: 50px" >Jawaban Unit</th>
+                      <th class="text-center align-middle" style="width: 50px" >Penjelasan Jawaban</th>
+                      <th class="text-center align-middle" style="width: 20px" colspan="2" >Bukti Unit (Link/File)</th>
+                      <th class="text-center align-middle" style="width: 50px" >Jawaban</th>
+                      <th class="text-center align-middle" style="width: 200px">Catatan Evaluasi</th>
+                      <th class="text-center align-middle" style="width: 20px" >Konfir-
+                      masi</th>
+                      <th class="text-center align-middle" style="width: 20px" >Aksi</th>
+                      
+                      
+                  </thead>
+                            <tbody>
+
+                       
+                              <?php foreach ($kri as $krit): ?>
+                              <?php if ($krit['id_subkomponen'] === $subk['id_subkomponen']): ?>
+                              <tr data-widget="expandable-table " aria-expanded="false">
+                                <td class="text-center" ><?php echo $krit['kd_aspek']; ?></td>
+                                <td class="text-justify" style="width: 350px">
+                                  <i class="expandable-table-caret"></i>
+                                 <?php echo $krit['uraian_aspek']; ?>
+                                </td>
+                                <td <?php 
+                                 if ($krit['opsi5'] == "0"){echo "";} elseif ($krit['opsi3'] == "0.5"){echo "";} elseif ($krit['opsi1'] == "1"){echo "";} elseif ($krit['opsi4'] == "0.33"){echo "";} elseif ($krit['opsi2'] == "0.66"){echo "";} else {echo "hidden";}; ?> class="text-center align-middle"><?php 
+                                if ($krit['jawaban1'] == "0"){echo "Tidak";} elseif ($krit['jawaban1'] == "0.5"){echo "Sebagian";} elseif ($krit['jawaban1'] == "1"){echo "Ya";} elseif ($krit['jawaban1'] == "0.33"){echo "Sebagian Kecil";} elseif ($krit['jawaban1'] == "0.66"){echo "Sebagian Besar";} else {echo "Y/T";}; ?> </td>
+                                <td title="<?php echo htmlspecialchars($krit['uraian_jawaban1'], ENT_QUOTES, 'UTF-8'); ?>" class="text-center align-middle" style="width: 100px">
+                                    <i class="expandable-table-caret"></i>
+                                    <?php
+                                    $fullText = htmlspecialchars($krit['uraian_jawaban1'], ENT_QUOTES, 'UTF-8');
+                                    $shortText = (strlen($fullText) > 3) ? substr($fullText, 0, 3) . '...' : $fullText;
+                                    echo $shortText;
+                                    if (strlen($fullText) > 3) {
+                                        echo ' <a href="#" class="read-more" data-fulltext="' . $fullText . '" data-toggle="modal" data-target="#readMoreModal">more</a>';
+                                    }
+                                    ?>
+                                </td>
+                                <td title="<?php echo $krit['dok_pendukung2']; ?>" class="text-truncate align-middle" style="max-width: 100px;" style="width: 100px">
+                                  <i class="expandable-table-caret "></i>
+                                  <div class="text-truncate">
+                                        <?php
+                                        $url = $krit['link_bukti'];
+                                        
+                                        // Pemeriksaan protokol, jika tidak ada, tambahkan "http://"
+                                        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+                                            $url = "http://" . $url;
+                                        }
+                                        ?>
+                                        <a href="<?php echo $url; ?>" target="_blank"><?php echo htmlspecialchars($krit['link_bukti'], ENT_QUOTES, 'UTF-8'); ?></a>
+                                      </div>
+                                      <div class="text-truncate">
+                                        <?php
+                                        $url = $krit['link_bukti3'];
+                                        
+                                        // Pemeriksaan protokol, jika tidak ada, tambahkan "http://"
+                                        if (!preg_match("~^(?:f|ht)tps?://~i", $url)) {
+                                            $url = "http://" . $url;
+                                        }
+                                        ?>
+                                        <a href="<?php echo $url; ?>" target="_blank"><?php echo htmlspecialchars($krit['link_bukti3'], ENT_QUOTES, 'UTF-8'); ?></a>
+                                      </div>
+                                </td>
+                                <td class="text-center align-middle" style="width: 30px">
+                                    <?php if ($krit['link_bukti2'] != ""): ?>
+                                        <button class="btn btn-secondary btn-xs view-files-btn-pm" data-files="<?php echo $krit['link_bukti2']; ?>" data-id_pm="<?php echo $krit['id_pm']; ?>"><i class="fas fa-search"></i></button>
+                                      <?php endif; ?></td>
+                                <td title="<?php echo $krit['catatan']; ?>" <?php 
+                                 if ($krit['opsi5'] == "0"){echo "";} elseif ($krit['opsi3'] == "0.5"){echo "";} elseif ($krit['opsi1'] == "1"){echo "";} elseif ($krit['opsi4'] == "0.33"){echo "";} elseif ($krit['opsi2'] == "0.66"){echo "";} else {echo "hidden";}; ?> class="text-center align-middle"><?php 
+                                if ($krit['jawaban2'] == "0"){echo "Tidak";} elseif ($krit['jawaban2'] == "0.5"){echo "Sebagian";} elseif ($krit['jawaban2'] == "1"){echo "Ya";} elseif ($krit['jawaban2'] == "0.33"){echo "Sebagian Kecil";} elseif ($krit['jawaban2'] == "0.66"){echo "Sebagian Besar";} else {echo "Y/T";}; ?> </td>
+                                <td class="text-justify" style="width: 350px">
+                                    <i class="expandable-table-caret"></i>
+                                    <?php
+                                    $fullText = htmlspecialchars($krit['catatan_ev'], ENT_QUOTES, 'UTF-8');
+                                    $shortText = (strlen($fullText) > 350) ? substr($fullText, 0, 340) . '...' : $fullText;
+                                    echo $shortText;
+                                    if (strlen($fullText) > 340) {
+                                        echo ' <a href="#" class="read-more" data-fulltext="' . $fullText . '" data-toggle="modal" data-target="#readMoreModal">read more</a>';
+                                    }
+                                    ?>
+                                <td  class="text-center align-middle" style="width: 30px">
+                                 <?php if ($krit['status_data'] == "1" && $krit['perbaikan'] == "1"): ?>
+                                 <div class="btn btn-xs open-modal2" data-id_ev="<?php echo $krit['id_ev']; ?>" onclick="setSessionIdEv('<?php echo $krit['id_ev']; ?>')"><i class="fas fa-comments text-danger"></i>
+                                  <?php foreach ($konfirmasinotif as $kn): ?>
+                                    <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 1 || $kn['id_role'] == 5)): ?>
+                                  <span class="badge badge-danger blinking">!</span>
+                                   <?php endif; ?>
+                                    <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 3 || $kn['id_role'] == 7)): ?>
+                                  <span class="badge badge-danger blinking">!</span>
+                                   <?php endif; ?>
+                                  <?php endforeach; ?>
+                                 </div>
+                              <?php endif; ?>
+                            </td>
+                               <td  class="text-center align-middle" style="width: 30px">
+                                 <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+                                 <div 
+                                 <?php if ($krit['ev_modified_by'] != ""): ?>
+                                 title="last modified by: <?php echo $krit['ev_modified_by']; ?>"
+                                 <?php endif; ?>
+                                  class="btn btn-success btn-xs open-modal" data-id_ev="<?php echo $krit['id_ev']; ?>"><i class="fas fa-edit"></i></div>
+                                   <?php else: ?>
+                                    <div 
+                                 <?php if ($krit['ev_modified_by'] != ""): ?>
+                                 title="last modified by: <?php echo $krit['ev_modified_by']; ?>"
+                                 <?php endif; ?>
+                                  class="btn btn-primary btn-xs open-modal" data-id_ev="<?php echo $krit['id_ev']; ?>"><i class="fas fa-search"></i></div>
+                              <?php endif; ?>
+                            </td>
+                              
+                              </tr>
+                              
+                              <?php endif; ?>
+                               <?php endforeach; ?>
+                     
+                           
+                            </tbody>
+                          </table>
+                        </div>
+                      </td>
+                    </tr>
+
+                     <?php endif; ?>
+                               <?php endforeach; ?>
+                     </tbody>
+                          </table>
+                        </div>
+                      </td>
+                    </tr>
+                      
+
+
+                           <?php endforeach; ?>
+
+                      
+                           <thead class="table-dark">
+                    <?php foreach ($sumkom as $sumk): ?>
+                    <tr class="table" data-widget="expandable-table" aria-expanded="false">
+                      <td colspan="2">
+                        <i class="expandable-table-caret "></i>
+                        NILAI AKUNTABILITAS KINERJA
+                      </td>
+                      <td class="text-center align-middle"><?php echo $sumk['sumbobot']; ?></td>
+                      <td class="text-center align-middle"><?php $format = number_format((float)$sumk['sumnilaik'],2,",","."); echo $format; ?></td>
+                      <td class="text-center align-middle"><?php $format = number_format((float)$sumk['sumnilaikpersen'],2,",","."); echo $format; ?>%</td>
+                    </tr>
+                    <?php endforeach; ?>
+                     </thead>
+              <?php foreach ($sumkom as $sumk): ?>
+                   <tr class="table" data-widget="expandable-table" aria-expanded="false">
+                      <td colspan="3">
+                        <i class="expandable-table-caret "></i>
+                        PREDIKAT
+                      </td>
+                      
+                       <td <?php if($this->session->userdata('id_unit') == ""){echo "hidden";}else{echo "";}; ?> class="text-center align-middle"><?php $format = floatval(str_replace(',', '.', $sumk['sumnilaik'])); if ($format == 0){echo "E";} elseif ($format > 0.01 && $format <= 30.00){echo "D";} elseif ($format > 30.01 && $format <= 50.00){echo "C";} elseif ($format >= 50.01 && $format <= 60.00){echo "CC";} elseif ($format >= 60.01 && $format <= 70.00){echo "B";}elseif ($format >= 70.01 && $format <= 80.00){echo "BB";} elseif ($format >= 80.01 && $format <= 90.00){echo "A";} elseif ($format >= 90.01 && $format <= 100){echo "AA";} else {echo "";}; ?></td>
+                        <td <?php if($this->session->userdata('id_unit') != ""){echo "hidden";}else{echo "";}; ?> class="text-center align-middle"></td>
+                        <td class="text-center align-middle"></td>
+                      
+                    </tr>
+                    <?php endforeach; ?>
+                  
+                  </tbody>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </td> 
+                        
+                      
+                          
+                    
+                   </tr>
+
+                  </tbody>
+                </table>
+
+
+                  </div>
+              </div>
+            </div>
+              </div>
+              <!-- /.card-body -->
+
+              
+
+              
+              <div class="card-footer clearfix">
+                <ul class="pagination pagination-sm m-0 float-right">
+                 
+                </ul>
+              </div>
+
+
+            </div>
+            <!-- /.card -->
+
+            
+          </div>
+          <!-- /.col -->
+          
+
+        </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+
+
+<!-- Modal HTML using Bootstrap -->
+<div class="modal fade" id="readMoreModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Full Text</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-justify" id="modalText">
+                <!-- Full text will be injected here by JavaScript -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+  document.addEventListener('DOMContentLoaded', (event) => {
+    // Add click event to read-more links
+    var readMoreLinks = document.querySelectorAll('.read-more');
+    readMoreLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+            event.preventDefault();
+            var fullText = this.getAttribute('data-fulltext');
+            document.getElementById('modalText').innerText = fullText;
+        });
+    });
+});
+</script>
+
+
+<!-- Modal Edit -->
+<div class="modal fade" id="EditData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Penilaian Kriteria</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <form id="formkrit">
+       
+           
+          <input type="hidden" name="id_ev" id="id_ev">
+
+          <div class="row">
+          <div class="form-group col-md-6">
+            <label>Kriteria yang Dinilai</label>
+            <textarea readonly type="text" rows="8" name="uraian_aspek" id="uraian_aspek" class="form-control text-justify"></textarea>
+      </div>
+      <div class="form-group col-md-6">
+            <label>Daftar Evidance</label>
+            <textarea readonly type="text" rows="8" name="dok_pendukung2" id="dok_pendukung2" class="form-control text-justify"></textarea>
+          </div>
+          
+          </div>
+          <div class="row"> 
+            
+            <div class="form-group col-md-2">
+            <label>Jawaban Unit</label>
+            <select readonly disabled name="jawaban1" id="jawaban1" class="form-control">
+                <option hidden value="">Y/T</option>
+                <option hidden value="1">Ya</option>
+                <option hidden value="0">Tidak</option>
+           </select>
+          </div>
+
+          <div class="form-group col-md-2">
+            <label>Jawaban</label>
+            <select id="jawaban2" name="jawaban2" class="form-control"
+            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+            <?php else: ?>
+            readonly disabled
+            <?php endif; ?>
+            >
+             <option hidden value="">Y/T</option>
+                <option value="1">Ya</option>
+                <option value="0">Tidak</option>
+            </select>
+          </div>  
+
+          <div class="form-group col-md-2">
+            <label>Konfirmasi?</label>
+            <select id="perbaikan" name="perbaikan" class="form-control"
+            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+            <?php else: ?>
+            readonly disabled
+            <?php endif; ?>
+            >
+            <option value="0">Tidak</option>
+            <option value="1">Ya</option>
+            </select>
+          </div>
+        
+
+          </div>
+
+
+          <table style="width: 100%;" class="table " >
+            <thead class="no">
+                    <tr>
+                      <th class="align-middle" id="keterangan_pengisian_header">Informasi Tambahan</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                       <td class="align-middle" id="ket_pengisian1"></td>
+                    </tr>
+                    <tr>
+                       <td class="align-middle" id="ket_pengisian2"></td>
+                    </tr>
+                    <tr>
+                       <td class="align-middle" id="ket_pengisian3"></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+
+          <div class="row"> 
+            <div class="form-group col-md-6">
+            <label>Penjelasan Jawaban Unit</label>
+            <textarea readonly id="uraian_jawaban1" type="text" rows="7" name="uraian_jawaban1" class="form-control text-justify"></textarea>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Catatan Evaluasi</label>
+            <textarea type="text" rows="7" name="catatan_ev" id="catatan_ev" class="form-control text-justify"
+            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+            <?php else: ?>
+            readonly disabled
+            <?php endif; ?>
+            ></textarea>
+          </div>
+          
+          
+          </div>
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+        <button id="submitkrit" class="btn btn-primary">Save</button>
+          <?php endif; ?>
+      </form>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+<script>
+   $(document).ready(function () {
+    $("#submitkrit").click(function (event) {
+      event.preventDefault();
+        // Jika validasi kedua tidak memunculkan pesan kesalahan
+        if ($('#formkrit').valid()) {
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url('ev/update_data'); ?>",
+                data: $("#formkrit").serialize(),
+                success: function (response) {
+                    toastr.success('Data berhasil disimpan!', 'Sukses');
+                    location.reload();
+                },
+                error: function () {
+                    alert("Terjadi kesalahan saat menyimpan data.");
+                }
+            });
+        }
+    });
+});
+</script>
+<script>
+  $(document).ready(function() {
+    $('#EditData').on('show.bs.modal', function (event) {
+      var modal = $(this);
+
+      // Periksa ket_pengisian1
+      if ($.trim(modal.find('#ket_pengisian1').text()) === '') {
+        modal.find('#ket_pengisian1').closest('tr').hide();
+      } else {
+        modal.find('#ket_pengisian1').closest('tr').show();
+      }
+
+      // Periksa ket_pengisian2
+      if ($.trim(modal.find('#ket_pengisian2').text()) === '') {
+        modal.find('#ket_pengisian2').closest('tr').hide();
+      } else {
+        modal.find('#ket_pengisian2').closest('tr').show();
+      }
+
+      // Periksa ket_pengisian3
+      if ($.trim(modal.find('#ket_pengisian3').text()) === '') {
+        modal.find('#ket_pengisian3').closest('tr').hide();
+      } else {
+        modal.find('#ket_pengisian3').closest('tr').show();
+      }
+
+      // Sembunyikan/munculkan header sesuai kondisi
+      if ($.trim(modal.find('#ket_pengisian3').text()) === '' && $.trim(modal.find('#ket_pengisian2').text()) === '' && $.trim(modal.find('#ket_pengisian1').text()) === '') {
+        $('#keterangan_pengisian_header').hide();
+      } else {
+        $('#keterangan_pengisian_header').show();
+      }
+
+    });
+  });
+</script>
+
+
+<!-- Modal Edit Sub -->
+<div class="modal fade" id="EditDataSub" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Penilaian Akhir Setelah Penambahan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        
+       <form id="formsub">
+           
+          <input type="hidden" name="id_ev0" id="id_ev0" >
+
+          <div class="row">
+          <div class="form-group col-md-6">
+            <label>Subkomponen yang Dinilai</label>
+            <textarea readonly type="text" rows="8" name="uraian_subkomponen" id="uraian_subkomponen" class="form-control text-justify"></textarea>
+      </div>
+      <div class="form-group col-md-6">
+            <label>Dokumen yang Harus Disediakan</label>
+            <textarea readonly type="text" rows="8" name="dok_pendukung" id="dok_pendukung" class="form-control text-justify"></textarea>
+          </div>
+          
+          </div>
+          <div class="row"> 
+            
+
+            <div class="form-group col-md-3">
+            <label>Jawaban Akhir Unit</label>
+            <select readonly disabled name="jawaban0" id="jawaban0" class="form-control">
+            <option hidden value=""></option>
+            <option hidden value="100">AA</option>
+            <option hidden value="90">A</option>
+            <option hidden value="80">BB</option>
+            <option hidden value="70">B</option>
+            <option hidden value="60">CC</option>
+            <option hidden value="50">C</option>
+            <option hidden value="30">D</option>
+            <option hidden value="0">E</option>
+            </select>
+          </div>
+
+            <div class="form-group col-md-3">
+            <label>Jawaban Antara</label>
+            <input readonly type="text" name="jawabanantara" id="jawabanantara" class="form-control">
+          </div>  
+
+          <div class="form-group col-md-3">
+            <label>Jawaban Akhir</label>
+            <select id="jawaban0ev" name="jawaban0ev" class="form-control"
+            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+            <?php else: ?>
+            readonly disabled
+            <?php endif; ?>
+            >
+            <option value="" hidden >Pilih Jawaban</option>
+            <option value="100">AA</option>
+            <option value="90">A</option>
+            <option value="80">BB</option>
+            <option value="70">B</option>
+            <option value="60">CC</option>
+            <option value="50">C</option>
+            <option value="30">D</option>
+            <option value="0">E</option>
+            </select>
+          </div>  
+
+
+          <div class="form-group col-md-3">
+            <label>Perlu Konfirmasi?</label>
+            <select id="perbaikan0" name="perbaikan0" class="form-control"
+            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+            <?php else: ?>
+            readonly disabled
+            <?php endif; ?>
+            >
+            <option value="0">Tidak</option>
+            <option value="1">Ya</option>
+            </select>
+          </div>
+          
+          </div>
+          <div class="row"> 
+          <div class="form-group col-md-6">
+            <label>Penjelasan Jawaban Unit</label>
+            <textarea readonly id="uraian_jawaban0" title="Wajib diisi jika Jawaban Akhir A atau AA" type="text" rows="7" name="uraian_jawaban0" class="form-control text-justify" placeholder="Wajib diisi jika Jawaban Akhir A atau AA"></textarea>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Catatan Evaluasi</label>
+            <textarea id="catatan_ev0" type="text" rows="7" name="catatan_ev0" class="form-control text-justify"
+            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+            <?php else: ?>
+            readonly disabled
+            <?php endif; ?>
+            ></textarea>
+          </div>
+          
+          
+          
+          </div>
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+        <button id="submitsub" class="btn btn-primary">Save</button>
+          <?php endif; ?>
+        
+          
+      </form>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+
+
+<script>
+   $(document).ready(function () {
+    $("#submitsub").click(function (event) {
+      event.preventDefault();
+        // Jika validasi kedua tidak memunculkan pesan kesalahan
+        if ($('#formsub').valid()) {
+            $.ajax({
+                type: "POST",
+                url: "<?php echo base_url('ev/update_data2'); ?>",
+                data: $("#formsub").serialize(),
+                success: function (response) {
+                    toastr.success('Data berhasil disimpan!', 'Sukses');
+                    location.reload();
+                },
+                error: function () {
+                    alert("Terjadi kesalahan saat menyimpan data.");
+                }
+            });
+        }
+    });
+});
+</script>
+
+
+<!-- Modal Insert -->
+<div class="modal fade" id="InsertData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Load Data Evaluasi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        
+        <?php echo form_open_multipart('ev/insert_ev'); ?>
+           
+
+            
+            
+          
+          </div>
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        
+        <button  type="submit" class="btn btn-primary">Load</button>
+         
+        <?php echo form_close(); ?>
+      </div>
+
+      
+    </div>
+  </div>
+
+
+
+
+<!-- Modal View Uploaded Files -->
+<div class="modal fade" id="ViewFilesModalPM" tabindex="-1" role="dialog" aria-labelledby="ViewFilesModalPMLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ViewFilesModalPMLabel">File yang Telah Diupload pada Kriteria</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Nama File</th>
+              <th style="width: 30px">Preview</th>
+              </tr>
+          </thead>
+          <tbody id="fileListBodyPM">
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="ViewFilesModalPM0" tabindex="-1" role="dialog" aria-labelledby="ViewFilesModalPM0Label" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ViewFilesModalPM0Label">File yang Telah Diupload pada Subkomponen</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Nama File</th>
+              <th style="width: 30px">Preview</th>
+              </tr>
+          </thead>
+          <tbody id="fileListBodyPM0">
+            </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const viewFilesBtnsPM = document.querySelectorAll('.view-files-btn-pm');
+
+  viewFilesBtnsPM.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const files = this.getAttribute('data-files').split(';');
+      const id_pm = this.getAttribute('data-id_pm');
+
+      showUploadedFilesPM(files, id_pm);
+      $('#ViewFilesModalPM').modal('show');
+    });
+  });
+});
+
+function showUploadedFilesPM(files, id_pm) {
+  const fileListBody = document.getElementById('fileListBodyPM');
+  fileListBody.innerHTML = ''; // Clear existing rows
+
+  files.forEach(file => {
+    const row = document.createElement('tr');
+
+    const fileNameCell = document.createElement('td');
+    fileNameCell.textContent = file;
+
+    const previewCell = document.createElement('td');
+    const previewLink = document.createElement('a');
+    previewLink.href = `../assets/bukti_pm/${file}`;
+    previewLink.target = '_blank';
+    previewLink.textContent = 'Preview';
+    previewLink.classList.add('btn', 'btn-secondary', 'btn-xs');
+    previewCell.appendChild(previewLink);
+
+    
+
+row.appendChild(fileNameCell);
+row.appendChild(previewCell);
+fileListBody.appendChild(row);
+  });
+}
+
+
+</script> 
+ 
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const viewFilesBtnsPM0 = document.querySelectorAll('.view-files-btn-pm0');
+
+  viewFilesBtnsPM0.forEach(btn => {
+    btn.addEventListener('click', function () {
+      const files = this.getAttribute('data-files').split(';');
+      const id_pm0 = this.getAttribute('data-id_pm0');
+
+      showUploadedFilesPM0(files, id_pm0);
+      $('#ViewFilesModalPM0').modal('show');
+    });
+  });
+});
+
+function showUploadedFilesPM0(files, id_pm0) {
+  const fileListBody = document.getElementById('fileListBodyPM0');
+  fileListBody.innerHTML = ''; // Clear existing rows
+
+  files.forEach(file => {
+    const row = document.createElement('tr');
+
+    const fileNameCell = document.createElement('td');
+    fileNameCell.textContent = file;
+
+    const previewCell = document.createElement('td');
+    const previewLink = document.createElement('a');
+    previewLink.href = `../assets/bukti_pm/${file}`;
+    previewLink.target = '_blank';
+    previewLink.textContent = 'Preview';
+    previewLink.classList.add('btn', 'btn-secondary', 'btn-xs');
+    previewCell.appendChild(previewLink);
+
+    
+
+    row.appendChild(fileNameCell);
+    row.appendChild(previewCell);
+    fileListBody.appendChild(row);
+  });
+}
+
+
+</script>
+
+
+
+
+
+<!-- Modal Edit Konfirmasi -->
+<div class="modal fade" id="EditKonfirmasi" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+
+        <?php echo form_open_multipart('ev/update_konfirmasi'); ?>
+       
+           
+          <input type="hidden" name="id_ev" id="id_ev2">
+          <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('id_unit'); ?>">
+          <input type="hidden" name="tahun" value="<?php echo $this->session->userdata('tahun'); ?>">
+          <input type="hidden" name="id_role" value="<?php echo $this->session->userdata('id_role'); ?>">
+          <input type="hidden" name="log_user" value="<?php echo $this->session->userdata('username'); ?>">
+
+
+          <div class="row">
+          <div class="col-md-12" style="height:500px;">
+            <!-- DIRECT CHAT DANGER -->
+            <div class="card card-danger direct-chat direct-chat-danger">
+              <div class="card-header">
+                <h3 class="card-title">Konfirmasi</h3>
+
+                <div class="card-tools">
+                  <?php foreach ($evaluasiform as $evf): ?>
+                  <span title="<?php echo $evf['uraian_aspek']; ?>" class="badge text-truncate" style="width: 600px; text-align: right;"><?php echo $evf['kd_komponen']; ?>.<?php echo $evf['kd_subkomponen']; ?>.<?php echo $evf['kd_aspek']; ?> <?php echo $evf['uraian_aspek']; ?></span>
+                  <?php endforeach; ?>
+                  <!-- <button type="button" class="btn btn-tool" title="Contacts" data-widget="chat-pane-toggle">
+                    <i class="fas fa-comments"></i>
+                  </button> -->
+                  <button type="button" class="btn btn-tool" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <!-- Conversations are loaded here -->
+                
+                <div class="direct-chat-messages" style="height:500px;">
+                  <?php foreach ($h_konfirmasi as $hkon): ?>
+                  <!-- Message. Default to the left -->
+                  <?php if ($hkon['id_role'] == 3 || $hkon['id_role'] == 7): ?>
+                  <div class="direct-chat-msg col-md-6 ml-auto">
+                    <div class="direct-chat-infos clearfix">
+                      <span class="direct-chat-name float-left"><?php echo $hkon['log_user']; ?></span>
+                      <span class="direct-chat-timestamp float-right"><?php echo $hkon['created_at']; ?></span>
+                    </div>
+                    <!-- /.direct-chat-infos -->
+                    <img class="direct-chat-img" src="<?php echo base_url() ?>assets/dist/img/evaluator.jpg" alt="Message User Image">
+                    <!-- /.direct-chat-img -->
+                    <div class="direct-chat-text">
+                      <?php echo htmlspecialchars($hkon['uraian_konfirmasi'], ENT_QUOTES, 'UTF-8'); ?>
+                    </div>
+                    <div class="direct-chat-infos clearfix">
+                      <span class="direct-chat-timestamp float-right">Tenggat Waktu : <?php echo $hkon['tenggat_waktu']; ?></span>
+                      </div>
+                    <!-- /.direct-chat-text -->
+                  </div>
+                  <?php endif; ?>
+                  
+                  <!-- /.direct-chat-msg -->
+
+                  <!-- Message to the right -->
+                  <?php if ($hkon['id_role'] == 1 || $hkon['id_role'] == 5): ?>
+                  <div class="direct-chat-msg right col-md-6">
+                    <div class="direct-chat-infos clearfix">
+                      <span class="direct-chat-name float-right"><?php echo $hkon['log_user']; ?></span>
+                      <span class="direct-chat-timestamp float-left"><?php echo $hkon['created_at']; ?></span>
+                    </div>
+                    <!-- /.direct-chat-infos -->
+                    <img class="direct-chat-img" src="<?php echo base_url() ?>assets/dist/img/klien.png" alt="Message User Image">
+                    <!-- /.direct-chat-img -->
+                    <div class="direct-chat-text">
+                      <?php echo htmlspecialchars($hkon['uraian_konfirmasi'], ENT_QUOTES, 'UTF-8'); ?>
+                    </div>
+                    <div class="direct-chat-infos clearfix">
+                      <a class="direct-chat-timestamp float-left" href="<?php echo $hkon['bukti_perbaikan']; ?>" target="_blank"><?php echo htmlspecialchars($hkon['bukti_perbaikan'], ENT_QUOTES, 'UTF-8'); ?></a>
+                      </div>
+                    <!-- /.direct-chat-text -->
+                  </div>
+                 <?php endif; ?>
+                  <!-- /.direct-chat-msg -->
+                  <?php endforeach; ?>
+                </div>
+                 
+                <!--/.direct-chat-messages-->
+
+                <!-- Contacts are loaded here -->
+                <div class="direct-chat-contacts">
+                  <ul class="contacts-list">
+                    <li>
+                      <a href="#">
+                        <img class="contacts-list-img" src="../dist/img/user1-128x128.jpg" alt="User Avatar">
+
+                        <div class="contacts-list-info">
+                          <span class="contacts-list-name">
+                            Count Dracula
+                            <small class="contacts-list-date float-right">2/28/2015</small>
+                          </span>
+                          <span class="contacts-list-msg">How have you been? I was...</span>
+                        </div>
+                        <!-- /.contacts-list-info -->
+                      </a>
+                    </li>
+                    <!-- End Contact Item -->
+                  </ul>
+                  <!-- /.contatcts-list -->
+                </div>
+                <!-- /.direct-chat-pane -->
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer">
+                <form action="#" method="post">
+                 <div class="row">
+              <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7)): ?>
+                <div class="input-group col-md-2 date" id="datetimepicker" data-target-input="nearest">
+                    <input required type="text" name="tenggat_waktu" class="form-control datetimepicker-input" data-target="#datetimepicker" />
+                    <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+                  <div class="input-group col-md-10">
+                    <input required type="text" name="uraian_konfirmasi" placeholder="Type Message ..." class="form-control">
+                    <span class="input-group-append">
+                      <button type="submit" class="btn btn-danger">Send</button>
+                    </span>
+                  </div>
+                <?php endif; ?>
+                  <?php if ($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
+                               $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))): ?>
+                  <div class="input-group col-md-1">
+                  <button title="Bukti Perbaikan" class="btn btn-secondary" id="showButton"><i class="fas fa-paperclip"></i></button>
+                  </div>
+                  <div class="input-group col-md-11">
+                    <input required type="text" name="uraian_konfirmasi" placeholder="Type Message ..." class="form-control">
+                    <span class="input-group-append">
+                      <button type="submit" class="btn btn-danger">Send</button>
+                    </span>
+                  </div>
+                   <div class="input-group col-sm-12 hidden-div" id="buktiPerbaikanDiv" style="display:none;">
+                    <input type="text" name="bukti_perbaikan" class="form-control" placeholder="Bukti Link ...">
+                  </div>
+                  <?php endif; ?>
+
+                  
+                  </div>
+                  
+                </form>
+              </div>
+              <!-- /.card-footer-->
+            </div>
+            <!--/.direct-chat -->
+          </div>
+          </div>
+
+          <!--   -->
+
+
+      <?php echo form_close(); ?>
+     
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- Modal Edit Konfirmasi0 -->
+<div class="modal fade" id="EditKonfirmasi0" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      
+
+        <?php echo form_open_multipart('ev/update_konfirmasi0'); ?>
+       
+           
+          <input type="hidden" name="id_ev0" id="id_ev02">
+          <input type="hidden" name="id_unit" value="<?php echo $this->session->userdata('id_unit'); ?>">
+          <input type="hidden" name="tahun" value="<?php echo $this->session->userdata('tahun'); ?>">
+          <input type="hidden" name="id_role" value="<?php echo $this->session->userdata('id_role'); ?>">
+          <input type="hidden" name="log_user" value="<?php echo $this->session->userdata('username'); ?>">
+
+
+          <div class="row">
+          <div class="col-md-12" style="height:500px;">
+            <!-- DIRECT CHAT DANGER -->
+            <div class="card card-danger direct-chat direct-chat-danger">
+              <div class="card-header">
+                <h3 class="card-title">Konfirmasi</h3>
+
+                <div class="card-tools">
+                  <?php foreach ($evaluasi0form as $ev0f): ?>
+                  <span title="<?php echo $ev0f['uraian_subkomponen']; ?>" class="badge text-truncate" style="width: 600px; text-align: right;"><?php echo $ev0f['kd_komponen']; ?>.<?php echo $ev0f['kd_subkomponen']; ?> <?php echo $ev0f['uraian_subkomponen']; ?></span>
+                  <?php endforeach; ?>
+                  <!-- <button type="button" class="btn btn-tool" title="Contacts" data-widget="chat-pane-toggle">
+                    <i class="fas fa-comments"></i>
+                  </button> -->
+                  <button type="button" class="btn btn-tool" data-dismiss="modal" aria-label="Close">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <!-- Conversations are loaded here -->
+                
+                <div class="direct-chat-messages" style="height:500px;">
+                  <?php foreach ($h_konfirmasi0 as $hkon0): ?>
+                  <!-- Message. Default to the left -->
+                  <?php if ($hkon0['id_role'] == 3 || $hkon0['id_role'] == 7): ?>
+                  <div class="direct-chat-msg col-md-6 ml-auto">
+                    <div class="direct-chat-infos clearfix">
+                      <span class="direct-chat-name float-left"><?php echo $hkon0['log_user']; ?></span>
+                      <span class="direct-chat-timestamp float-right"><?php echo $hkon0['created_at']; ?></span>
+                    </div>
+                    <!-- /.direct-chat-infos -->
+                    <img class="direct-chat-img" src="<?php echo base_url() ?>assets/dist/img/evaluator.jpg" alt="Message User Image">
+                    <!-- /.direct-chat-img -->
+                    <div class="direct-chat-text">
+                      <?php echo htmlspecialchars($hkon0['uraian_konfirmasi'], ENT_QUOTES, 'UTF-8'); ?>
+                    </div>
+                    <div class="direct-chat-infos clearfix">
+                      <span class="direct-chat-timestamp float-right">Tenggat Waktu : <?php echo $hkon0['tenggat_waktu']; ?></span>
+                      </div>
+                    <!-- /.direct-chat-text -->
+                  </div>
+                  <?php endif; ?>
+                  
+                  <!-- /.direct-chat-msg -->
+
+                  <!-- Message to the right -->
+                  <?php if ($hkon0['id_role'] == 1 || $hkon0['id_role'] == 5): ?>
+                  <div class="direct-chat-msg right col-md-6">
+                    <div class="direct-chat-infos clearfix">
+                      <span class="direct-chat-name float-right"><?php echo $hkon0['log_user']; ?></span>
+                      <span class="direct-chat-timestamp float-left"><?php echo $hkon0['created_at']; ?></span>
+                    </div>
+                    <!-- /.direct-chat-infos -->
+                    <img class="direct-chat-img" src="<?php echo base_url() ?>assets/dist/img/klien.png" alt="Message User Image">
+                    <!-- /.direct-chat-img -->
+                    <div class="direct-chat-text">
+                      <?php echo htmlspecialchars($hkon0['uraian_konfirmasi'], ENT_QUOTES, 'UTF-8'); ?>
+                    </div>
+                    <div class="direct-chat-infos clearfix">
+                      <a class="direct-chat-timestamp float-left" href="<?php echo $hkon0['bukti_perbaikan']; ?>" target="_blank"><?php echo htmlspecialchars($hkon0['bukti_perbaikan'], ENT_QUOTES, 'UTF-8'); ?></a>
+                      </div>
+                    <!-- /.direct-chat-text -->
+                  </div>
+                 <?php endif; ?>
+                  <!-- /.direct-chat-msg -->
+                  <?php endforeach; ?>
+                </div>
+                 
+                <!--/.direct-chat-messages-->
+
+                <!-- Contacts are loaded here -->
+                <div class="direct-chat-contacts">
+                  <ul class="contacts-list">
+                    <li>
+                      <a href="#">
+                        <img class="contacts-list-img" src="../dist/img/user1-128x128.jpg" alt="User Avatar">
+
+                        <div class="contacts-list-info">
+                          <span class="contacts-list-name">
+                            Count Dracula
+                            <small class="contacts-list-date float-right">2/28/2015</small>
+                          </span>
+                          <span class="contacts-list-msg">How have you been? I was...</span>
+                        </div>
+                        <!-- /.contacts-list-info -->
+                      </a>
+                    </li>
+                    <!-- End Contact Item -->
+                  </ul>
+                  <!-- /.contatcts-list -->
+                </div>
+                <!-- /.direct-chat-pane -->
+              </div>
+              <!-- /.card-body -->
+              <div class="card-footer">
+                <form action="#" method="post">
+                 <div class="row">
+              <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7)): ?>
+                <div class="input-group col-md-2 date" id="datetimepicker0" data-target-input="nearest">
+                    <input required type="text" name="tenggat_waktu" class="form-control datetimepicker-input" data-target="#datetimepicker0" />
+                    <div class="input-group-append" data-target="#datetimepicker0" data-toggle="datetimepicker">
+                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                    </div>
+                </div>
+                  <div class="input-group col-md-10">
+                    <input required type="text" name="uraian_konfirmasi" placeholder="Type Message ..." class="form-control">
+                    <span class="input-group-append">
+                      <button type="submit" class="btn btn-danger">Send</button>
+                    </span>
+                  </div>
+                <?php endif; ?>
+                  <?php if ($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
+                               $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))): ?>
+                  <div class="input-group col-md-1">
+                  <button title="Bukti Perbaikan" class="btn btn-secondary" id="showButton"><i class="fas fa-paperclip"></i></button>
+                  </div>
+                  <div class="input-group col-md-11">
+                    <input required type="text" name="uraian_konfirmasi" placeholder="Type Message ..." class="form-control">
+                    <span class="input-group-append">
+                      <button type="submit" class="btn btn-danger">Send</button>
+                    </span>
+                  </div>
+                   <div class="input-group col-sm-12 hidden-div" id="buktiPerbaikanDiv" style="display:none;">
+                    <input type="text" name="bukti_perbaikan" class="form-control" placeholder="Bukti Link ...">
+                  </div>
+                  <?php endif; ?>
+                  
+                 
+                  </div>
+
+                </form>
+              </div>
+              <!-- /.card-footer-->
+            </div>
+            <!--/.direct-chat -->
+          </div>
+          </div>
+
+          <!--   -->
+
+
+      <?php echo form_close(); ?>
+     
+
+      
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<script>
+  document.getElementById('showButton').addEventListener('click', function(event) {
+    event.preventDefault();
+    var divElement = document.getElementById('buktiPerbaikanDiv');
+    if (divElement.style.display === 'none') {
+      divElement.style.display = 'block';
+    } else {
+      divElement.style.display = 'none';
+    }
+  });
+</script>
+
+<script>
+  // Simpan status tree view saat diubah
+function saveTreeViewState(elementId, expanded) {
+    localStorage.setItem("treeview_" + elementId, expanded);
+}
+
+// Baca status tree view saat halaman dimuat
+function loadTreeViewState(elementId) {
+    var expanded = localStorage.getItem("treeview_" + elementId);
+    if (expanded === "true") {
+        return true;
+    }
+    return false;
+}
+
+// Tandai tree view yang harus diubah saat halaman dimuat
+document.addEventListener("DOMContentLoaded", function () {
+    var expandableElements = document.querySelectorAll("[data-widget='expandable-table']");
+    expandableElements.forEach(function (element) {
+        var elementId = element.getAttribute("elementId");
+        var expanded = loadTreeViewState(elementId);
+
+        // Atur aria-expanded berdasarkan status yang disimpan
+        element.setAttribute("aria-expanded", expanded);
+
+        // Tambahkan event listener untuk menyimpan status saat diubah
+        element.addEventListener("click", function () {
+            var expanded = element.getAttribute("aria-expanded") === "true";
+            saveTreeViewState(elementId, !expanded);
+        });
+    });
+});
+
+</script>
+
+
+<script>
+$(document).ready(function() {
+  // Fungsi untuk mengambil dan menampilkan data pada modal
+  function showData(id_ev) {
+    // Mengirim permintaan AJAX ke Datakriteria/getData dengan parameter id_ev
+    $.ajax({
+      url: '<?php echo base_url("Datakriteria_ev/getData"); ?>',
+      type: 'GET',
+      data: { id_ev: id_ev }, // Menggunakan parameter id_ev
+      dataType: 'json',
+      success: function(response) {
+        // Mengisikan data ke dalam elemen-elemen pada modal
+        $('#id_ev').val(response.id_ev);
+        $('#uraian_aspek').val(response.uraian_aspek);
+        $('#dok_pendukung2').val(response.dok_pendukung2);
+        $('#jawaban1').val(response.jawaban1);
+        $('#jawaban2').val(response.jawaban2);
+        $('#uraian_jawaban1').val(response.uraian_jawaban1);
+        $('#ket_pengisian1').html(response.ket_pengisian1);
+        $('#ket_pengisian2').html(response.ket_pengisian2);
+        $('#ket_pengisian3').html(response.ket_pengisian3);
+        $('#catatan_ev').val(response.catatan_ev);
+        $('#perbaikan').val(response.perbaikan);
+        // Tampilkan modal
+        $('#EditData').modal('show');
+      },
+      error: function() {
+        alert('Terjadi kesalahan saat mengambil data.');
+      }
+    });
+  }
+
+  // Event click pada link dengan class "open-modal"
+  $('.open-modal').click(function(e) {
+    e.preventDefault();
+    // Mengambil id dari atribut data-id
+    var id_ev = $(this).data('id_ev'); // Menggunakan data-id_ev sebagai sumber id_ev
+    // Memanggil fungsi showData dengan parameter id_ev
+    showData(id_ev);
+  });
+});
+</script>
+
+
+<script>
+$(document).ready(function() {
+  // Fungsi untuk mengambil dan menampilkan data pada modal
+  function showDataSub(id_ev0) {
+    // Mengirim permintaan AJAX ke Datakriteria/getData dengan parameter id_ev0
+    $.ajax({
+      url: '<?php echo base_url("Datasub_ev/getData"); ?>',
+      type: 'GET',
+      data: { id_ev0: id_ev0 }, // Menggunakan parameter id_ev0
+      dataType: 'json',
+      success: function(response) {
+        // Mengisikan data ke dalam elemen-elemen pada modal
+        $('#id_ev0').val(response.id_ev0);
+        $('#uraian_subkomponen').val(response.uraian_subkomponen);
+        $('#dok_pendukung').val(response.dok_pendukung);
+        $('#jawabanantara').val(response.jawabanantara);
+        $('#jawaban0').val(response.jawaban0);
+        $('#jawaban0ev').val(response.jawaban0ev);
+        $('#uraian_jawaban0').val(response.uraian_jawaban0);
+        $('#catatan_ev0').val(response.catatan_ev0);
+        $('#perbaikan0').val(response.perbaikan0);
+        // Tampilkan modal
+        $('#EditDataSub').modal('show');
+      },
+      error: function() {
+        alert('Terjadi kesalahan saat mengambil data.');
+      }
+    });
+  }
+
+  // Event click pada link dengan class "open-modal"
+  $('.open-modal0').click(function(e) {
+    e.preventDefault();
+    // Mengambil id dari atribut data-id
+    var id_ev0 = $(this).data('id_ev0'); // Menggunakan data-id_ev0 sebagai sumber id_ev0
+    // Memanggil fungsi showData dengan parameter id_ev0
+    showDataSub(id_ev0);
+  });
+});
+</script>
+
+
+
+<script>
+$(document).ready(function() {
+
+  $.validator.addMethod("noLeadingZero", function(value, element) {
+    return /^(?!0\d+)/.test(value);
+  }, "Angka tidak boleh memiliki 0 di depannya.");
+
+  $('#formkrit').validate({
+    rules: {
+      jawaban2: {
+        required: true,
+        digits: true,
+        range: [0, 1],
+        noLeadingZero: true
+      }
+    },
+    messages: {
+      jawaban2: {
+        required: "Jawaban harus diisi!",
+        digits: "Jawaban hanya boleh sesuai pilihan!",
+        range: "Jawaban hanya boleh sesuai pilihan!",
+        noLeadingZero: "Jawaban hanya boleh sesuai pilihan!"
+      }
+    },
+    errorElement: 'span',
+    errorClass: 'invalid-feedback',
+    errorPlacement: function(error, element) {
+      error.insertAfter(element);
+    },
+    highlight: function(element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function(element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    },
+    submitHandler: function(form) {
+      console.log('valid');
+      form.submit();
+    }
+  });
+});
+</script>
+
+
+<script>
+$(document).ready(function() {
+  // Menambahkan metode validasi khusus untuk jawaban0
+  $.validator.addMethod("allowedValue", function(value, element, param) {
+    return param.includes(parseInt(value, 10));
+  }, "Jawaban hanya boleh 0, 30, 50, 60, 70, 80, 90, atau 100.");
+
+  $.validator.addMethod("noLeadingZero", function(value, element) {
+    return /^(?!0\d+)/.test(value);
+  }, "Angka tidak boleh memiliki 0 di depannya.");
+
+  $('#formsub').validate({
+    rules: {
+      jawaban0ev: {
+        required: true,
+        digits: true,
+        allowedValue: [0, 30, 50, 60, 70, 80, 90, 100],
+        noLeadingZero: true
+        }
+      },
+    messages: {
+      jawaban0ev: {
+        required: "Jawaban Akhir harus diisi!",
+        digits: "Jawaban hanya boleh sesuai pilihan!",
+        allowedValue: "Jawaban hanya boleh sesuai pilihan!",
+        noLeadingZero: "Jawaban hanya boleh sesuai pilihan!"
+        }
+      },
+    errorElement: 'span',
+    errorClass: 'invalid-feedback',
+    errorPlacement: function(error, element) {
+      error.insertAfter(element);
+    },
+    highlight: function(element, errorClass, validClass) {
+      $(element).addClass('is-invalid');
+    },
+    unhighlight: function(element, errorClass, validClass) {
+      $(element).removeClass('is-invalid');
+    },
+    submitHandler: function(form) {
+      console.log('valid');
+      form.submit();
+    }
+  });
+});
+</script>
+
+
+<script>
+  // Menangani perubahan pada jawaban antara
+  $(document).ready(function() {
+    $('#EditDataSub').on('shown.bs.modal', function() {
+  $('#jawabanantara').on('change', function() {
+  var jawabanantara = $(this).val();
+  var jawaban0evDropdown = $('#jawaban0ev');
+  var selectedJawaban0ev = $('#jawaban0ev').val();
+
+  // Menghapus semua opsi jawaban akhir
+  jawaban0evDropdown.empty();
+
+   // Menambahkan semua opsi jawaban akhir
+        var options = {
+          '80': 'BB',
+          '90': 'A',
+          '100': 'AA',
+          '70': 'B',
+          '60': 'CC',
+          '50': 'C',
+          '30': 'D',
+          '0': 'E'
+        };
+
+        for (var value in options) {
+          var text = options[value];
+          jawaban0evDropdown.append($('<option>', { value: value, text: text }));
+        }
+
+  // Menambahkan opsi jawaban akhir yang sesuai berdasarkan jawaban antara
+  if (jawabanantara === 'BB') {
+          jawaban0evDropdown.find('option[value!="80"][value!="90"][value!="100"]').attr('hidden', true);
+        } else if (jawabanantara === 'B') {
+          jawaban0evDropdown.find('option[value!="70"]').attr('hidden', true);
+        } else if (jawabanantara === 'CC') {
+          jawaban0evDropdown.find('option[value!="60"]').attr('hidden', true);
+        } else if (jawabanantara === 'C') {
+          jawaban0evDropdown.find('option[value!="50"]').attr('hidden', true);
+        } else if (jawabanantara === 'D') {
+          jawaban0evDropdown.find('option[value!="30"]').attr('hidden', true);
+        } else if (jawabanantara === 'E') {
+          jawaban0evDropdown.find('option[value!="0"]').attr('hidden', true);
+        }
+
+  // Menetapkan nilai jawaban akhir pertama sebagai nilai default
+  jawaban0evDropdown.val(selectedJawaban0ev);
+});
+     // Memanggil perubahan acara saat halaman dimuat
+    $('#jawabanantara').trigger('change');
+  });
+  });
+</script>
+
+
+<script>
+  $(document).ready(function() {
+    // Function untuk mengambil dan menampilkan data pada modal
+    function showDataKonfirmasi(id_ev) {
+      // Mengirim permintaan AJAX ke controller dengan parameter id_ev
+      $.ajax({
+        url: '<?php echo base_url("Datakonfirmasi/getData"); ?>',
+        type: 'GET',
+        data: { id_ev: id_ev }, // Menggunakan parameter id_ev
+        dataType: 'json',
+        success: function(response) {
+          // Mengisikan data ke dalam elemen-elemen pada modal
+          $('#id_ev2').val(response.id_ev);
+          // Tampilkan modal
+          $('#EditKonfirmasi').modal('show');
+        },
+        error: function() {
+          alert('Terjadi kesalahan saat mengambil data.');
+        }
+      });
+    }
+
+    // Event click pada link dengan class "open-modal2"
+    $('.open-modal2').click(function(e) {
+      e.preventDefault();
+      // Mengambil id dari atribut data-id_ev
+      var id_ev = $(this).data('id_ev'); // Menggunakan data-id_ev sebagai sumber id_ev
+      // Memanggil fungsi showDataKonfirmasi dengan parameter id_ev
+      /*showDataKonfirmasi(id_ev);*/
+    });
+
+    // Function untuk melakukan refresh pada modal setelah session id_ev di-set
+    function refreshModal() {
+      var id_ev = '<?php echo $this->session->userdata("id_ev"); ?>';
+      // Cek apakah session id_ev sudah di-set
+      if (id_ev != "") {
+        // Memanggil fungsi showDataKonfirmasi dengan parameter id_ev
+        showDataKonfirmasi(id_ev);
+        // Reset session id_ev menjadi kosong setelah modal ditampilkan
+        '<?php $this->session->unset_userdata("id_ev"); ?>';
+      }
+    }
+
+    // Memanggil fungsi refreshModal saat halaman selesai di-load
+    refreshModal();
+  });
+</script>
+
+
+
+<script>
+  function setSessionIdEv(id_ev) {
+    // Kirim data id_ev ke controller menggunakan AJAX
+    $.ajax({
+      url: '<?php echo base_url("ev/set_userdata_session"); ?>', // Ganti dengan URL endpoint untuk mengatur userdata session di server
+      type: 'POST',
+      data: { id_ev: id_ev }, // Data yang akan dikirim ke controller
+      success: function(response) {
+        // Berhasil mengatur userdata session, lakukan sesuatu jika diperlukan
+        location.reload();
+      },
+      error: function() {
+        // Terjadi kesalahan saat mengatur userdata session
+        alert('Terjadi kesalahan saat mengatur session.');
+      }
+    });
+  }
+</script>
+
+
+
+
+<script>
+  $(document).ready(function() {
+    // Function untuk mengambil dan menampilkan data pada modal
+    function showDataKonfirmasi0(id_ev0) {
+      // Mengirim permintaan AJAX ke controller dengan parameter id_ev
+      $.ajax({
+        url: '<?php echo base_url("Datakonfirmasi0/getData"); ?>',
+        type: 'GET',
+        data: { id_ev0: id_ev0 }, // Menggunakan parameter id_ev
+        dataType: 'json',
+        success: function(response) {
+          // Mengisikan data ke dalam elemen-elemen pada modal
+          $('#id_ev02').val(response.id_ev0);
+          // Tampilkan modal
+          $('#EditKonfirmasi0').modal('show');
+        },
+        error: function() {
+          alert('Terjadi kesalahan saat mengambil data.');
+        }
+      });
+    }
+
+    // Event click pada link dengan class "open-modal2"
+    $('.open-modal02').click(function(e) {
+      e.preventDefault();
+      // Mengambil id dari atribut data-id_ev
+      var id_ev0 = $(this).data('id_ev0'); // Menggunakan data-id_ev sebagai sumber id_ev
+      // Memanggil fungsi showDataKonfirmasi dengan parameter id_ev
+      /*showDataKonfirmasi(id_ev);*/
+    });
+
+    // Function untuk melakukan refresh pada modal setelah session id_ev di-set
+    function refreshModal() {
+      var id_ev0 = '<?php echo $this->session->userdata("id_ev0"); ?>';
+      // Cek apakah session id_ev sudah di-set
+      if (id_ev0 != "") {
+        // Memanggil fungsi showDataKonfirmasi dengan parameter id_ev
+        showDataKonfirmasi0(id_ev0);
+        // Reset session id_ev menjadi kosong setelah modal ditampilkan
+        '<?php $this->session->unset_userdata("id_ev0"); ?>';
+      }
+    }
+
+    // Memanggil fungsi refreshModal saat halaman selesai di-load
+    refreshModal();
+  });
+</script>
+
+
+
+<script>
+  function setSessionIdEv0(id_ev0) {
+    // Kirim data id_ev ke controller menggunakan AJAX
+    $.ajax({
+      url: '<?php echo base_url("ev/set_userdata_session0"); ?>', // Ganti dengan URL endpoint untuk mengatur userdata session di server
+      type: 'POST',
+      data: { id_ev0: id_ev0 }, // Data yang akan dikirim ke controller
+      success: function(response) {
+        // Berhasil mengatur userdata session, lakukan sesuatu jika diperlukan
+        location.reload();
+      },
+      error: function() {
+        // Terjadi kesalahan saat mengatur userdata session
+        alert('Terjadi kesalahan saat mengatur session.');
+      }
+    });
+  }
+</script>
+
+
+
+
+<script>
+    $(document).ready(function() {
+        // Aktifkan datetimepicker pada input field dengan id "datetimepicker"
+        $('#datetimepicker').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm:ss', // Format tanggal dan waktu yang diinginkan
+            icons: {
+                time: 'fa fa-clock',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-calendar-check-o',
+                clear: 'fa fa-trash',
+                close: 'fa fa-times'
+            }
+        });
+    });
+</script>
+
+
+<script>
+    $(document).ready(function() {
+        // Aktifkan datetimepicker pada input field dengan id "datetimepicker"
+        $('#datetimepicker0').datetimepicker({
+            format: 'YYYY-MM-DD HH:mm:ss', // Format tanggal dan waktu yang diinginkan
+            icons: {
+                time: 'fa fa-clock',
+                date: 'fa fa-calendar',
+                up: 'fa fa-chevron-up',
+                down: 'fa fa-chevron-down',
+                previous: 'fa fa-chevron-left',
+                next: 'fa fa-chevron-right',
+                today: 'fa fa-calendar-check-o',
+                clear: 'fa fa-trash',
+                close: 'fa fa-times'
+            }
+        });
+    });
+</script>
+
+
+
+</body>
+</html>
+
+
+
+
