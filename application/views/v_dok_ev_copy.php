@@ -1,3 +1,23 @@
+<?php
+/*
+ * ========================================
+ * FILE BACKUP - v_dok_ev_copy.php
+ * ========================================
+ * 
+ * File ini adalah backup dari v_dok_ev.php SEBELUM penghapusan kolom
+ * "Berita Acara Evaluasi 2024" dan "Laporan Evaluasi Final 2024"
+ * 
+ * Tanggal Backup: 2025-12-11
+ * 
+ * JANGAN GUNAKAN FILE INI untuk production!
+ * File ini hanya untuk referensi jika diperlukan rollback.
+ * 
+ * Seluruh konten di-comment agar tidak mengganggu saat running aplikasi.
+ * 
+ * ========================================
+ */
+
+/*
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -67,7 +87,6 @@
               
             
 
-
               <!-- /.card-header -->
               <div class="card-body table-responsive">
                 <table id="table" style="width: 100%;" class="table table-bordered">
@@ -78,7 +97,16 @@
                       <th class="text-center align-middle" >Nama Unit</th>
                       <th class="text-center align-middle">Progres Kriteria</th>
                       <th class="text-center align-middle" >Nilai Eva</th>
-<!-- Kolom Berita Acara dan Laporan Evaluasi dihapus -->
+<!--Header Kolom  -->                      
+                      <?php if($this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "3" || $this->session->userdata('id_role') == "7"): ?>
+                      <th class="text-center align-middle" colspan="2" style="width: 120px">Berita Acara Evaluasi <?php echo $this->session->userdata('tahun'); ?></th>
+                      <th class="text-center align-middle" colspan="2" style="width: 120px">Laporan Evaluasi Final <?php echo $this->session->userdata('tahun'); ?></th>
+                      <?php endif; ?>
+                      <?php if($this->session->userdata('id_role') == "2" || $this->session->userdata('id_role') == "6"): ?>
+                      <th class="text-center align-middle" style="width: 120px">Berita Acara Evaluasi <?php echo $this->session->userdata('tahun'); ?></th>
+                      <th class="text-center align-middle" style="width: 120px">Laporan Evaluasi Final <?php echo $this->session->userdata('tahun'); ?></th>
+<!--Batas akhir  -->
+                      <?php endif; ?>
                       <th class="text-center align-middle" style="width: 120px">Status Evaluasi</th>
                       <?php if($this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "3" || $this->session->userdata('id_role') == "7"): ?>
                       <th class="text-center align-middle" >Aksi</th>
@@ -98,15 +126,41 @@
                       <td style="width: 800px"><?php echo $unt['nm_unit']; ?></td>
                       <td class="text-center" style="width: 120px"><?php $format = number_format((float)$unt['persen'],2,",","."); echo $format; ?>%</td> 
                       <td class="text-center" style="width: 120px"><?php $format = number_format((float)$unt['totalnilai'],2,",","."); echo $format; ?></td>
-<!-- Data kolom Berita Acara dan Laporan Evaluasi dihapus -->
+<!-- Pengapusan Kolom -->
+                      <td class="text-center align-middle" style="width: 30px">
+                        <?php if ($unt['status_data1'] == "0"): ?>
+                        <div class= "btn btn-primary btn-xs" data-toggle="modal" data-target="#EditDataba<?php echo $unt['id_dok_ev']; ?>">Upload</div>
+                       <?php endif; ?>
+                     </td>
+
+                     <td class="text-center align-middle" style="width: 30px">
+                      <?php if ($unt['ba_ev'] != ""): ?>
+                      <a class= "btn btn-secondary btn-xs" href="../assets/dok_ev/<?php echo $unt['ba_ev']; ?>" target="_blank">Preview</a>
+                       <?php endif; ?>
+                     </td>
+
+		            <td class="text-center align-middle" style="width: 30px">
+                          <?php if ($unt['status_data1'] == "0"): ?>
+                          <div class= "btn btn-primary btn-xs" data-toggle="modal" data-target="#EditDatalap<?php echo $unt['id_dok_ev']; ?>">Upload</div>
+                       <?php endif; ?>
+                     </td>
+
+                     <td class="text-center align-middle" style="width: 30px">
+                      <?php if ($unt['lap_ev'] != ""): ?>
+                      <a class= "btn btn-secondary btn-xs" href="../assets/dok_ev/<?php echo $unt['lap_ev']; ?>" target="_blank">Preview</a>
+                       <?php endif; ?>
+                     </td>
+<!-- Batas Pengapusan Kolom -->
                   <td class="text-center"><?php 
 						       if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
 
+<!-- Penghapusan Aksi -->
                         <td class="text-center align-middle" style="width: 30px">
-                          <?php if ($unt['status_data1'] == "0"): ?>
+                          <?php if (($unt['status_data1'] == "0") && ($unt['ba_ev'] != "") && ($unt['lap_ev'] != "")): ?>
                           <div class= "btn btn-success btn-xs" data-toggle="modal" data-target="#EditData<?php echo $unt['id_dok_ev']; ?>"><i class="fas fa-edit"></i></div>
                        <?php endif; ?>
                      </td>
+<!-- Batas Penghapusan Aksi -->
                       
                     </tr>
                    <?php endforeach; ?>
@@ -127,7 +181,19 @@
                       <td class="text-center" style="width: 120px"><?php $format = number_format((float)$unt['persen'],2,",","."); echo $format; ?>%</td> 
                       <td class="text-center" style="width: 120px"><?php $format = number_format((float)$unt['totalnilai'],2,",","."); echo $format; ?></td>
                      
-<!-- Data kolom Berita Acara dan Laporan Evaluasi dihapus -->
+<!--  Penghapusan Kolom-->
+                     <td class="text-center align-middle" style="width: 30px">
+                      <?php if ($unt['ba_ev'] != ""): ?>
+                      <a class= "btn btn-secondary btn-xs" href="../assets/dok_ev/<?php echo $unt['ba_ev']; ?>" target="_blank">Preview</a>
+                       <?php endif; ?>
+                     </td>
+<!--  Penghapusan Kolom-->
+
+                     <td class="text-center align-middle" style="width: 30px">
+                      <?php if ($unt['lap_ev'] != ""): ?>
+                      <a class= "btn btn-secondary btn-xs" href="../assets/dok_ev/<?php echo $unt['lap_ev']; ?>" target="_blank">Preview</a>
+                       <?php endif; ?>
+                     </td>
                  
                   <td class="text-center"><?php 
                    if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
@@ -168,10 +234,6 @@
 
 
 
-
-
-
-
 <!-- Modal Edit -->
 <?php $no = 0; 
 foreach ($unit3monev as $unt) : ?>
@@ -198,9 +260,9 @@ foreach ($unit3monev as $unt) : ?>
         	<div class="form-group col-md-12">
      		 <label for="inputState">Status Evaluasi</label>
       			<select id="inputState" name="status_data1" class="form-control" value="<?php 
-						  if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?>">
+					  if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?>">
         		<option hidden="true" value="<?php echo $unt['status_data1']; ?>"><?php 
-						  if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></option>
+					  if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></option>
         		<option <?php 
               if ($unt['status_data1'] == "0"){echo "";} elseif ($unt['status_data1'] == "1"){echo "Hidden";} else {echo "Hidden";}; ?> value="0">Draft</option>
         		<option value="1">Final</option>
@@ -223,10 +285,107 @@ foreach ($unit3monev as $unt) : ?>
 <?php endforeach; ?>
 
 
-<!-- Modal Upload Laporan Evaluasi dihapus -->
+<!-- Modal Edit Laporan-->
+<?php $no = 0; 
+foreach ($unit3monev as $unt) : ?>
+<div class="modal fade" id="EditDatalap<?php echo $unt['id_dok_ev']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Laporan Evaluasi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <?php echo form_open_multipart('dok_ev/update_data2'); ?>
+       
+           
+          <input type="hidden" name="id_dok_ev" value="<?php echo $unt['id_dok_ev']; ?>">
+
+          
+            <div class="row">
+            <div class="form-group col-md-12">
+            <label>Upload Laporan Evaluasi</label>
+            <input type="file" name="lap_ev" class="form-control" value="<?php echo $unt['lap_ev']; ?>">
+          </div>
+           </div>
+           <div class="row">
+                <div class="col-md-12">
+                  <label>*Keterangan</label>
+              <br>Max file size: 15MB
+              <br>Format file: PDF
+              <br>
+              <br>
+          </div>
+          </div>
+          
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+          
+      <?php echo form_close(); ?>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+<?php endforeach; ?>
 
 
-<!-- Modal Upload BA Evaluasi dihapus -->
+<!-- Modal Edit BA-->
+<?php $no = 0; 
+foreach ($unit3monev as $unt) : ?>
+<div class="modal fade" id="EditDataba<?php echo $unt['id_dok_ev']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">BA Evaluasi</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+
+        <?php echo form_open_multipart('dok_ev/update_data3'); ?>
+       
+           
+          <input type="hidden" name="id_dok_ev" value="<?php echo $unt['id_dok_ev']; ?>">
+
+          
+            <div class="row">
+            <div class="form-group col-md-12">
+            <label>Upload BA Evaluasi</label>
+            <input type="file" name="ba_ev" class="form-control" value="<?php echo $unt['ba_ev']; ?>">
+          </div>
+           </div>
+           <div class="row">
+                <div class="col-md-12">
+                  <label>*Keterangan</label>
+              <br>Max file size: 15MB
+              <br>Format file: PDF
+              <br>
+              <br>
+          </div>
+          </div>
+          
+
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+          
+      <?php echo form_close(); ?>
+      </div>
+
+      
+    </div>
+  </div>
+</div>
+<?php endforeach; ?>
+<!-- Batas Modal Edit BA -->
 
 
 
@@ -236,3 +395,5 @@ foreach ($unit3monev as $unt) : ?>
 
 
 
+*/
+?>
