@@ -259,7 +259,7 @@
                                 </td> 
                                 <td title="<?php echo $krit['catatan']; ?>" <?php 
                                  if ($krit['opsi5'] == "0"){echo "";} elseif ($krit['opsi3'] == "0.5"){echo "";} elseif ($krit['opsi1'] == "1"){echo "";} elseif ($krit['opsi4'] == "0.33"){echo "";} elseif ($krit['opsi2'] == "0.66"){echo "";} else {echo "hidden";}; ?> class="text-center align-middle"><?php 
-                                if ($krit['jawaban1'] == "0"){echo "Tidak";} elseif ($krit['jawaban1'] == "0.5"){echo "Sebagian";} elseif ($krit['jawaban1'] == "1"){echo "Ya";} elseif ($krit['jawaban1'] == "0.33"){echo "Sebagian Kecil";} elseif ($krit['jawaban1'] == "0.66"){echo "Sebagian Besar";} else {echo "Y/T";}; ?> </td>
+                                if ($krit['jawaban1'] == "100"){echo "AA";} elseif ($krit['jawaban1'] == "90"){echo "A";} elseif ($krit['jawaban1'] == "80"){echo "BB";} elseif ($krit['jawaban1'] == "70"){echo "B";} elseif ($krit['jawaban1'] == "60"){echo "CC";} elseif ($krit['jawaban1'] == "50"){echo "C";} elseif ($krit['jawaban1'] == "30"){echo "D";} elseif ($krit['jawaban1'] == "0"){echo "E";} else {echo "E";} ?> </td>
                                 <td class="text-justify" style="width: 600px">
                                     <i class="expandable-table-caret"></i>
                                     <?php
@@ -534,14 +534,19 @@
               <label>Jawaban</label>
               <select name="jawaban1" id="jawaban1" class="form-control"
               <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
-          readonly disabled
           <?php endif; ?>
               >
-                <option hidden value="">Y/T</option>
-                <option value="1">Ya</option>
-                <option value="0">Tidak</option>
+                <option hidden value="">Pilih Jawaban 1</option>
+                <option value="100">AA</option>
+                <option value="90">A</option>
+                <option value="80">BB</option>
+                <option value="70">B</option>
+                <option value="60">CC</option>
+                <option value="50">C</option>
+                <option value="30">D</option>
+                <option value="0">E</option>
               </select>
-            </div>
+              </div>
             <div class="form-group col-md-5">
               <label>Bukti Dokumen (Link)</label>
               <input type="text" name="link_bukti" id="link_bukti" class="form-control" placeholder="Jawaban Ya Wajib isi Link/Upload Bukti"
@@ -1308,39 +1313,40 @@ $(document).ready(function() {
   $.validator.addMethod("noLeadingZero", function(value, element) {
     return /^(?!0\d+)/.test(value);
   }, "Angka tidak boleh memiliki 0 di depannya.");
-
-  $('#formkrit').validate({
+$('#formkrit').validate({
     rules: {
-      jawaban1: {
-        required: true,
-        digits: true,
-        range: [0, 1],
-        noLeadingZero: true
-      },
-      uraian_jawaban1: {
-        required: {
-          depends: function() {
-            return parseInt($('#jawaban1').val(), 10) === 1;
-          }
+        jawaban1: {
+            required: true,
+            digits: true,
+            range: [0, 100],  // Diperbarui untuk menerima nilai 0-100
+            noLeadingZero: true
+        },
+        uraian_jawaban1: {
+            required: function() {
+                // Tetap wajib diisi jika jawaban dipilih (bukan kosong)
+                return $('#jawaban1').val() !== '';
+            }
         }
-      }
     },
     messages: {
-      jawaban1: {
-        required: "Jawaban harus diisi!",
-        digits: "Jawaban hanya boleh sesuai pilihan!",
-        range: "Jawaban hanya boleh sesuai pilihan!",
-        noLeadingZero: "Angka tidak boleh memiliki 0 di depannya."
-      },
-      uraian_jawaban1: {
-        required: "Penjelasan Jawaban harus diisi jika Jawaban Ya!"
-      }
+        jawaban1: {
+            required: "Silakan pilih jawaban",
+            digits: "Jawaban hanya boleh berupa angka",
+            range: "Nilai jawaban tidak valid",
+            noLeadingZero: "Angka tidak boleh memiliki 0 di depannya."
+        },
+        uraian_jawaban1: {
+            required: "Penjelasan Jawaban harus diisi"
+        }
     },
-    errorElement: 'span',
+    // ... kode errorElement dan errorPlacement yang ada ...
+});
+  errorElement: 'span',
     errorClass: 'invalid-feedback',
     errorPlacement: function(error, element) {
       error.insertAfter(element);
     },
+
     highlight: function(element, errorClass, validClass) {
       $(element).addClass('is-invalid');
     },

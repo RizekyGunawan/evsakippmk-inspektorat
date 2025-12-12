@@ -9,21 +9,35 @@ class Datasub extends CI_Controller {
 
         $id_pm0 = $this->input->get('id_pm0');
 
-        // Lakukan logika untuk mengambil data berdasarkan ID yang diberikan
-        // Misalnya, mengambil data dari database
-
-        // Contoh logika untuk mengambil data dari database
-        $query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
-        (CASE 
-        WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-        WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-        WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-        WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-        WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-        WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
-        ELSE ''
-        END) as jawabanantara
-        from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 where d.id_pm0 = ?", array($id_pm0)); // Menjalankan query dan mendapatkan hasilnya
+        // Query yang dioptimalkan untuk menghitung rata-rata jawaban1
+        $this->db->select([
+            'a.*',
+            'b.*',
+            'c.*',
+            'd.*',
+            'AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) as avg_jawaban1',
+            'CASE ' .
+            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 90 THEN "AA" ' .
+            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 80 THEN "A" ' .
+            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 70 THEN "BB" ' .
+            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 60 THEN "B" ' .
+            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 50 THEN "CC" ' .
+            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 30 THEN "C" ' .
+            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) > 0 THEN "D" ' .
+            '   ELSE "E" ' .
+            'END as jawabanantara',
+            'ROUND(AVG(CAST(a.jawaban1 AS DECIMAL(10,2))), 0) as skorpersen',
+            'ROUND(AVG(CAST(a.jawaban1 AS DECIMAL(10,2))), 0) as skor'
+        ]);
+        
+        $this->db->from('ta_pm a');
+        $this->db->join('ref_aspek b', 'a.id_aspek = b.id_aspek');
+        $this->db->join('ref_subkomponen c', 'a.id_subkomponen = c.id_subkomponen');
+        $this->db->join('ta_pm0 d', 'a.id_pm0 = d.id_pm0');
+        $this->db->where('d.id_pm0', $id_pm0);
+        $this->db->group_by('d.id_pm0');
+        
+        $query = $this->db->get();
 
         if ($query->num_rows() > 0) {
             $data = $query->row_array(); // Mengambil data hasil query sebagai array

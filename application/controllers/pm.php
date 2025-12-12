@@ -102,7 +102,7 @@ class Pm extends CI_Controller {
 
 	public function update_data (){
 
-		$id_pm 					= $this->input->post('id_pm');
+		$id_pm 					= $jthis->input->post('id_pm');
 		$jawaban1 				= $this->input->post('jawaban1');
 		$uraian_jawaban1 		= $this->input->post('uraian_jawaban1');
 		$link_bukti 			= $this->input->post('link_bukti');
@@ -647,25 +647,46 @@ class Pm extends CI_Controller {
 
 		        $baris++;
 		    }
-
-
 		     
-		    $opsi = '';
-			if ($pm['jawaban1'] == "1") {
-			    $opsi = "Ya";
-			} elseif ($pm['jawaban1'] == "0") {
-			    $opsi = "Tidak";
-			} elseif ($pm['jawaban1'] == "") {
-			    $opsi = "Y/T";
-			}
-			$jawaban1 = '';
-			if ($pm['jawaban1'] == "1") {
-			    $jawaban1 = "100";
-			} elseif ($pm['jawaban1'] == "0") {
-			    $jawaban1 = "0";
-			} elseif ($pm['jawaban1'] == "") {
-			    $jawaban1 = "Belum Diisi";
-			}
+$opsi = '';
+$jawaban1 = '';
+switch($pm['jawaban1']) {
+    case '100':
+        $opsi = 'AA';
+        $jawaban1 = '100';
+        break;
+    case '90':
+        $opsi = 'A';
+        $jawaban1 = '90';
+        break;
+    case '80':
+        $opsi = 'BB';
+        $jawaban1 = '80';
+        break;
+    case '70':
+        $opsi = 'B';
+        $jawaban1 = '70';
+        break;
+    case '60':
+        $opsi = 'CC';
+        $jawaban1 = '60';
+        break;
+    case '50':
+        $opsi = 'C';
+        $jawaban1 = '50';
+        break;
+    case '30':
+        $opsi = 'D';
+        $jawaban1 = '30';
+        break;
+    case '0':
+        $opsi = 'E';
+        $jawaban1 = '0';
+        break;
+    default:
+        $opsi = 'E';
+        $jawaban1 = 'Belum Diisi';
+}
 			$buktiupload = '';
 			if ($pm['link_bukti2'] == "") {
 			    $buktiupload = "";
@@ -962,21 +983,44 @@ class Pm extends CI_Controller {
 
 
 		     
-		    $opsi = '';
-			if ($pm['jawaban1'] == "1") {
-			    $opsi = "Ya";
-			} elseif ($pm['jawaban1'] == "0") {
-			    $opsi = "Tidak";
-			} elseif ($pm['jawaban1'] == "") {
-			    $opsi = "Y/T";
-			}
+		    		    $opsi = '';
 			$jawaban1 = '';
-			if ($pm['jawaban1'] == "1") {
-			    $jawaban1 = "100";
-			} elseif ($pm['jawaban1'] == "0") {
-			    $jawaban1 = "0";
-			} elseif ($pm['jawaban1'] == "") {
-			    $jawaban1 = "Belum Diisi";
+			switch($pm['jawaban1']) {
+			    case '100':
+			        $opsi = 'AA';
+			        $jawaban1 = '100';
+			        break;
+			    case '90':
+			        $opsi = 'A';
+			        $jawaban1 = '90';
+			        break;
+			    case '80':
+			        $opsi = 'BB';
+			        $jawaban1 = '80';
+			        break;
+			    case '70':
+			        $opsi = 'B';
+			        $jawaban1 = '70';
+			        break;
+			    case '60':
+			        $opsi = 'CC';
+			        $jawaban1 = '60';
+			        break;
+			    case '50':
+			        $opsi = 'C';
+			        $jawaban1 = '50';
+			        break;
+			    case '30':
+			        $opsi = 'D';
+			        $jawaban1 = '30';
+			        break;
+			    case '0':
+			        $opsi = 'E';
+			        $jawaban1 = '0';
+			        break;
+			    default:
+			        $opsi = 'E';
+			        $jawaban1 = '0';
 			}
 			$buktiupload = '';
 			if ($pm['link_bukti2'] == "") {
