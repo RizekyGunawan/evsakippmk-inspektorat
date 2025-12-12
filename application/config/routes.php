@@ -52,10 +52,3 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'auth2';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
-
-
-$routes->group('notifications', ['namespace' => 'App\Controllers'], function($routes) {
-    $routes->get('', 'Notifications::index');
-    $routes->post('read/(:num)', 'Notifications::read/$1');
-    $routes->post('read-all', 'Notifications::readAll');
-});

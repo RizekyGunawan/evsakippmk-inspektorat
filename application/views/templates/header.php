@@ -136,7 +136,7 @@
     <ul class="navbar-nav ml-auto">
       <!-- Navbar Search -->
 
-      <?php $this->load->view('templates/notification_dropdown'); ?>
+      <?php $this->load->view('templates/notifications_dropdown'); ?>
      
        <li class="nav-item d-none d-sm-inline-block">
        
