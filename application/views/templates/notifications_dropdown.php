@@ -17,7 +17,7 @@
         </div>
         <div class="dropdown-divider"></div>
         <a href="#" class="dropdown-item dropdown-footer" id="mark-all-read">Tandai semua sudah dibaca</a>
-        <a href="<?= base_url('notifications') ?>" class="dropdown-item dropdown-footer">Lihat Semua Notifikasi</a>
+        <a href="<?= base_url('notification') ?>" class="dropdown-item dropdown-footer">Lihat Semua Notifikasi</a>
     </div>
 </li>
 
@@ -30,7 +30,7 @@ document.getElementById('notificationDropdown').addEventListener('shown.bs.dropd
 // Load notifications
 function loadNotifications() {
     $.ajax({
-        url: '<?= base_url('notifications') ?>',
+        url: '<?= base_url('notification') ?>',
         type: 'GET',
         dataType: 'json',
         headers: {
@@ -115,7 +115,7 @@ function renderNotifications(notifications) {
 // Mark notification as read
 function markAsRead(notificationId) {
     $.ajax({
-        url: `<?= base_url('notifications/read/') ?>${notificationId}`,
+        url: `<?= base_url('notification/markAsRead/') ?>${notificationId}`,
         type: 'POST',
         dataType: 'json',
         headers: {
@@ -138,7 +138,7 @@ document.getElementById('mark-all-read')?.addEventListener('click', function(e) 
     e.preventDefault();
     
     $.ajax({
-        url: '<?= base_url('notifications/read-all') ?>',
+        url: '<?= base_url('notification/markAsRead') ?>',
         type: 'POST',
         dataType: 'json',
         headers: {
@@ -184,7 +184,7 @@ setInterval(() => {
     const dropdown = document.querySelector('.dropdown-menu.show');
     if (!dropdown) { // Only check if dropdown is not open
         $.ajax({
-            url: '<?= base_url('notifications/unread') ?>',
+            url: '<?= base_url('notification/unreadCount') ?>',
             type: 'GET',
             dataType: 'json',
             headers: {
