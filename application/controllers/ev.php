@@ -207,6 +207,19 @@ class Ev extends CI_Controller {
 	);
 
 		$this->m_ev->input_data($data, 'ta_konfirmasi');
+
+		// In any controller where you want to send a notification
+$this->load->model('notification_model');
+
+$notificationData = [
+    'user_id' => $targetUserId, // ID of the user to notify
+    'title' => 'Judul Notifikasi',
+    'message' => 'Ini adalah pesan notifikasi',
+    'url' => 'controller/method' // Optional: URL to redirect when clicked
+];
+
+$this->notification_model->create($notificationData);
+
 		redirect('/ev/index');
 	}
 
