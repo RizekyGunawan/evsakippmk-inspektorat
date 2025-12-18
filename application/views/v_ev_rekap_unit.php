@@ -3,27 +3,54 @@
 
 <style>
   .komponen-row {
-    background-color: #87CEEB;
+    background-color: #87CEEB !important;
+    color: #000000 !important;
     font-weight: bold;
   }
   .subkomponen-row {
-    background-color: #FFE4C4;
+    background-color: #FFE4C4 !important;
+    color: #000000 !important;
     font-weight: bold;
   }
   .kriteria-row {
-    background-color: #FFFFE0;
+    background-color: #FFFFE0 !important;
+    color: #000000 !important;
   }
   .total-row {
-    background-color: #1F4E78;
-    color: white;
+    background-color: #1F4E78 !important;
+    color: #FFFFFF !important;
     font-weight: bold;
   }
   .table-rekap {
     font-size: 12px;
+    background-color: #FFFFFF !important;
   }
   .table-rekap td, .table-rekap th {
     padding: 6px 4px;
     vertical-align: middle;
+    color: #000000 !important;
+    background-color: #FFFFFF !important;
+  }
+  .table-rekap thead th {
+    background-color: #343a40 !important;
+    color: #FFFFFF !important;
+  }
+  /* Override untuk baris dengan class khusus */
+  .table-rekap .komponen-row td {
+    background-color: #87CEEB !important;
+    color: #000000 !important;
+  }
+  .table-rekap .subkomponen-row td {
+    background-color: #FFE4C4 !important;
+    color: #000000 !important;
+  }
+  .table-rekap .kriteria-row td {
+    background-color: #FFFFE0 !important;
+    color: #000000 !important;
+  }
+  .table-rekap .total-row td {
+    background-color: #1F4E78 !important;
+    color: #FFFFFF !important;
   }
 </style>
 
@@ -226,8 +253,13 @@
                           } elseif ($pemenuhan == 0) {
                             $predikat = "E";
                           }
+                          // Format persentase dengan 2 desimal, koma sebagai pemisah desimal (format Indonesia)
+                          $persentase_format = number_format($pemenuhan, 2, ',', '.');
                         ?>
-                        <td class="text-center"><?php echo $predikat; ?></td>
+                        <td class="text-center">
+                          <?php echo $predikat; ?><br>
+                          <span style="font-size: 0.85em;">(<?php echo $persentase_format; ?>%)</span>
+                        </td>
                         <?php endforeach; ?>
                       </tr>
                     </tbody>
