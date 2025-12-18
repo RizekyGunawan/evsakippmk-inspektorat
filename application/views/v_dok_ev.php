@@ -82,13 +82,12 @@
                       <!-- Kolom Status Pengisian - Menampilkan Draft/Selesai berdasarkan progres -->
                       <th class="text-center align-middle" style="width: 120px">Status Pengisian</th>
                       <th class="text-center align-middle" style="width: 120px">Status Evaluasi</th>
-                      <?php if($this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "3" || $this->session->userdata('id_role') == "7"): ?>
+                      <!-- Kolom Aksi tersedia untuk semua role -->
                       <th class="text-center align-middle" >Aksi</th>
-                      <?php endif; ?>
                     </tr>
                   </thead>
 
-                  <?php if($this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "3" || $this->session->userdata('id_role') == "7"): ?>
+                  <!-- Section 1: Tersedia untuk semua role -->
                   <tbody>
 
                   <?php
@@ -116,7 +115,7 @@
 						       if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
 
                         <td class="text-center align-middle" style="width: 30px">
-                          <!-- Tombol Edit selalu muncul untuk rollback Draft <-> Final -->
+                          <!-- Tombol Edit untuk semua role -->
                           <div class= "btn btn-success btn-xs" data-toggle="modal" data-target="#EditData<?php echo $unt['id_dok_ev']; ?>"><i class="fas fa-edit"></i></div>
                      </td>
                       
@@ -124,7 +123,7 @@
                    <?php endforeach; ?>
 
                   </tbody>
-                  <?php endif; ?>
+
 
                   <?php if($this->session->userdata('id_role') == "2" || $this->session->userdata('id_role') == "6"): ?>
                   <tbody>
@@ -154,8 +153,12 @@
                   <td class="text-center"><?php 
                    if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
 
-                       
-                    </tr>
+                        <!-- Kolom Aksi untuk semua role -->
+                        <td class="text-center align-middle" style="width: 30px">
+                          <!-- Tombol Edit untuk semua role -->
+                          <div class= "btn btn-success btn-xs" data-toggle="modal" data-target="#EditData<?php echo $unt['id_dok_ev']; ?>"><i class="fas fa-edit"></i></div>
+                        </td>
+                     </tr>
                    <?php endforeach; ?>
                   </tbody>
                   <?php endif; ?>

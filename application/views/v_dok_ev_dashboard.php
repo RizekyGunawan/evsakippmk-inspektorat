@@ -1,6 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 
+<style>
+/* Light mode styling */
+.table-summary-row {
+  background-color: #f0f0f0 !important;
+  font-weight: bold;
+}
+
+.table-info-row {
+  background-color: #e0e0e0 !important;
+  font-weight: bold;
+}
+
+.table-percentage-row {
+  background-color: #d0d0d0 !important;
+  font-weight: bold;
+}
+
+/* Dark mode styling */
+.dark-mode .table-summary-row {
+  background-color: #3a3f47 !important;
+  color: #c2c7d0;
+}
+
+.dark-mode .table-info-row {
+  background-color: #2d3238 !important;
+  color: #c2c7d0;
+}
+
+.dark-mode .table-percentage-row {
+  background-color: #252a30 !important;
+  color: #c2c7d0;
+}
+</style>
+
 <body>
 
   <!-- Content Wrapper. Contains page content -->
@@ -101,7 +135,7 @@
                       <?php endforeach; ?>
                       
                       <!-- Average Row -->
-                      <tr style="background-color: #f0f0f0; font-weight: bold;">
+                      <tr class="table-summary-row">
                         <td colspan="2" class="text-center">Rata-Rata</td>
                         <td class="text-center"><?php echo number_format($total_komp[1] / $count_units, 2, ',', '.'); ?></td>
                         <td class="text-center"><?php echo number_format($total_komp[2] / $count_units, 2, ',', '.'); ?></td>
@@ -124,7 +158,7 @@
                       </tr>
                       
                       <!-- Bobot Row -->
-                      <tr style="background-color: #e0e0e0; font-weight: bold;">
+                      <tr class="table-info-row">
                         <td colspan="2" class="text-center">Bobot</td>
                         <td class="text-center">30,00</td>
                         <td class="text-center">30,00</td>
@@ -134,7 +168,7 @@
                       </tr>
                       
                       <!-- Pemenuhan Row -->
-                      <tr style="background-color: #d0d0d0; font-weight: bold;">
+                      <tr class="table-percentage-row">
                         <td colspan="2" class="text-center">Pemenuhan</td>
                         <td class="text-center"><?php echo number_format(($total_komp[1] / $count_units / 30) * 100, 2, ',', '.'); ?>%</td>
                         <td class="text-center"><?php echo number_format(($total_komp[2] / $count_units / 30) * 100, 2, ',', '.'); ?>%</td>
