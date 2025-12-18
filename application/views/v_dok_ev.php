@@ -79,6 +79,8 @@
                       <th class="text-center align-middle">Progres Kriteria</th>
                       <th class="text-center align-middle" >Nilai Eva</th>
 <!-- Kolom Berita Acara dan Laporan Evaluasi dihapus -->
+                      <!-- Kolom Status Pengisian - Menampilkan Draft/Selesai berdasarkan progres -->
+                      <th class="text-center align-middle" style="width: 120px">Status Pengisian</th>
                       <th class="text-center align-middle" style="width: 120px">Status Evaluasi</th>
                       <?php if($this->session->userdata('id_role') == "4" || $this->session->userdata('id_role') == "3" || $this->session->userdata('id_role') == "7"): ?>
                       <th class="text-center align-middle" >Aksi</th>
@@ -99,13 +101,23 @@
                       <td class="text-center" style="width: 120px"><?php $format = number_format((float)$unt['persen'],2,",","."); echo $format; ?>%</td> 
                       <td class="text-center" style="width: 120px"><?php $format = number_format((float)$unt['totalnilai'],2,",","."); echo $format; ?></td>
 <!-- Data kolom Berita Acara dan Laporan Evaluasi dihapus -->
+                      <!-- Status Pengisian: Otomatis berdasarkan progres kriteria -->
+                      <td class="text-center" style="width: 120px">
+                        <?php 
+                          $progres = (float)$unt['persen'];
+                          if ($progres >= 100) {
+                            echo '<span class="badge badge-success">Selesai</span>';
+                          } else {
+                            echo '<span class="badge badge-warning">Draft</span>';
+                          }
+                        ?>
+                      </td>
                   <td class="text-center"><?php 
 						       if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
 
                         <td class="text-center align-middle" style="width: 30px">
-                          <?php if ($unt['status_data1'] == "0"): ?>
+                          <!-- Tombol Edit selalu muncul untuk rollback Draft <-> Final -->
                           <div class= "btn btn-success btn-xs" data-toggle="modal" data-target="#EditData<?php echo $unt['id_dok_ev']; ?>"><i class="fas fa-edit"></i></div>
-                       <?php endif; ?>
                      </td>
                       
                     </tr>
@@ -128,7 +140,17 @@
                       <td class="text-center" style="width: 120px"><?php $format = number_format((float)$unt['totalnilai'],2,",","."); echo $format; ?></td>
                      
 <!-- Data kolom Berita Acara dan Laporan Evaluasi dihapus -->
-                 
+                      <!-- Status Pengisian: Otomatis berdasarkan progres kriteria -->
+                      <td class="text-center" style="width: 120px">
+                        <?php 
+                          $progres = (float)$unt['persen'];
+                          if ($progres >= 100) {
+                            echo '<span class="badge badge-success">Selesai</span>';
+                          } else {
+                            echo '<span class="badge badge-warning">Draft</span>';
+                          }
+                        ?>
+                      </td>
                   <td class="text-center"><?php 
                    if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
 
@@ -198,11 +220,10 @@ foreach ($unit3monev as $unt) : ?>
         	<div class="form-group col-md-12">
      		 <label for="inputState">Status Evaluasi</label>
       			<select id="inputState" name="status_data1" class="form-control" value="<?php 
-						  if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?>">
+				  if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?>">
         		<option hidden="true" value="<?php echo $unt['status_data1']; ?>"><?php 
-						  if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></option>
-        		<option <?php 
-              if ($unt['status_data1'] == "0"){echo "";} elseif ($unt['status_data1'] == "1"){echo "Hidden";} else {echo "Hidden";}; ?> value="0">Draft</option>
+				  if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></option>
+        		<option value="0">Draft</option>
         		<option value="1">Final</option>
       			</select>
             </div>

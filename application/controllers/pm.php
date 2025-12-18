@@ -102,7 +102,7 @@ class Pm extends CI_Controller {
 
 	public function update_data (){
 
-		$id_pm 					= $jthis->input->post('id_pm');
+		$id_pm 					= $this->input->post('id_pm');
 		$jawaban1 				= $this->input->post('jawaban1');
 		$uraian_jawaban1 		= $this->input->post('uraian_jawaban1');
 		$link_bukti 			= $this->input->post('link_bukti');

@@ -51,6 +51,8 @@
                       <th class="text-center align-middle" colspan="2">Unit</th>
                       <th class="text-center align-middle" style="width: 120px">Berita Acara Evaluasi <?php echo $this->session->userdata('tahun'); ?></th>
                       <th class="text-center align-middle" style="width: 120px">Laporan Evaluasi Final <?php echo $this->session->userdata('tahun'); ?></th>
+                      <!-- Kolom Status Pengisian - Menampilkan Draft/Selesai berdasarkan progres -->
+                      <th class="text-center align-middle" style="width: 120px">Status Pengisian</th>
                       <th class="text-center align-middle" style="width: 120px">Status Evaluasi</th>
                       <th hidden class="text-center align-middle" >Aksi</th>
                     </tr>
@@ -81,6 +83,18 @@
                       <?php endif; ?>
                      </td>
                  
+                      <!-- Status Pengisian: Menampilkan Draft (data belum lengkap) atau Selesai (data lengkap) -->
+                      <!-- Catatan: Karena v_dok_ev2.php tidak memiliki data progres, status ditentukan dari keberadaan file -->
+                      <td class="text-center" style="width: 120px">
+                        <?php 
+                          // Jika ada file BA dan Laporan, status Selesai, jika tidak maka Draft
+                          if (!empty($unt['ba_ev']) && !empty($unt['lap_ev'])) {
+                            echo '<span class="badge badge-success">Selesai</span>';
+                          } else {
+                            echo '<span class="badge badge-warning">Draft</span>';
+                          }
+                        ?>
+                      </td>
                   <td class="text-center"><?php 
                    if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
 
