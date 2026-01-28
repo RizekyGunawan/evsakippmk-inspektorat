@@ -3488,3 +3488,463 @@ INFO - 2026-01-28 07:13:22 --> File loaded: C:\laragon\www\evsakippmk\applicatio
 INFO - 2026-01-28 07:13:22 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/footer.php
 INFO - 2026-01-28 07:13:22 --> Final output sent to browser
 DEBUG - 2026-01-28 07:13:22 --> Total execution time: 0.3304
+INFO - 2026-01-28 09:10:36 --> Config Class Initialized
+INFO - 2026-01-28 09:10:36 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:10:36 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:10:36 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:10:36 --> URI Class Initialized
+DEBUG - 2026-01-28 09:10:37 --> No URI present. Default controller set.
+INFO - 2026-01-28 09:10:37 --> Router Class Initialized
+INFO - 2026-01-28 09:10:37 --> Output Class Initialized
+INFO - 2026-01-28 09:10:37 --> Security Class Initialized
+DEBUG - 2026-01-28 09:10:37 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:10:37 --> Input Class Initialized
+INFO - 2026-01-28 09:10:37 --> Language Class Initialized
+INFO - 2026-01-28 09:10:37 --> Loader Class Initialized
+INFO - 2026-01-28 09:10:37 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:10:37 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:10:37 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:10:37 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:10:37 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:10:37 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:10:37 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Model Class Initialized
+INFO - 2026-01-28 09:10:37 --> Controller Class Initialized
+INFO - 2026-01-28 09:10:37 --> File loaded: C:\laragon\www\evsakippmk\application\views\v_login.php
+INFO - 2026-01-28 09:10:37 --> Final output sent to browser
+DEBUG - 2026-01-28 09:10:37 --> Total execution time: 0.9419
+INFO - 2026-01-28 09:10:38 --> Config Class Initialized
+INFO - 2026-01-28 09:10:38 --> Hooks Class Initialized
+INFO - 2026-01-28 09:10:38 --> Config Class Initialized
+DEBUG - 2026-01-28 09:10:38 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:10:38 --> Hooks Class Initialized
+INFO - 2026-01-28 09:10:38 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:10:38 --> URI Class Initialized
+INFO - 2026-01-28 09:10:38 --> Router Class Initialized
+DEBUG - 2026-01-28 09:10:38 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:10:38 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:10:38 --> Output Class Initialized
+INFO - 2026-01-28 09:10:38 --> Security Class Initialized
+DEBUG - 2026-01-28 09:10:38 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:10:38 --> Input Class Initialized
+INFO - 2026-01-28 09:10:38 --> Language Class Initialized
+ERROR - 2026-01-28 09:10:38 --> 404 Page Not Found: Assets/plugins
+INFO - 2026-01-28 09:10:38 --> URI Class Initialized
+INFO - 2026-01-28 09:10:38 --> Router Class Initialized
+INFO - 2026-01-28 09:10:38 --> Output Class Initialized
+INFO - 2026-01-28 09:10:38 --> Security Class Initialized
+DEBUG - 2026-01-28 09:10:38 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:10:38 --> Input Class Initialized
+INFO - 2026-01-28 09:10:38 --> Language Class Initialized
+ERROR - 2026-01-28 09:10:38 --> 404 Page Not Found: Assets/plugins
+INFO - 2026-01-28 09:10:54 --> Config Class Initialized
+INFO - 2026-01-28 09:10:54 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:10:54 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:10:54 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:10:54 --> URI Class Initialized
+INFO - 2026-01-28 09:10:54 --> Router Class Initialized
+INFO - 2026-01-28 09:10:54 --> Output Class Initialized
+INFO - 2026-01-28 09:10:54 --> Security Class Initialized
+DEBUG - 2026-01-28 09:10:54 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:10:54 --> Input Class Initialized
+INFO - 2026-01-28 09:10:54 --> Language Class Initialized
+INFO - 2026-01-28 09:10:54 --> Loader Class Initialized
+INFO - 2026-01-28 09:10:54 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:10:54 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:10:54 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:10:54 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:10:54 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:10:54 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:10:54 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Controller Class Initialized
+INFO - 2026-01-28 09:10:54 --> Language file loaded: language/english/form_validation_lang.php
+INFO - 2026-01-28 09:10:54 --> Config Class Initialized
+INFO - 2026-01-28 09:10:54 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:10:54 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:10:54 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:10:54 --> URI Class Initialized
+INFO - 2026-01-28 09:10:54 --> Router Class Initialized
+INFO - 2026-01-28 09:10:54 --> Output Class Initialized
+INFO - 2026-01-28 09:10:54 --> Security Class Initialized
+DEBUG - 2026-01-28 09:10:54 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:10:54 --> Input Class Initialized
+INFO - 2026-01-28 09:10:54 --> Language Class Initialized
+INFO - 2026-01-28 09:10:54 --> Loader Class Initialized
+INFO - 2026-01-28 09:10:54 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:10:54 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:10:54 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:10:54 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:10:54 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:10:54 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:10:54 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:54 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Model Class Initialized
+INFO - 2026-01-28 09:10:55 --> Controller Class Initialized
+INFO - 2026-01-28 09:10:55 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/header.php
+INFO - 2026-01-28 09:10:55 --> File loaded: C:\laragon\www\evsakippmk\application\views\v_dashboard.php
+INFO - 2026-01-28 09:10:55 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/sidebar.php
+INFO - 2026-01-28 09:10:55 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/footer.php
+INFO - 2026-01-28 09:10:55 --> Final output sent to browser
+DEBUG - 2026-01-28 09:10:55 --> Total execution time: 0.6670
+INFO - 2026-01-28 09:10:58 --> Config Class Initialized
+INFO - 2026-01-28 09:10:58 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:10:58 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:10:58 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:10:58 --> URI Class Initialized
+INFO - 2026-01-28 09:10:58 --> Router Class Initialized
+INFO - 2026-01-28 09:10:58 --> Output Class Initialized
+INFO - 2026-01-28 09:10:58 --> Security Class Initialized
+DEBUG - 2026-01-28 09:10:58 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:10:58 --> Input Class Initialized
+INFO - 2026-01-28 09:10:58 --> Language Class Initialized
+INFO - 2026-01-28 09:10:58 --> Loader Class Initialized
+INFO - 2026-01-28 09:10:58 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:10:58 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:10:58 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:10:58 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:10:58 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:10:59 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:10:59 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Model Class Initialized
+INFO - 2026-01-28 09:10:59 --> Controller Class Initialized
+INFO - 2026-01-28 09:10:59 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/header.php
+INFO - 2026-01-28 09:10:59 --> File loaded: C:\laragon\www\evsakippmk\application\views\v_ev.php
+INFO - 2026-01-28 09:10:59 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/sidebar.php
+INFO - 2026-01-28 09:10:59 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/footer.php
+INFO - 2026-01-28 09:10:59 --> Final output sent to browser
+DEBUG - 2026-01-28 09:10:59 --> Total execution time: 1.1365
+INFO - 2026-01-28 09:11:00 --> Config Class Initialized
+INFO - 2026-01-28 09:11:00 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:11:00 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:11:00 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:11:00 --> URI Class Initialized
+INFO - 2026-01-28 09:11:00 --> Router Class Initialized
+INFO - 2026-01-28 09:11:00 --> Output Class Initialized
+INFO - 2026-01-28 09:11:00 --> Security Class Initialized
+DEBUG - 2026-01-28 09:11:00 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:11:00 --> Input Class Initialized
+INFO - 2026-01-28 09:11:00 --> Language Class Initialized
+ERROR - 2026-01-28 09:11:00 --> 404 Page Not Found: Dist/img
+INFO - 2026-01-28 09:11:06 --> Config Class Initialized
+INFO - 2026-01-28 09:11:06 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:11:06 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:11:06 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:11:06 --> URI Class Initialized
+INFO - 2026-01-28 09:11:06 --> Router Class Initialized
+INFO - 2026-01-28 09:11:06 --> Output Class Initialized
+INFO - 2026-01-28 09:11:06 --> Security Class Initialized
+DEBUG - 2026-01-28 09:11:06 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:11:06 --> Input Class Initialized
+INFO - 2026-01-28 09:11:06 --> Language Class Initialized
+INFO - 2026-01-28 09:11:06 --> Loader Class Initialized
+INFO - 2026-01-28 09:11:06 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:11:06 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:11:06 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:11:06 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:11:06 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:11:07 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:11:07 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Controller Class Initialized
+INFO - 2026-01-28 09:11:07 --> Config Class Initialized
+INFO - 2026-01-28 09:11:07 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:11:07 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:11:07 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:11:07 --> URI Class Initialized
+INFO - 2026-01-28 09:11:07 --> Router Class Initialized
+INFO - 2026-01-28 09:11:07 --> Output Class Initialized
+INFO - 2026-01-28 09:11:07 --> Security Class Initialized
+DEBUG - 2026-01-28 09:11:07 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:11:07 --> Input Class Initialized
+INFO - 2026-01-28 09:11:07 --> Language Class Initialized
+INFO - 2026-01-28 09:11:07 --> Loader Class Initialized
+INFO - 2026-01-28 09:11:07 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:11:07 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:11:07 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:11:07 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:11:07 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:11:07 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:11:07 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Model Class Initialized
+INFO - 2026-01-28 09:11:07 --> Controller Class Initialized
+INFO - 2026-01-28 09:11:07 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/header.php
+INFO - 2026-01-28 09:11:07 --> File loaded: C:\laragon\www\evsakippmk\application\views\v_ev.php
+INFO - 2026-01-28 09:11:07 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/sidebar.php
+INFO - 2026-01-28 09:11:07 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/footer.php
+INFO - 2026-01-28 09:11:07 --> Final output sent to browser
+DEBUG - 2026-01-28 09:11:07 --> Total execution time: 0.6823
+INFO - 2026-01-28 09:11:08 --> Config Class Initialized
+INFO - 2026-01-28 09:11:08 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:11:08 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:11:08 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:11:08 --> URI Class Initialized
+INFO - 2026-01-28 09:11:08 --> Router Class Initialized
+INFO - 2026-01-28 09:11:08 --> Output Class Initialized
+INFO - 2026-01-28 09:11:08 --> Security Class Initialized
+DEBUG - 2026-01-28 09:11:08 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:11:08 --> Input Class Initialized
+INFO - 2026-01-28 09:11:08 --> Language Class Initialized
+ERROR - 2026-01-28 09:11:08 --> 404 Page Not Found: Dist/img
+INFO - 2026-01-28 09:11:43 --> Config Class Initialized
+INFO - 2026-01-28 09:11:43 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:11:43 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:11:43 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:11:43 --> URI Class Initialized
+INFO - 2026-01-28 09:11:43 --> Router Class Initialized
+INFO - 2026-01-28 09:11:43 --> Output Class Initialized
+INFO - 2026-01-28 09:11:43 --> Security Class Initialized
+DEBUG - 2026-01-28 09:11:43 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:11:43 --> Input Class Initialized
+INFO - 2026-01-28 09:11:43 --> Language Class Initialized
+INFO - 2026-01-28 09:11:43 --> Loader Class Initialized
+INFO - 2026-01-28 09:11:43 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:11:43 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:11:43 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:11:43 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:11:43 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:11:43 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:11:44 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Model Class Initialized
+INFO - 2026-01-28 09:11:44 --> Controller Class Initialized
+INFO - 2026-01-28 09:11:44 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/header.php
+INFO - 2026-01-28 09:11:44 --> File loaded: C:\laragon\www\evsakippmk\application\views\v_ev.php
+INFO - 2026-01-28 09:11:44 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/sidebar.php
+INFO - 2026-01-28 09:11:44 --> File loaded: C:\laragon\www\evsakippmk\application\views\templates/footer.php
+INFO - 2026-01-28 09:11:44 --> Final output sent to browser
+DEBUG - 2026-01-28 09:11:44 --> Total execution time: 1.7518
+INFO - 2026-01-28 09:11:45 --> Config Class Initialized
+INFO - 2026-01-28 09:11:45 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:11:45 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:11:45 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:11:45 --> URI Class Initialized
+INFO - 2026-01-28 09:11:45 --> Router Class Initialized
+INFO - 2026-01-28 09:11:45 --> Output Class Initialized
+INFO - 2026-01-28 09:11:45 --> Security Class Initialized
+DEBUG - 2026-01-28 09:11:45 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:11:45 --> Input Class Initialized
+INFO - 2026-01-28 09:11:45 --> Language Class Initialized
+ERROR - 2026-01-28 09:11:45 --> 404 Page Not Found: Dist/img
+INFO - 2026-01-28 09:11:52 --> Config Class Initialized
+INFO - 2026-01-28 09:11:52 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:11:52 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:11:52 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:11:52 --> URI Class Initialized
+INFO - 2026-01-28 09:11:52 --> Config Class Initialized
+INFO - 2026-01-28 09:11:52 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:11:52 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:11:52 --> Router Class Initialized
+INFO - 2026-01-28 09:11:52 --> Output Class Initialized
+INFO - 2026-01-28 09:11:52 --> Security Class Initialized
+DEBUG - 2026-01-28 09:11:53 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:11:53 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:11:53 --> Input Class Initialized
+INFO - 2026-01-28 09:11:53 --> Language Class Initialized
+INFO - 2026-01-28 09:11:53 --> Loader Class Initialized
+INFO - 2026-01-28 09:11:53 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:11:53 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:11:53 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:11:53 --> URI Class Initialized
+INFO - 2026-01-28 09:11:53 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:11:53 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:11:53 --> Router Class Initialized
+INFO - 2026-01-28 09:11:53 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:11:53 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:11:53 --> Model Class Initialized
+INFO - 2026-01-28 09:11:53 --> Model Class Initialized
+INFO - 2026-01-28 09:11:53 --> Model Class Initialized
+INFO - 2026-01-28 09:11:53 --> Model Class Initialized
+INFO - 2026-01-28 09:11:53 --> Output Class Initialized
+INFO - 2026-01-28 09:11:53 --> Security Class Initialized
+INFO - 2026-01-28 09:11:53 --> Model Class Initialized
+INFO - 2026-01-28 09:11:54 --> Model Class Initialized
+DEBUG - 2026-01-28 09:11:54 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:11:54 --> Model Class Initialized
+INFO - 2026-01-28 09:11:54 --> Model Class Initialized
+INFO - 2026-01-28 09:11:54 --> Input Class Initialized
+INFO - 2026-01-28 09:11:54 --> Language Class Initialized
+INFO - 2026-01-28 09:11:54 --> Model Class Initialized
+INFO - 2026-01-28 09:11:54 --> Loader Class Initialized
+INFO - 2026-01-28 09:11:54 --> Model Class Initialized
+INFO - 2026-01-28 09:11:54 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:11:54 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:11:54 --> Model Class Initialized
+INFO - 2026-01-28 09:11:54 --> Model Class Initialized
+INFO - 2026-01-28 09:11:54 --> Model Class Initialized
+INFO - 2026-01-28 09:11:54 --> Controller Class Initialized
+INFO - 2026-01-28 09:11:54 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:11:54 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:11:54 --> Final output sent to browser
+INFO - 2026-01-28 09:11:54 --> Database Driver Class Initialized
+DEBUG - 2026-01-28 09:11:54 --> Total execution time: 2.4322
+INFO - 2026-01-28 09:11:55 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:11:55 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:11:55 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Model Class Initialized
+INFO - 2026-01-28 09:11:56 --> Controller Class Initialized
+INFO - 2026-01-28 09:11:56 --> Final output sent to browser
+DEBUG - 2026-01-28 09:11:56 --> Total execution time: 4.7532
+INFO - 2026-01-28 09:13:36 --> Config Class Initialized
+INFO - 2026-01-28 09:13:36 --> Config Class Initialized
+INFO - 2026-01-28 09:13:36 --> Hooks Class Initialized
+INFO - 2026-01-28 09:13:36 --> Hooks Class Initialized
+DEBUG - 2026-01-28 09:13:36 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:13:36 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:13:36 --> URI Class Initialized
+DEBUG - 2026-01-28 09:13:36 --> UTF-8 Support Enabled
+INFO - 2026-01-28 09:13:37 --> Router Class Initialized
+INFO - 2026-01-28 09:13:37 --> Output Class Initialized
+INFO - 2026-01-28 09:13:37 --> Security Class Initialized
+DEBUG - 2026-01-28 09:13:37 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:13:37 --> Input Class Initialized
+INFO - 2026-01-28 09:13:37 --> Language Class Initialized
+INFO - 2026-01-28 09:13:37 --> Utf8 Class Initialized
+INFO - 2026-01-28 09:13:37 --> Loader Class Initialized
+INFO - 2026-01-28 09:13:37 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:13:37 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:13:37 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:13:37 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:13:37 --> URI Class Initialized
+INFO - 2026-01-28 09:13:37 --> Router Class Initialized
+INFO - 2026-01-28 09:13:37 --> Output Class Initialized
+INFO - 2026-01-28 09:13:37 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:13:37 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:13:37 --> Security Class Initialized
+DEBUG - 2026-01-28 09:13:37 --> Global POST, GET and COOKIE data sanitized
+INFO - 2026-01-28 09:13:37 --> Input Class Initialized
+INFO - 2026-01-28 09:13:37 --> Language Class Initialized
+INFO - 2026-01-28 09:13:37 --> Loader Class Initialized
+INFO - 2026-01-28 09:13:37 --> Helper loaded: url_helper
+INFO - 2026-01-28 09:13:37 --> Helper loaded: form_helper
+INFO - 2026-01-28 09:13:37 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:37 --> Helper loaded: file_helper
+INFO - 2026-01-28 09:13:37 --> Helper loaded: captcha_helper
+INFO - 2026-01-28 09:13:37 --> Database Driver Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:37 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Controller Class Initialized
+INFO - 2026-01-28 09:13:38 --> Final output sent to browser
+DEBUG - 2026-01-28 09:13:38 --> Total execution time: 1.4694
+INFO - 2026-01-28 09:13:38 --> Session: Class initialized using 'database' driver.
+INFO - 2026-01-28 09:13:38 --> Form Validation Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Model Class Initialized
+INFO - 2026-01-28 09:13:38 --> Controller Class Initialized
+INFO - 2026-01-28 09:13:38 --> Final output sent to browser
+DEBUG - 2026-01-28 09:13:38 --> Total execution time: 1.6644
