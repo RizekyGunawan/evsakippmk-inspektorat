@@ -236,19 +236,23 @@
                         <?php foreach ($rekap_units as $unit): 
                           $pemenuhan = (float)$unit['pemenuhan'];
                           $predikat = '';
-                          if ($pemenuhan >= 90.01 && $pemenuhan <= 100) {
+                          
+                          // Mapping berdasarkan nilai pasti sesuai tabel referensi
+                          if ($pemenuhan == 100) {
                             $predikat = "AA";
-                          } elseif ($pemenuhan >= 80.01 && $pemenuhan <= 90.00) {
+                          } elseif ($pemenuhan >= 90 && $pemenuhan < 100) {
                             $predikat = "A";
-                          } elseif ($pemenuhan >= 70.01 && $pemenuhan <= 80.00) {
+                          } elseif ($pemenuhan >= 80 && $pemenuhan < 90) {
                             $predikat = "BB";
-                          } elseif ($pemenuhan >= 60.01 && $pemenuhan <= 70.00) {
+                          } elseif ($pemenuhan >= 70 && $pemenuhan < 80) {
                             $predikat = "B";
-                          } elseif ($pemenuhan >= 50.01 && $pemenuhan <= 60.00) {
+                          } elseif ($pemenuhan >= 60 && $pemenuhan < 70) {
                             $predikat = "CC";
-                          } elseif ($pemenuhan >= 30.01 && $pemenuhan <= 50.00) {
+                          } elseif ($pemenuhan >= 50 && $pemenuhan < 60) {
                             $predikat = "C";
-                          } elseif ($pemenuhan >= 0.01 && $pemenuhan <= 30.00) {
+                          } elseif ($pemenuhan >= 30 && $pemenuhan < 50) {
+                            $predikat = "D";
+                          } elseif ($pemenuhan > 0 && $pemenuhan < 30) {
                             $predikat = "D";
                           } elseif ($pemenuhan == 0) {
                             $predikat = "E";
@@ -257,8 +261,7 @@
                           $persentase_format = number_format($pemenuhan, 2, ',', '.');
                         ?>
                         <td class="text-center">
-                          <?php echo $predikat; ?><br>
-                          <span style="font-size: 0.85em;">(<?php echo $persentase_format; ?>%)</span>
+                          <?php echo $predikat; ?>
                         </td>
                         <?php endforeach; ?>
                       </tr>

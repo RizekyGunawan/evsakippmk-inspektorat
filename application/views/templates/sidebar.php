@@ -28,6 +28,13 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
 
+               <!-- DEBUG: Cek Role ID User -->
+               <?php 
+               $current_role = $this->session->userdata('id_role');
+               echo "<!-- DEBUG: Current Role ID = " . $current_role . " -->"; 
+               echo "<!-- DEBUG: Username = " . $this->session->userdata('username') . " -->"; 
+               ?>
+
                <?php if ($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7): ?>
 
           <li class="nav-item">
@@ -83,6 +90,14 @@
             </a>
             
           </li>
+
+        <?php endif; ?>
+
+          <?php 
+          // Menu Rekapitulasi Unit Kerja - Exclude Unit Kerja (role 1)
+          // Hanya untuk role 2-7 (Pembina, Evaluator, Admin, Admin UK, Admin Pembina, Admin Evaluator)
+          if ($this->session->userdata('id_role') >= 2 && $this->session->userdata('id_role') <= 7): 
+          ?>
           <li class="nav-item">
             <a href="<?php echo base_url() ?>ev/rekap_unit" class="nav-link" data-id="rekap_unit-link">
               <i class="nav-icon fas fa-table"></i>
@@ -93,6 +108,10 @@
             </a>
             
           </li>
+          <?php endif; ?>
+
+          <?php if ($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7): ?>
+
           <li class="nav-item">
             <a href="<?php echo base_url() ?>dok_ev/index" class="nav-link" data-id="dok_ev-link">
               <i class="nav-icon fas fa-copy"></i>

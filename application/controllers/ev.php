@@ -256,6 +256,16 @@ $this->notification_model->create($notificationData);
 
 
 	public function rekap_unit (){
+		// Block akses untuk Unit Kerja (Role 1)
+		// Unit Kerja hanya perlu lihat data unit mereka sendiri, tidak perlu rekapitulasi semua unit
+		if ($this->session->userdata('id_role') == 1) {
+			$this->load->view('templates/header');
+			$this->load->view('errors/unauthorized');
+			$this->load->view('templates/sidebar');
+			$this->load->view('templates/footer');
+			return;
+		}
+		
 		$this->load->model('m_ev');
 		
 		$data['user']= $this->m_auth2->get_datauser();
@@ -270,27 +280,18 @@ $this->notification_model->create($notificationData);
 		
 		$this->load->view('templates/header', $data);
 
-		
-		if ($this->session->userdata('id_role')==4)  {
-		$this->load->view('v_ev_rekap_unit', $data);}
-		elseif ($this->session->userdata('id_role')==5)  {
-		$this->load->view('v_ev_rekap_unit', $data);}
-		elseif ($this->session->userdata('id_role')==6)  {
-		$this->load->view('v_ev_rekap_unit', $data);}
-		elseif ($this->session->userdata('id_role')==7)  {
-		$this->load->view('v_ev_rekap_unit', $data);}
-		elseif ($this->session->userdata('id_role')==1)  {
-		$this->load->view('v_ev_rekap_unit', $data);}
-		elseif ($this->session->userdata('id_role')==2)  {
-		$this->load->view('v_ev_rekap_unit', $data);}
-		elseif ($this->session->userdata('id_role')==3)  {
-		$this->load->view('v_ev_rekap_unit', $data);}else {
-		$this->load->view('404');}
+		// Role 2-7 bisa akses (Pembina, Evaluator, Admin, Admin UK, Admin Pembina, Admin Evaluator)
+		if ($this->session->userdata('id_role') >= 2 && $this->session->userdata('id_role') <= 7) {
+			$this->load->view('v_ev_rekap_unit', $data);
+		} else {
+			$this->load->view('404');
+		}
 
 		$this->load->view('templates/sidebar');
 		$this->load->view('templates/footer', $data);
 
 	}
+
 
 
 

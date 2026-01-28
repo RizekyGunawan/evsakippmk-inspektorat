@@ -48,13 +48,12 @@
                   <thead class="thead-dark">
                     <tr>
                       <th class="text-center align-middle" style="width: 10px">No</th>
-                      <th class="text-center align-middle" colspan="2">Unit</th>
-                      <th class="text-center align-middle" style="width: 120px">Berita Acara Evaluasi <?php echo $this->session->userdata('tahun'); ?></th>
-                      <th class="text-center align-middle" style="width: 120px">Laporan Evaluasi Final <?php echo $this->session->userdata('tahun'); ?></th>
+                      <th class="text-center align-middle">Kode Unit</th>
+                      <th class="text-center align-middle">Nama Unit</th>
                       <!-- Kolom Status Pengisian - Menampilkan Draft/Selesai berdasarkan progres -->
                       <th class="text-center align-middle" style="width: 120px">Status Pengisian</th>
                       <th class="text-center align-middle" style="width: 120px">Status Evaluasi</th>
-                      <th hidden class="text-center align-middle" >Aksi</th>
+                      <th class="text-center align-middle" style="width: 200px">Laporan Evaluasi Final <?php echo $this->session->userdata('tahun'); ?></th>
                     </tr>
                   </thead>
                   
@@ -68,35 +67,37 @@
                       <td class="text-center"><?php echo $no++ ?> </td>
                       <td class="text-center"><?php echo $unt['kd_unit']; ?></td>
                       <td style="width: 900px"><?php echo $unt['nm_unit']; ?></td>
-
-                      
-                     <td class="text-center align-middle" style="width: 30px">
-                      <?php if ($unt['ba_ev'] != ""): ?>
-                        <a class= "btn btn-secondary btn-xs" href="../assets/dok_ev/<?php echo $unt['ba_ev']; ?>" target="_blank">Preview</a>
-                       <?php endif; ?>
-                     </td>
-
-                        
-                     <td class="text-center align-middle" style="width: 30px">
-                      <?php if ($unt['lap_ev'] != ""): ?>
-                      <a class= "btn btn-secondary btn-xs" href="../assets/dok_ev/<?php echo $unt['lap_ev']; ?>" target="_blank">Preview</i></a>
-                      <?php endif; ?>
-                     </td>
                  
                       <!-- Status Pengisian: Menampilkan Draft (data belum lengkap) atau Selesai (data lengkap) -->
-                      <!-- Catatan: Karena v_dok_ev2.php tidak memiliki data progres, status ditentukan dari keberadaan file -->
+                      <!-- Catatan: Status ditentukan dari keberadaan file Laporan Evaluasi -->
                       <td class="text-center" style="width: 120px">
                         <?php 
-                          // Jika ada file BA dan Laporan, status Selesai, jika tidak maka Draft
-                          if (!empty($unt['ba_ev']) && !empty($unt['lap_ev'])) {
+                          // Jika ada file Laporan, status Selesai, jika tidak maka Draft
+                          if (!empty($unt['lap_ev'])) {
                             echo '<span class="badge badge-success">Selesai</span>';
                           } else {
                             echo '<span class="badge badge-warning">Draft</span>';
                           }
                         ?>
                       </td>
-                  <td class="text-center"><?php 
-                   if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
+                      <td class="text-center"><?php 
+                        if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
+
+                      <!-- Kolom Laporan Evaluasi - Dipindah ke paling kanan -->
+                      <td class="text-center align-middle">
+                        <?php if ($unt['lap_ev'] != ""): ?>
+                          <!-- Tombol Preview -->
+                          <a class="btn btn-info btn-sm mr-1" href="../assets/dok_ev/<?php echo $unt['lap_ev']; ?>" target="_blank">
+                            <i class="fas fa-eye"></i> Preview
+                          </a>
+                          <!-- Tombol Download -->
+                          <a class="btn btn-success btn-sm" href="../assets/dok_ev/<?php echo $unt['lap_ev']; ?>" download>
+                            <i class="fas fa-download"></i> Download
+                          </a>
+                        <?php else: ?>
+                          <span class="badge badge-secondary">Belum Tersedia</span>
+                        <?php endif; ?>
+                      </td>
 
                        
                     </tr>
