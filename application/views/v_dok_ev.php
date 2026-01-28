@@ -125,44 +125,6 @@
                   </tbody>
 
 
-                  <?php if($this->session->userdata('id_role') == "2" || $this->session->userdata('id_role') == "6"): ?>
-                  <tbody>
-
-                  <?php
-                     $no = 1;
-                     foreach ($unit3monev2 as $unt) : ?>
-                    <tr>
-                      <td class="text-center"><?php echo $no++ ?> </td>
-                      <td class="text-center"><?php echo $unt['kd_unit']; ?></td>
-                      <td style="width: 900px"><?php echo $unt['nm_unit']; ?></td>
-                      <td class="text-center" style="width: 120px"><?php $format = number_format((float)$unt['persen'],2,",","."); echo $format; ?>%</td> 
-                      <td class="text-center" style="width: 120px"><?php $format = number_format((float)$unt['totalnilai'],2,",","."); echo $format; ?></td>
-                     
-<!-- Data kolom Berita Acara dan Laporan Evaluasi dihapus -->
-                      <!-- Status Pengisian: Otomatis berdasarkan progres kriteria -->
-                      <td class="text-center" style="width: 120px">
-                        <?php 
-                          $progres = (float)$unt['persen'];
-                          if ($progres >= 100) {
-                            echo '<span class="badge badge-success">Selesai</span>';
-                          } else {
-                            echo '<span class="badge badge-warning">Draft</span>';
-                          }
-                        ?>
-                      </td>
-                  <td class="text-center"><?php 
-                   if ($unt['status_data1'] == "0"){echo "Draft";} elseif ($unt['status_data1'] == "1"){echo "Final";} else {echo "";}; ?></td>
-
-                        <!-- Kolom Aksi untuk semua role -->
-                        <td class="text-center align-middle" style="width: 30px">
-                          <!-- Tombol Edit untuk semua role -->
-                          <div class= "btn btn-success btn-xs" data-toggle="modal" data-target="#EditData<?php echo $unt['id_dok_ev']; ?>"><i class="fas fa-edit"></i></div>
-                        </td>
-                     </tr>
-                   <?php endforeach; ?>
-                  </tbody>
-                  <?php endif; ?>
-
                 </table>
               </div>
               <!-- /.card-body -->
