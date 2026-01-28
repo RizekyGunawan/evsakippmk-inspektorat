@@ -1,0 +1,41 @@
+# CodeIgniter specific
+application/cache/*
+!application/cache/index.html
+!application/cache/.htaccess
+
+application/logs/*
+!application/logs/index.html
+!application/logs/.htaccess
+
+# CAPTCHA images (temporary files)
+assets/captcha/*.jpg
+assets/captcha/*.png
+
+# User uploads
+uploads/*
+!uploads/index.html
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Composer
+vendor/
+composer.lock
+
+# Node modules (if using npm/yarn)
+node_modules/
+package-lock.json
+yarn.lock
