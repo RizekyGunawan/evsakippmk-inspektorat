@@ -1,0 +1,89 @@
+<?php
+defined('BASEPATH') OR exit('No direct script access allowed');
+
+class Datasub extends CI_Controller {
+
+    /**
+     * Get and calculate average score data for a specific PM0 ID
+     * @return void Outputs JSON response
+     */
+    public function getData()
+{
+    // Load database dan helper yang diperlukan
+    $this->load->database();
+    $this->load->helper('url');
+
+    // Ambil dan validasi input
+    $id_pm0 = (int)$this->input->get('id_pm0');
+    
+    if (empty($id_pm0) || $id_pm0 <= 0) {
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(400)
+            ->set_output(json_encode(['error' => 'ID PM0 tidak valid']));
+    }
+
+    try {
+        // Query untuk menghitung rata-rata per subkomponen
+        $this->db->select([
+            'c.id_subkomponen',
+            'c.nama_subkomponen',
+            'b.id_aspek',
+            'b.nama_aspek',
+            'AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) as avg_jawaban1',
+            'COUNT(a.id_pm) as total_responden',
+            'MIN(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) as nilai_terendah',
+            'MAX(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) as nilai_tertinggi',
+            'CASE ' .
+            '   WHEN AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) > 89.99 THEN "AA" ' .
+            '   WHEN AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) > 79.99 THEN "A" ' .
+            '   WHEN AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) > 69.99 THEN "BB" ' .
+            '   WHEN AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) > 59.99 THEN "B" ' .
+            '   WHEN AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) > 49.99 THEN "CC" ' .
+            '   WHEN AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) > 29.99 THEN "C" ' .
+            '   WHEN AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)) > 0 THEN "D" ' .
+            '   ELSE "E" ' .
+            'END as jawabanantara',
+            'ROUND(AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)), 0) as skorpersen',
+            'ROUND(AVG(LEAST(GREATEST(CAST(a.jawaban1 AS DECIMAL(10,2)), 0), 100)), 0) as skor'
+        ]);
+        
+        $this->db->from('ta_pm a')
+            ->join('ref_aspek b', 'a.id_aspek = b.id_aspek')
+            ->join('ref_subkomponen c', 'a.id_subkomponen = c.id_subkomponen')
+            ->join('ta_pm0 d', 'a.id_pm0 = d.id_pm0')
+            ->where('d.id_pm0', $id_pm0)
+            ->group_by(['c.id_subkomponen', 'c.nama_subkomponen', 'b.id_aspek', 'b.nama_aspek'])
+            ->order_by('c.id_subkomponen');
+        
+        $query = $this->db->get();
+
+        $response = [
+            'status' => 'success',
+            'data' => $query->num_rows() > 0 ? $query->result_array() : [],
+            'metadata' => [
+                'total_subkomponen' => $query->num_rows(),
+                'timestamp' => date('Y-m-d H:i:s')
+            ]
+        ];
+
+    } catch (Exception $e) {
+        log_message('error', 'Error in Datasub/getData: ' . $e->getMessage());
+        $response = [
+            'status' => 'error',
+            'message' => 'Terjadi kesalahan server',
+            'error' => $e->getMessage()
+        ];
+        
+        return $this->output
+            ->set_content_type('application/json')
+            ->set_status_header(500)
+            ->set_output(json_encode($response));
+    }
+
+    // Kembalikan response JSON
+    return $this->output
+        ->set_content_type('application/json')
+        ->set_status_header(200)
+        ->set_output(json_encode($response, JSON_PRETTY_PRINT));
+}

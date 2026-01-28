@@ -9,43 +9,35 @@ class Datasub extends CI_Controller {
 
         $id_pm0 = $this->input->get('id_pm0');
 
-        // Query yang dioptimalkan untuk menghitung rata-rata jawaban1
-        $this->db->select([
-            'a.*',
-            'b.*',
-            'c.*',
-            'd.*',
-            'AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) as avg_jawaban1',
-            'CASE ' .
-            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 90 THEN "AA" ' .
-            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 80 THEN "A" ' .
-            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 70 THEN "BB" ' .
-            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 60 THEN "B" ' .
-            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 50 THEN "CC" ' .
-            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) >= 30 THEN "C" ' .
-            '   WHEN AVG(CAST(a.jawaban1 AS DECIMAL(10,2))) > 0 THEN "D" ' .
-            '   ELSE "E" ' .
-            'END as jawabanantara',
-            'ROUND(AVG(CAST(a.jawaban1 AS DECIMAL(10,2))), 0) as skorpersen',
-            'ROUND(AVG(CAST(a.jawaban1 AS DECIMAL(10,2))), 0) as skor'
-        ]);
-        
-        $this->db->from('ta_pm a');
-        $this->db->join('ref_aspek b', 'a.id_aspek = b.id_aspek');
-        $this->db->join('ref_subkomponen c', 'a.id_subkomponen = c.id_subkomponen');
-        $this->db->join('ta_pm0 d', 'a.id_pm0 = d.id_pm0');
-        $this->db->where('d.id_pm0', $id_pm0);
-        $this->db->group_by('d.id_pm0');
-        
-        $query = $this->db->get();
+        $query = $this->db->query("
+            SELECT 
+                d.*,
+                AVG(a.jawaban1) as skorpersen, 
+                AVG(c.bobot2 * (a.jawaban1 / 100)) as skor,
+                (CASE 
+                    WHEN AVG(a.jawaban1) = 100 THEN 'AA'
+                    WHEN AVG(a.jawaban1) >= 90 THEN 'A'
+                    WHEN AVG(a.jawaban1) >= 80 THEN 'BB'
+                    WHEN AVG(a.jawaban1) >= 70 THEN 'B'
+                    WHEN AVG(a.jawaban1) >= 60 THEN 'CC'
+                    WHEN AVG(a.jawaban1) >= 50 THEN 'C'
+                    WHEN AVG(a.jawaban1) >= 30 THEN 'D'
+                    ELSE 'E'
+                END) as jawabanantara
+            from ta_pm a  
+            inner join ref_aspek b on a.id_aspek=b.id_aspek 
+            inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen 
+            inner join ta_pm0 d on a.id_pm0=d.id_pm0 
+            where d.id_pm0 = ?
+            GROUP BY d.id_pm0
+        ", array($id_pm0));
 
         if ($query->num_rows() > 0) {
-            $data = $query->row_array(); // Mengambil data hasil query sebagai array
+            $data = $query->row_array();
         } else {
-            $data = array(); // Jika tidak ada data, inisialisasikan dengan array kosong
+            $data = array();
         }
 
-        // Mengirimkan data sebagai respon JSON
         header('Content-Type: application/json');
         echo json_encode($data);
     }

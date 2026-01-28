@@ -135,12 +135,18 @@ class Pm extends CI_Controller {
 
     // Determine valid answers based on the value of jawabanantara
     switch ($jawabanantara) {
-        case 'BB':
-            $valid_jawaban0 = array('80', '90', '100');
+        case 'AA':
+            $valid_jawaban0 = array('100');
             break;
-        case 'B':
+        case 'A':
+            $valid_jawaban0 = array('90');
+            break;
+		case 'BB':
+            $valid_jawaban0 = array('80');
+            break;
+		case 'B':
             $valid_jawaban0 = array('70');
-            break;
+            break;	
         case 'CC':
             $valid_jawaban0 = array('60');
             break;

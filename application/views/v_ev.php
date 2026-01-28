@@ -163,8 +163,8 @@
                         <?php echo $subk['uraian_subkomponen']; ?>
                       </td>
                       <td class="text-center align-middle"><?php 
-                      if ($subk['jawaban0'] == "100"){echo "AA";} elseif ($subk['jawaban0'] == "90"){echo "A";} elseif ($subk['jawaban0'] == "80"){echo "BB";} elseif ($subk['jawaban0'] == "70"){echo "B";} elseif ($subk['jawaban0'] == "60"){echo "CC";} elseif ($subk['jawaban0'] == "50"){echo "C";} elseif ($subk['jawaban0'] == "30"){echo "D";} elseif ($subk['jawaban0'] == "0"){echo "E";} else {echo "";}; ?></td>
-                      <td title="<?php echo htmlspecialchars($subk['uraian_jawaban0'], ENT_QUOTES, 'UTF-8'); ?>" class="text-center align-middle"style="width: 50px">
+                      if ($subk['jawaban0'] == "100"){echo "AA=100";} elseif ($subk['jawaban0'] == "90"){echo "A=90";} elseif ($subk['jawaban0'] == "80"){echo "BB=80";} elseif ($subk['jawaban0'] == "70"){echo "B=70";} elseif ($subk['jawaban0'] == "60"){echo "CC=60";} elseif ($subk['jawaban0'] == "50"){echo "C=50";} elseif ($subk['jawaban0'] == "30"){echo "D=30";} elseif ($subk['jawaban0'] == "0"){echo "E=0 ";} else {echo "kosong";}; ?></td>
+<td title="<?php echo htmlspecialchars($subk['uraian_jawaban0'], ENT_QUOTES, 'UTF-8'); ?>" class="text-center align-middle"style="width: 50px">
                                   <i class="expandable-table-caret"></i>
                                  <?php
                                     $fullText = htmlspecialchars($subk['uraian_jawaban0'], ENT_QUOTES, 'UTF-8');
@@ -211,7 +211,7 @@
                       <td class="text-center align-middle"><?php $format = number_format($subk['skor'],2,",","."); echo $format; ?></td>
                       <td class="text-center align-middle"><?php echo $subk['jawabanantara']; ?></td>
                       <td class="text-center align-middle"><?php 
-                      if ($subk['jawaban0ev'] == "100"){echo "AA";} elseif ($subk['jawaban0ev'] == "90"){echo "A";} elseif ($subk['jawaban0ev'] == "80"){echo "BB";} elseif ($subk['jawaban0ev'] == "70"){echo "B";} elseif ($subk['jawaban0ev'] == "60"){echo "CC";} elseif ($subk['jawaban0ev'] == "50"){echo "C";} elseif ($subk['jawaban0ev'] == "30"){echo "D";} elseif ($subk['jawaban0ev'] == "0"){echo "E";} else {echo "";}; ?></td>
+                      if ($subk['jawaban0ev'] == "100"){echo "AA=100";} elseif ($subk['jawaban0ev'] == "90"){echo "A=90";} elseif ($subk['jawaban0ev'] == "80"){echo "BB=80";} elseif ($subk['jawaban0ev'] == "70"){echo "B=70";} elseif ($subk['jawaban0ev'] == "60"){echo "CC=60";} elseif ($subk['jawaban0ev'] == "50"){echo "C=50";} elseif ($subk['jawaban0ev'] == "30"){echo "D=30";} elseif ($subk['jawaban0ev'] == "0"){echo "E=0 ";} else {echo "kosong";}; ?></td>
                       <td class="text-center align-middle"><?php $format = number_format((float)$subk['nilai'],2,",","."); echo $format; ?></td>
                       <td class="text-center align-middle"><?php $format = number_format($subk['nilaipersen'],2,",","."); echo $format; ?>%</td>
                        <td title="<?php echo htmlspecialchars($subk['catatan_ev0'], ENT_QUOTES, 'UTF-8'); ?>" class="text-center align-middle"style="width: 50px">
@@ -279,7 +279,7 @@
                       <th class="text-center align-middle" style="width: 50px" >Jawaban Unit</th>
                       <th class="text-center align-middle" style="width: 50px" >Penjelasan Jawaban</th>
                       <th class="text-center align-middle" style="width: 20px" colspan="2" >Bukti Unit (Link/File)</th>
-                      <th class="text-center align-middle" style="width: 50px" >Jawaban</th>
+                      <th class="text-center align-middle" style="width: 50px" >Jawabanku</th>
                       <th class="text-center align-middle" style="width: 200px">Catatan Evaluasi</th>
                       <th class="text-center align-middle" style="width: 20px" >Konfir-
                       masi</th>
@@ -300,7 +300,7 @@
                                 </td>
                                 <td <?php 
                                  if ($krit['opsi5'] == "0"){echo "";} elseif ($krit['opsi3'] == "0.5"){echo "";} elseif ($krit['opsi1'] == "1"){echo "";} elseif ($krit['opsi4'] == "0.33"){echo "";} elseif ($krit['opsi2'] == "0.66"){echo "";} else {echo "hidden";}; ?> class="text-center align-middle"><?php 
-                                if ($krit['jawaban1'] == "0"){echo "Tidak";} elseif ($krit['jawaban1'] == "0.5"){echo "Sebagian";} elseif ($krit['jawaban1'] == "1"){echo "Ya";} elseif ($krit['jawaban1'] == "0.33"){echo "Sebagian Kecil";} elseif ($krit['jawaban1'] == "0.66"){echo "Sebagian Besar";} else {echo "Y/T";}; ?> </td>
+                                if ($krit['jawaban1'] == "100"){echo "AA=100";} elseif ($krit['jawaban1'] == "90"){echo "A=90";} elseif ($krit['jawaban1'] == "80"){echo "BB=80";} elseif ($krit['jawaban1'] == "70"){echo "B=70";} elseif ($krit['jawaban1'] == "60"){echo "CC=60";} elseif ($krit['jawaban1'] == "50"){echo "C=50";} elseif ($krit['jawaban1'] == "30"){echo "D=30";} elseif ($krit['jawaban1'] == "0"){echo "E=0";} else {echo "kosong";} ?> </td>
                                 <td title="<?php echo htmlspecialchars($krit['uraian_jawaban1'], ENT_QUOTES, 'UTF-8'); ?>" class="text-center align-middle" style="width: 100px">
                                     <i class="expandable-table-caret"></i>
                                     <?php
@@ -343,8 +343,8 @@
                                       <?php endif; ?></td>
                                 <td title="<?php echo $krit['catatan']; ?>" <?php 
                                  if ($krit['opsi5'] == "0"){echo "";} elseif ($krit['opsi3'] == "0.5"){echo "";} elseif ($krit['opsi1'] == "1"){echo "";} elseif ($krit['opsi4'] == "0.33"){echo "";} elseif ($krit['opsi2'] == "0.66"){echo "";} else {echo "hidden";}; ?> class="text-center align-middle"><?php 
-                                if ($krit['jawaban2'] == "0"){echo "Tidak";} elseif ($krit['jawaban2'] == "0.5"){echo "Sebagian";} elseif ($krit['jawaban2'] == "1"){echo "Ya";} elseif ($krit['jawaban2'] == "0.33"){echo "Sebagian Kecil";} elseif ($krit['jawaban2'] == "0.66"){echo "Sebagian Besar";} else {echo "Y/T";}; ?> </td>
-                                <td class="text-justify" style="width: 350px">
+                              if ($subk['jawaban2'] == "100"){echo "AA=100";} elseif ($subk['jawaban2'] == "90"){echo "A=90";} elseif ($subk['jawaban2'] == "80"){echo "BB=80";} elseif ($subk['jawaban2'] == "70"){echo "B=70";} elseif ($subk['jawaban2'] == "60"){echo "CC=60";} elseif ($subk['jawaban2'] == "50"){echo "C=50";} elseif ($subk['jawaban2'] == "30"){echo "D=30";} elseif ($subk['jawaban2'] == "0"){echo "E=0 ";} else {echo "kosong";}; ?></td>
+                                                                <td class="text-justify" style="width: 350px">
                                     <i class="expandable-table-caret"></i>
                                     <?php
                                     $fullText = htmlspecialchars($krit['catatan_ev'], ENT_QUOTES, 'UTF-8');
@@ -429,7 +429,7 @@
                         PREDIKAT
                       </td>
                       
-                       <td <?php if($this->session->userdata('id_unit') == ""){echo "hidden";}else{echo "";}; ?> class="text-center align-middle"><?php $format = floatval(str_replace(',', '.', $sumk['sumnilaik'])); if ($format == 0){echo "E";} elseif ($format > 0.01 && $format <= 30.00){echo "D";} elseif ($format > 30.01 && $format <= 50.00){echo "C";} elseif ($format >= 50.01 && $format <= 60.00){echo "CC";} elseif ($format >= 60.01 && $format <= 70.00){echo "B";}elseif ($format >= 70.01 && $format <= 80.00){echo "BB";} elseif ($format >= 80.01 && $format <= 90.00){echo "A";} elseif ($format >= 90.01 && $format <= 100){echo "AA";} else {echo "";}; ?></td>
+                       <td <?php if($this->session->userdata('id_unit') == ""){echo "hidden";}else{echo "";}; ?> class="text-center align-middle"><?php $format = floatval(str_replace(',', '.', $sumk['sumnilaik'])); if ($format == 0){echo "E=0";} elseif ($format > 0.01 && $format <= 30.00){echo "D=30";} elseif ($format > 30.01 && $format <= 50.00){echo "C=50";} elseif ($format >= 50.01 && $format <= 60.00){echo "CC=60";} elseif ($format >= 60.01 && $format <= 70.00){echo "B=70";}elseif ($format >= 70.01 && $format <= 80.00){echo "BB=80";} elseif ($format >= 80.01 && $format <= 90.00){echo "A=90";} elseif ($format >= 90.01 && $format <= 100){echo "AA=100";} else {echo "";}; ?></td>
                         <td <?php if($this->session->userdata('id_unit') != ""){echo "hidden";}else{echo "";}; ?> class="text-center align-middle"></td>
                         <td class="text-center align-middle"></td>
                       
@@ -554,9 +554,15 @@
             <div class="form-group col-md-2">
             <label>Jawaban Unit</label>
             <select readonly disabled name="jawaban1" id="jawaban1" class="form-control">
-                <option hidden value="">Y/T</option>
-                <option hidden value="1">Ya</option>
-                <option hidden value="0">Tidak</option>
+                <option hidden value="">Pilih Jawaban</option>
+                <option value="100">AA</option>
+                <option value="90">A</option>
+                <option value="80">BB</option>
+                <option value="70">B</option>
+                <option value="60">CC</option>
+                <option value="50">C</option>
+                <option value="30">D</option>
+                <option value="0">E</option>
            </select>
           </div>
 
@@ -568,9 +574,15 @@
             readonly disabled
             <?php endif; ?>
             >
-             <option hidden value="">Y/T</option>
-                <option value="1">Ya</option>
-                <option value="0">Tidak</option>
+            <option hidden value="">Pilih Jawaban</option>
+                <option value="100">AA</option>
+                <option value="90">A</option>
+                <option value="80">BB</option>
+                <option value="70">B</option>
+                <option value="60">CC</option>
+                <option value="50">C</option>
+                <option value="30">D</option>
+                <option value="0">E</option>
             </select>
           </div>  
 
@@ -750,7 +762,7 @@
           </div>
 
             <div class="form-group col-md-3">
-            <label>Jawaban Antara</label>
+            <label>Jawaban Antaraku</label>
             <input readonly type="text" name="jawabanantara" id="jawabanantara" class="form-control">
           </div>  
 
