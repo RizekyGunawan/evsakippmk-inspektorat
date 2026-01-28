@@ -123,7 +123,7 @@
                       <th class="text-center align-middle" style="width: 450px">Subkomponen</th>
                       <th class="text-center align-middle" style="width: 50px" >Bobot</th>
                       <th class="text-center align-middle" style="width: 50px" colspan="2" >Keberadaan, Kualitas dan Pemanfaatan</th>
-                      <th class="text-center align-middle" style="width: 50px" >Jawaban Antara</th>
+                      <th class="text-center align-middle" style="width: 50px" >Jawaban Antara 0a</th>
                       <th class="text-center align-middle" style="width: 50px" >Nilai Akhir</th>
                       <th class="text-center align-middle" style="width: 50px" colspan="2" >Nilai Akuntabilitas Kinerja</th>
                       <th class="text-center align-middle" style="width: 50px" >Penjelasan Jawaban</th>
@@ -149,7 +149,7 @@
                       <td class="text-center align-middle"><?php $format = number_format($subk['skor'],2,",","."); echo $format; ?></td>
                       <td class="text-center align-middle"><?php echo $subk['jawabanantara']; ?></td>
                       <td class="text-center align-middle"><?php 
-                      if ($subk['jawaban0'] == "100"){echo "AA";} elseif ($subk['jawaban0'] == "90"){echo "A";} elseif ($subk['jawaban0'] == "80"){echo "BB";} elseif ($subk['jawaban0'] == "70"){echo "B";} elseif ($subk['jawaban0'] == "60"){echo "CC";} elseif ($subk['jawaban0'] == "50"){echo "C";} elseif ($subk['jawaban0'] == "30"){echo "D";} elseif ($subk['jawaban0'] == "0"){echo "E";} else {echo "";}; ?></td>
+                      if ($subk['jawaban0'] == "100"){echo "AA=100";} elseif ($subk['jawaban0'] == "90"){echo "A=90";} elseif ($subk['jawaban0'] == "80"){echo "BB=80";} elseif ($subk['jawaban0'] == "70"){echo "B=70";} elseif ($subk['jawaban0'] == "60"){echo "CC=60";} elseif ($subk['jawaban0'] == "50"){echo "C=50";} elseif ($subk['jawaban0'] == "30"){echo "D=30";} elseif ($subk['jawaban0'] == "0"){echo "E=0 ";} else {echo "kosong";}; ?></td>
                       <td class="text-center align-middle"><?php $format = number_format((float)$subk['nilai'],2,",","."); echo $format; ?></td>
                       <td class="text-center align-middle"><?php $format = number_format($subk['nilaipersen'],2,",","."); echo $format; ?>%</td>
                       <td title="<?php echo htmlspecialchars($subk['uraian_jawaban0'], ENT_QUOTES, 'UTF-8'); ?>" class="text-center align-middle"style="width: 50px">
@@ -240,7 +240,7 @@
                     <tr>
                       <th class="text-center align-middle" style="width: 20px" >Kode</th>
                       <th class="text-center align-middle" style="width: 300px">Kriteria yang dinilai</th>
-                      <th class="text-center align-middle" style="width: 50px" >Jawaban</th>
+                      <th class="text-center align-middle" style="width: 50px" >Jawaban1a</th>
                       <th class="text-center align-middle" style="width: 300px">Penjelasan Jawaban</th>
                       <th class="text-center align-middle" style="width: 50px" colspan="2">Bukti (Link/File)</th>
                       <th class="text-center align-middle" style="width: 20px" >Aksi</th>
@@ -259,7 +259,7 @@
                                 </td> 
                                 <td title="<?php echo $krit['catatan']; ?>" <?php 
                                  if ($krit['opsi5'] == "0"){echo "";} elseif ($krit['opsi3'] == "0.5"){echo "";} elseif ($krit['opsi1'] == "1"){echo "";} elseif ($krit['opsi4'] == "0.33"){echo "";} elseif ($krit['opsi2'] == "0.66"){echo "";} else {echo "hidden";}; ?> class="text-center align-middle"><?php 
-                                if ($krit['jawaban1'] == "100"){echo "AA";} elseif ($krit['jawaban1'] == "90"){echo "A";} elseif ($krit['jawaban1'] == "80"){echo "BB";} elseif ($krit['jawaban1'] == "70"){echo "B";} elseif ($krit['jawaban1'] == "60"){echo "CC";} elseif ($krit['jawaban1'] == "50"){echo "C";} elseif ($krit['jawaban1'] == "30"){echo "D";} elseif ($krit['jawaban1'] == "0"){echo "E";} else {echo "E";} ?> </td>
+                                if ($krit['jawaban1'] == "100"){echo "AA=100";} elseif ($krit['jawaban1'] == "90"){echo "A=90";} elseif ($krit['jawaban1'] == "80"){echo "BB=80";} elseif ($krit['jawaban1'] == "70"){echo "B=70";} elseif ($krit['jawaban1'] == "60"){echo "CC=60";} elseif ($krit['jawaban1'] == "50"){echo "C=50";} elseif ($krit['jawaban1'] == "30"){echo "D=30";} elseif ($krit['jawaban1'] == "0"){echo "E=0";} else {echo "kosong";} ?> </td>
                                 <td class="text-justify" style="width: 600px">
                                     <i class="expandable-table-caret"></i>
                                     <?php
@@ -531,7 +531,7 @@
           </div>
           <div class="row">
             <div class="form-group col-md-2">
-              <label>Jawaban</label>
+              <label>Jawaban1</label>
               <select name="jawaban1" id="jawaban1" class="form-control"
               <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
           <?php endif; ?>
@@ -704,6 +704,26 @@
             <label>Jawaban Antara</label>
             <input readonly type="text" name="jawabanantara" id="jawabanantara" class="form-control">
           </div>  
+
+          <div class="form-group col-md-2">
+            <label>Jawaban Akhir Otomatis</label>
+            <select id="jawaban0" name="jawaban0" class="form-control"
+            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
+          readonly
+          <?php endif; ?>
+            >
+            <option value="" hidden="true">Pilih Jawaban</option>
+            <option value="100">AA</option>
+            <option value="90">A</option>
+            <option value="80">BB</option>
+            <option value="70">B</option>
+            <option value="60">CC</option>
+            <option value="50">C</option>
+            <option value="30">D</option>
+            <option value="0">E</option>
+            </select>
+          </div>  
+
 
           <div class="form-group col-md-2">
             <label>Jawaban Akhir</label>

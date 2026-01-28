@@ -6,35 +6,38 @@ class Datasub_ev extends CI_Controller {
     public function getData()
     {
         $this->load->database();
-
         $id_ev0 = $this->input->get('id_ev0');
 
-        // Lakukan logika untuk mengambil data berdasarkan ID yang diberikan
-        // Misalnya, mengambil data dari database
-
-        // Contoh logika untuk mengambil data dari database
-        $query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban2) as skor,
-        (CASE 
-        WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) THEN 'BB'
-        WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) <='99' THEN 'B' 
-        WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) <='75' THEN 'CC'
-        WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) <='50' THEN 'C'  
-        WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) <='25' THEN 'D'
-        WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)*100) THEN 'E'
-        ELSE ''
-        END) as jawabanantara
-        from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_pm e on a.id_pm=e.id_pm inner join ta_pm0 f on d.id_pm0=f.id_pm0
-        where d.id_ev0 = ?", array($id_ev0)); // Menjalankan query dan mendapatkan hasilnya
+        $query = $this->db->query("
+            SELECT 
+                d.*,
+                AVG(a.jawaban2) as skorpersen, 
+                AVG(c.bobot2 * (a.jawaban2 / 100)) as skor,
+                (CASE 
+                    WHEN AVG(a.jawaban2) = 100 THEN 'AA'
+                    WHEN AVG(a.jawaban2) >= 90 THEN 'A'
+                    WHEN AVG(a.jawaban2) >= 80 THEN 'BB'
+                    WHEN AVG(a.jawaban2) >= 70 THEN 'B'
+                    WHEN AVG(a.jawaban2) >= 60 THEN 'CC'
+                    WHEN AVG(a.jawaban2) >= 50 THEN 'C'
+                    WHEN AVG(a.jawaban2) >= 30 THEN 'D'
+                    ELSE 'E'
+                END) as jawabanantara
+            FROM ta_ev a  
+            INNER JOIN ref_aspek b ON a.id_aspek = b.id_aspek 
+            INNER JOIN ref_subkomponen c ON a.id_subkomponen = c.id_subkomponen 
+            INNER JOIN ta_ev0 d ON a.id_ev0 = d.id_ev0 
+            WHERE d.id_ev0 = ?
+            GROUP BY d.id_ev0
+        ", array($id_ev0));
 
         if ($query->num_rows() > 0) {
-            $data = $query->row_array(); // Mengambil data hasil query sebagai array
+            $data = $query->row_array();
         } else {
-            $data = array(); // Jika tidak ada data, inisialisasikan dengan array kosong
+            $data = array();
         }
 
-        // Mengirimkan data sebagai respon JSON
         header('Content-Type: application/json');
         echo json_encode($data);
     }
-
 }
