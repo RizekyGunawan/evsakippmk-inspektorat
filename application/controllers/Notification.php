@@ -2,8 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 /**
+ * @property CI_Loader $load
  * @property CI_Session $session
+ * @property CI_Input $input
  * @property CI_DB_query_builder $db
+ * @property M_auth2 $m_auth2
  * @property Notifikasi_model $Notifikasi_model
  */
 class Notification extends CI_Controller
@@ -13,8 +16,29 @@ class Notification extends CI_Controller
     {
         parent::__construct();
         if (!$this->session->userdata('id_user')) {
-            redirect('auth2/login');
+            redirect('auth2/index');
         }
+    }
+
+    public function index()
+    {
+        $data['user'] = $this->m_auth2->get_datauser();
+        $user_id = $this->session->userdata('id_user');
+        $data['notifications'] = $this->Notifikasi_model->get_all($user_id);
+        $data['unread_count'] = $this->Notifikasi_model->count_unread($user_id);
+
+        $this->load->view('templates/header', $data);
+        $this->load->view('v_notifications', $data);
+        $this->load->view('templates/sidebar');
+        $this->load->view('templates/footer');
+    }
+
+    public function mark_all_read()
+    {
+        $user_id = $this->session->userdata('id_user');
+        $this->Notifikasi_model->mark_all_read($user_id);
+        $this->session->set_flashdata('success', 'Semua notifikasi ditandai sebagai terbaca.');
+        redirect('notification');
     }
 
     public function buka_notifikasi($id)

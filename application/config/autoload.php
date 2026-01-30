@@ -137,4 +137,4 @@ $autoload['language'] = array();
 |	$autoload['model'] = array('first_model' => 'first');
 */
 
-$autoload['model'] = array('m_dokumen', 'm_pm', 'm_ev', 'm_auth2', 'm_home', 'm_dok_ev', 'm_rekomendasi', 'm_tl', 'm_dashboard', 'm_users');
+$autoload['model'] = array('m_dokumen', 'm_pm', 'm_ev', 'm_auth2', 'm_home', 'm_dok_ev', 'm_rekomendasi', 'm_tl', 'm_dashboard', 'm_users', 'Notifikasi_model', 'Komentar_model');
