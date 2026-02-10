@@ -115,8 +115,45 @@ class Ev extends CI_Controller
 	}
 
 
+	/**
+	 * Menampilkan halaman Rekapitulasi Unit Kerja
+	 * Hanya dapat diakses oleh role 2-7 (Pembina, Evaluator, Admin, Admin UK, Admin Pembina, Admin Evaluator)
+	 * Menampilkan data gabungan evaluasi dari semua unit kerja
+	 */
+	public function rekap_unit()
+	{
+		// Validasi role - hanya role 2-7 yang boleh akses
+		$id_role = $this->session->userdata('id_role');
+		if ($id_role < 2 || $id_role > 7) {
+			// Jika role tidak sesuai, redirect ke halaman utama atau tampilkan 404
+			show_404();
+			return;
+		}
+
+		$this->load->model('m_ev');
+
+		// Ambil data user dan unit
+		$data['user'] = $this->m_auth2->get_datauser();
+		$data['unit2'] = $this->m_home->get_data2();
+		
+		// Ambil tahun dari session
+		$tahun = $this->session->userdata('tahun');
+
+		// Ambil data rekapitulasi dari model
+		$data['rekap_units'] = $this->m_ev->get_rekap_all_units($tahun);
+		$data['rekap_detail'] = $this->m_ev->get_rekap_detail_all_units($tahun);
+
+		// Load view dengan template
+		$this->load->view('templates/header', $data);
+		$this->load->view('v_ev_rekap_unit', $data);
+		$this->load->view('templates/sidebar');
+		$this->load->view('templates/footer', $data);
+	}
+
+
 
 	public function set_userdata_session()
+
 	{
 		$id_ev = $this->input->post('id_ev');
 		$this->session->set_userdata('id_ev', $id_ev);
