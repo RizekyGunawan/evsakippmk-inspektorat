@@ -25,145 +25,115 @@
       <div id="myDIV">
       <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-          <!-- Add icons to the links using the .nav-icon class
-               with font-awesome or any other icon font library -->
 
-               <!-- DEBUG: Cek Role ID User -->
-               <?php 
-               $current_role = $this->session->userdata('id_role');
-               echo "<!-- DEBUG: Current Role ID = " . $current_role . " -->"; 
-               echo "<!-- DEBUG: Username = " . $this->session->userdata('username') . " -->"; 
+               <?php
+               $r = (int) $this->session->userdata('id_role');
+
+               // Grup role untuk kemudahan referensi
+               $roles_old       = [1, 2, 3, 4, 5, 6, 7];       // role lama
+               $roles_supervisor = [10, 11, 12];                 // Ketua Tim, P.Teknis, P.Mutu
+               $roles_ev_access = [1,2,3,4,5,6,7,10,11,12,13]; // bisa akses EV
+               $roles_pm_access = [1,2,3,4,5,6,7,13,14];        // bisa akses PM
+               $roles_rekap     = [2,3,4,5,6,7,10,11,12,13];   // bisa akses Rekap
+               $roles_users     = [4,5,6,7,9];                   // bisa akses manajemen user
                ?>
 
-               <?php if ($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7): ?>
+               <!-- Informasi: semua role kecuali Admin murni (9) -->
+               <?php if ($r !== 9): ?>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>home/index" class="nav-link" data-id="home-link">
+                   <i class="nav-icon fas fa-info"></i>
+                   <p>Informasi</p>
+                 </a>
+               </li>
+               <?php endif; ?>
 
-          <li class="nav-item">
-            <a href="<?php echo base_url() ?>home/index" class="nav-link" data-id="home-link">
-              <i class="nav-icon fas fa-info"></i>
-              <p>
-                Informasi
-                
-              </p>
-            </a>
-            
-          </li>
+               <!-- Dashboard: semua role kecuali Admin (9) -->
+               <?php if ($r !== 9): ?>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>dashboard/index" class="nav-link" data-id="dashboard-link">
+                   <i class="nav-icon fas fa-tachometer-alt"></i>
+                   <p>Dashboard</p>
+                 </a>
+               </li>
+               <?php endif; ?>
 
-          <li class="nav-item">
-            <a href="<?php echo base_url() ?>dashboard/index" class="nav-link" data-id="dashboard-link">
-              <i class="nav-icon fas fa-tachometer-alt"></i>
-              <p>
-                Dashboard
-                
-              </p>
-            </a>
-            
-          </li>
-         
-          <li class="nav-item">
-            <a href="<?php echo base_url() ?>dokumen/index" class="nav-link" data-id="dokumen-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Status Pengisian
-              
-                
-              </p>
-            </a>
-           
-          </li>
-          <li class="nav-item">
-            <a href="<?php echo base_url() ?>pm/index" class="nav-link" data-id="pm-link">
-              <i class="nav-icon fas fa-edit"></i>
-              <p>
-                Pengisian Penilaian
-                
-              </p>
-            </a>
-            
-          </li>
-           <li class="nav-item">
-            <a href="<?php echo base_url() ?>ev/index" class="nav-link" data-id="ev-link">
-              <i class="nav-icon fas fa-search"></i>
-              <p>
-                Evaluasi Inspektorat
-                
-              </p>
-            </a>
-            
-          </li>
+               <!-- Status Pengisian: role lama + role baru yang bisa akses PM/EV -->
+               <?php if (in_array($r, array_merge($roles_old, $roles_supervisor, [13, 14]))): ?>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>dokumen/index" class="nav-link" data-id="dokumen-link">
+                   <i class="nav-icon fas fa-copy"></i>
+                   <p>Status Pengisian</p>
+                 </a>
+               </li>
+               <?php endif; ?>
 
-        <?php endif; ?>
+               <!-- Pengisian Penilaian (PM): UK + Evaluator -->
+               <?php if (in_array($r, $roles_pm_access)): ?>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>pm/index" class="nav-link" data-id="pm-link">
+                   <i class="nav-icon fas fa-edit"></i>
+                   <p>Pengisian Penilaian</p>
+                 </a>
+               </li>
+               <?php endif; ?>
 
-          <?php 
-          // Menu Rekapitulasi Unit Kerja - Exclude Unit Kerja (role 1)
-          // Hanya untuk role 2-7 (Pembina, Evaluator, Admin, Admin UK, Admin Pembina, Admin Evaluator)
-          if ($this->session->userdata('id_role') >= 2 && $this->session->userdata('id_role') <= 7): 
-          ?>
-          <li class="nav-item">
-            <a href="<?php echo base_url() ?>ev/rekap_unit" class="nav-link" data-id="rekap_unit-link">
-              <i class="nav-icon fas fa-table"></i>
-              <p>
-                Rekapitulasi Unit Kerja
-                
-              </p>
-            </a>
-            
-          </li>
-          <?php endif; ?>
+               <!-- Evaluasi Inspektorat: role lama + Supervisor + Tim Evaluator -->
+               <?php if (in_array($r, $roles_ev_access)): ?>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>ev/index" class="nav-link" data-id="ev-link">
+                   <i class="nav-icon fas fa-search"></i>
+                   <p>Evaluasi Inspektorat</p>
+                 </a>
+               </li>
+               <?php endif; ?>
 
-          <?php if ($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7): ?>
+               <!-- Rekapitulasi Unit Kerja: supervisor + evaluator + role lama (bukan UK) -->
+               <?php if (in_array($r, $roles_rekap)): ?>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>ev/rekap_unit" class="nav-link" data-id="rekap_unit-link">
+                   <i class="nav-icon fas fa-table"></i>
+                   <p>Rekapitulasi Unit Kerja</p>
+                 </a>
+               </li>
+               <?php endif; ?>
 
-          <li class="nav-item">
-            <a href="<?php echo base_url() ?>dok_ev/index" class="nav-link" data-id="dok_ev-link">
-              <i class="nav-icon fas fa-copy"></i>
-              <p>
-                Dokumen Evaluasi
-                
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="<?php echo base_url() ?>rekomendasi/index" class="nav-link" data-id="rekomendasi-link">
-              <i class="nav-icon fas fa-file-alt"></i>
-              <p>
-                Rekomendasi
-               
-              </p>
-            </a>
-            
-          </li>
-          <li class="nav-item">
-            <a href="<?php echo base_url() ?>tl/index" class="nav-link" data-id="tl-link">
-              <i class="nav-icon fas fa-tasks"></i>
-              <p>
-                Tindak Lanjut
-               
-              </p>
-            </a>
-            
-          </li>
+               <!-- Dokumen Evaluasi, Rekomendasi, TL: role lama + supervisor -->
+               <?php if (in_array($r, array_merge($roles_old, $roles_supervisor))): ?>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>dok_ev/index" class="nav-link" data-id="dok_ev-link">
+                   <i class="nav-icon fas fa-copy"></i>
+                   <p>Dokumen Evaluasi</p>
+                 </a>
+               </li>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>rekomendasi/index" class="nav-link" data-id="rekomendasi-link">
+                   <i class="nav-icon fas fa-file-alt"></i>
+                   <p>Rekomendasi</p>
+                 </a>
+               </li>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>tl/index" class="nav-link" data-id="tl-link">
+                   <i class="nav-icon fas fa-tasks"></i>
+                   <p>Tindak Lanjut</p>
+                 </a>
+               </li>
+               <?php endif; ?>
 
-        <?php endif; ?>
+               <!-- Manajemen User: Admin lama (4,5,6,7) + Admin baru (9) -->
+               <?php if (in_array($r, $roles_users)): ?>
+               <li class="nav-item">
+                 <a href="<?php echo base_url() ?>users/index" class="nav-link" data-id="users-link">
+                   <i class="nav-icon fas fa-user"></i>
+                   <p>Manajemen User</p>
+                 </a>
+               </li>
+               <?php endif; ?>
 
-         <!--  <?php if ($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7): ?>
-          <li class="nav-item">
-            <a href="<?php echo base_url() ?>users/index" class="nav-link" data-id="tl-link">
-              <i class="nav-icon fas fa-user"></i>
-              <p>
-                Role Users
-               
-              </p>
-            </a>
-            
-          </li>   
-        <?php endif; ?> -->
-          
-          
-
-
-     
+        </ul>
       </nav>
       </div>
+
       <!-- /.sidebar-menu -->
     </div>
     <!-- /.sidebar -->

@@ -10,16 +10,12 @@
  * @property Komentar_model $Komentar_model
  * @property Notifikasi_model $Notifikasi_model
  */
-class Ev extends CI_Controller
+class Ev extends MY_Controller
 {
 
 	public function __construct()
 	{
-		parent::__construct();
-
-		if ($this->session->userdata('id_role') == null) {
-			redirect('auth2/index');
-		}
+		parent::__construct(); // MY_Controller handles auth guard
 	}
 
 	public function index()
@@ -90,20 +86,11 @@ class Ev extends CI_Controller
 
 		$this->load->view('templates/header', $data);
 
-
-		if ($this->session->userdata('id_role') == 4) {
-			$this->load->view('v_ev', $data);
-		} elseif ($this->session->userdata('id_role') == 5) {
-			$this->load->view('v_ev', $data);
-		} elseif ($this->session->userdata('id_role') == 6) {
-			$this->load->view('v_ev', $data);
-		} elseif ($this->session->userdata('id_role') == 7) {
-			$this->load->view('v_ev', $data);
-		} elseif ($this->session->userdata('id_role') == 1) {
-			$this->load->view('v_ev', $data);
-		} elseif ($this->session->userdata('id_role') == 2) {
-			$this->load->view('v_ev', $data);
-		} elseif ($this->session->userdata('id_role') == 3) {
+		// Role lama (1-7) + Supervisor (10-12) + Tim Evaluator (13)
+		// Unit Kerja baru (14) tidak bisa akses halaman EV Inspektorat
+		$id_role = (int) $this->session->userdata('id_role');
+		$roles_allowed_ev = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13];
+		if (in_array($id_role, $roles_allowed_ev)) {
 			$this->load->view('v_ev', $data);
 		} else {
 			$this->load->view('404');
@@ -122,10 +109,11 @@ class Ev extends CI_Controller
 	 */
 	public function rekap_unit()
 	{
-		// Validasi role - hanya role 2-7 yang boleh akses
-		$id_role = $this->session->userdata('id_role');
-		if ($id_role < 2 || $id_role > 7) {
-			// Jika role tidak sesuai, redirect ke halaman utama atau tampilkan 404
+		// Role yang boleh akses: role lama (2-7) + Supervisor (10,11,12) + Tim Evaluator (13)
+		// Unit Kerja (14) dan Admin (9) tidak bisa akses halaman Rekapitulasi
+		$id_role = (int) $this->session->userdata('id_role');
+		$roles_rekap = [2, 3, 4, 5, 6, 7, 10, 11, 12, 13];
+		if (!in_array($id_role, $roles_rekap)) {
 			show_404();
 			return;
 		}
@@ -184,26 +172,49 @@ class Ev extends CI_Controller
 	public function update_data()
 	{
 
-		$id_ev = $this->input->post('id_ev');
-		$jawaban2 = $this->input->post('jawaban2');
-		$catatan_ev = $this->input->post('catatan_ev');
+		$id_ev       = $this->input->post('id_ev');
+		$jawaban2    = $this->input->post('jawaban2');
+		$catatan_ev  = $this->input->post('catatan_ev');
 		$rekomendasi = $this->input->post('rekomendasi');
-		$perbaikan = $this->input->post('perbaikan');
+		$perbaikan   = $this->input->post('perbaikan');
 		$modified_by = $this->session->userdata('username');
+		$id_role     = (int) $this->session->userdata('id_role');
+
+		// Ambil data lama sebelum di-update untuk audit trail
+		$old = $this->m_ev->get_single_ev($id_ev);
+		if ($old) {
+			$fields_to_track = [
+				'jawaban2'    => $jawaban2,
+				'catatan_ev'  => $catatan_ev,
+				'rekomendasi' => $rekomendasi,
+				'perbaikan'   => $perbaikan,
+			];
+			foreach ($fields_to_track as $field => $new_val) {
+				if ((string)$old[$field] !== (string)$new_val) {
+					$this->m_ev->insert_ev_history([
+						'id_ev'      => $id_ev,
+						'id_unit'    => $old['id_unit'] ?? null,
+						'tahun'      => $old['tahun']   ?? null,
+						'field_name' => $field,
+						'old_value'  => $old[$field],
+						'new_value'  => $new_val,
+						'changed_by' => $modified_by,
+						'id_role'    => $id_role,
+					]);
+				}
+			}
+		}
 
 		$data = array(
-			'id_ev' => $id_ev,
-			'jawaban2' => $jawaban2,
-			'catatan_ev' => $catatan_ev,
+			'id_ev'       => $id_ev,
+			'jawaban2'    => $jawaban2,
+			'catatan_ev'  => $catatan_ev,
 			'rekomendasi' => $rekomendasi,
-			'perbaikan' => $perbaikan,
+			'perbaikan'   => $perbaikan,
 			'modified_by' => $modified_by,
 		);
 
-
-		$where = array(
-			'id_ev' => $id_ev
-		);
+		$where = array('id_ev' => $id_ev);
 
 		$this->m_ev->update_data($where, $data, 'ta_ev');
 	}
