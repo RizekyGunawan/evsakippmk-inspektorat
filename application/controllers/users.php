@@ -2,47 +2,135 @@
 
 
 
-class Users extends CI_Controller {
+class Users extends MY_Controller {
 
 	public function __construct()
 		{
-			parent::__construct();
-
-			if ($this->session->userdata('id_role')==null) {
-				redirect('auth2/index');
-			}
-
-			
+			parent::__construct(); // MY_Controller handles auth guard
 		}
 
 	public function index (){
 		$this->load->model('m_users');
-		
 
-		$data['user']= $this->m_users->get_data();
-		$data['unit2']= $this->m_home->get_data2();
+		$id_role = (int) $this->session->userdata('id_role');
 		$id_unit = $this->session->userdata('id_unit');
-		$tahun = $this->session->userdata('tahun');
-		$data['users']= $this->m_users->get_data3($id_unit);
-		$data['unit4']= $this->m_home->get_data4($id_unit);
+		$tahun   = $this->session->userdata('tahun');
+
+		// Admin baru (9) — tampilkan halaman manajemen user khusus
+		if ($id_role === 9) {
+			$data['unit_list']       = $this->m_users->get_all_units();
+			$data['evaluator_list']  = $this->m_users->get_users_by_role(13);
+			$data['user_list']       = $this->m_users->get_new_role_users();
+			$data['assignment_list'] = $this->m_users->get_evaluator_assignments();
+
+			$this->load->view('templates/header', $data);
+			$this->load->view('v_admin_users', $data);
+			$this->load->view('templates/sidebar');
+			$this->load->view('templates/footer', $data);
+			return;
+		}
+
+		// Role lama (4,5,6,7) — halaman user lama
+		$data['user']   = $this->m_users->get_data();
+		$data['unit2']  = $this->m_home->get_data2();
+		$data['users']  = $this->m_users->get_data3($id_unit);
+		$data['unit4']  = $this->m_home->get_data4($id_unit);
 		$data['unites1']= $this->m_users->get_data5();
 
 		$this->load->view('templates/header', $data);
 
-		if ($this->session->userdata('id_role')==4)  {
-		$this->load->view('v_users', $data);}
-		elseif ($this->session->userdata('id_role')==5)  {
-		$this->load->view('v_users', $data);}
-		elseif ($this->session->userdata('id_role')==6)  {
-		$this->load->view('v_users', $data);}
-		elseif ($this->session->userdata('id_role')==7)  {
-		$this->load->view('v_users', $data);}else {
-		$this->load->view('404', $data);}
+		if (in_array($id_role, [4, 5, 6, 7])) {
+			// v_users tidak ada — tampilkan pesan sementara
+			echo '<div class="content-wrapper"><section class="content pt-3"><div class="container-fluid"><div class="alert alert-info">Halaman manajemen user untuk role ini sedang dalam pengembangan.</div></div></section></div>';
+		} else {
+			$this->load->view('404', $data);
+		}
 
 		$this->load->view('templates/sidebar');
 		$this->load->view('templates/footer', $data);
-
 	}
+
+
+	/**
+	 * Buat user baru (Tim Evaluator / Unit Kerja) — hanya Admin (9)
+	 */
+	public function create_user()
+	{
+		$this->_check_role([9]);
+		$this->load->model('m_users');
+
+		$nm_user  = $this->input->post('nm_user');
+		$username = $this->input->post('username');
+		$password = $this->input->post('password');
+		$id_role  = (int) $this->input->post('id_role');
+		$id_unit  = $this->input->post('id_unit') ?: null;
+
+		// Validasi sederhana
+		if (!in_array($id_role, [13, 14])) {
+			$this->session->set_flashdata('error', 'Role tidak valid.');
+			redirect('users/index');
+			return;
+		}
+
+		// Cek username sudah ada
+		$cek = $this->m_users->cek_username($username);
+		if ($cek) {
+			$this->session->set_flashdata('error', 'Username "' . htmlspecialchars($username) . '" sudah digunakan.');
+			redirect('users/index');
+			return;
+		}
+
+		$data = [
+			'nm_user'  => $nm_user,
+			'username' => $username,
+			'password' => password_hash($password, PASSWORD_BCRYPT),
+			'id_role'  => $id_role,
+			'id_unit'  => ($id_role == 14) ? $id_unit : null,
+		];
+
+		$this->m_users->insert_user($data);
+		$this->session->set_flashdata('success', 'User "' . htmlspecialchars($username) . '" berhasil dibuat.');
+		redirect('users/index');
+	}
+
+
+	/**
+	 * Assign Tim Evaluator ke Unit Kerja — hanya Admin (9)
+	 */
+	public function assign_evaluator()
+	{
+		$this->_check_role([9]);
+		$this->load->model('m_users');
+
+		$id_user    = (int) $this->input->post('id_user');
+		$id_unit    = (int) $this->input->post('id_unit');
+		$tahun      = (int) $this->input->post('tahun');
+		$created_by = $this->session->userdata('username');
+
+		if (!$id_user || !$id_unit || !$tahun) {
+			$this->session->set_flashdata('error', 'Data tidak lengkap.');
+			redirect('users/index');
+			return;
+		}
+
+		$data = [
+			'id_user'    => $id_user,
+			'id_unit'    => $id_unit,
+			'tahun'      => $tahun,
+			'created_by' => $created_by,
+		];
+
+		// Gunakan INSERT IGNORE via raw query untuk hindari duplicate
+		$this->db->query(
+			"INSERT IGNORE INTO ta_evaluator_unit (id_user, id_unit, tahun, created_by) VALUES (?, ?, ?, ?)",
+			[$id_user, $id_unit, $tahun, $created_by]
+		);
+
+		$this->session->set_flashdata('success', 'Penugasan evaluator berhasil disimpan.');
+		redirect('users/index');
+	}
+
+
 
 
 	function get_data()
@@ -60,7 +148,14 @@ class Users extends CI_Controller {
         '5' => 'Admin Unit Kerja',
         '6' => 'Admin Pembina',
         '7' => 'Admin Evaluator',
-        '8' => 'No Role'
+        '8' => 'No Role',
+        // Role baru
+        '9'  => 'Admin (Baru)',
+        '10' => 'Ketua Tim',
+        '11' => 'Pengendali Teknis',
+        '12' => 'Pengendali Mutu',
+        '13' => 'Tim Evaluator',
+        '14' => 'Unit Kerja (Baru)',
     );
 
     	// Define the mapping array
@@ -125,6 +220,10 @@ public function update_data()
         // Define the valid options
         $valid_roles = array('3', '7', '8');
     	endif;
+    	// Admin baru (role 9): hanya bisa assign Tim Evaluator (13) dan Unit Kerja (14)
+    	if ($this->session->userdata('id_role') == 9):
+        $valid_roles = array('13', '14');
+    	endif;
 
     	if ($this->session->userdata('id_role')==5 && $this->session->userdata('id_unit_es1')==1)  {
 		$valid_roles2 = array('1', '7', '409');}
@@ -170,7 +269,7 @@ public function update_data()
             $id_unit_es1 = $this->input->post('id_unit_es1');
             $modified_by = $this->session->userdata('username');
 
-            // Valid roles mapping
+            // Valid roles mapping (termasuk role baru)
 			$roles = [
 			    '1' => 'Unit Kerja',
 			    '2' => 'Pembina',
@@ -179,7 +278,13 @@ public function update_data()
 			    '5' => 'Admin Unit Kerja',
 			    '6' => 'Admin Pembina',
 			    '7' => 'Admin Evaluator',
-			    '8' => 'No Role'
+			    '8' => 'No Role',
+			    '9'  => 'Admin',
+			    '10' => 'Ketua Tim',
+			    '11' => 'Pengendali Teknis',
+			    '12' => 'Pengendali Mutu',
+			    '13' => 'Tim Evaluator',
+			    '14' => 'Unit Kerja',
 			];
             $nm_user = $roles[$id_role];
 

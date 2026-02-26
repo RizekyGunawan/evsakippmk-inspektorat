@@ -1,14 +1,10 @@
 <?php 
 
-class Pm extends CI_Controller {
+class Pm extends MY_Controller {
 
 	public function __construct()
 		{
-			parent::__construct();
-
-			if ($this->session->userdata('id_role')==null) {
-				redirect('auth2/index');
-			}
+			parent::__construct(); // MY_Controller handles auth guard
 		}
 
 	public function index (){
@@ -17,9 +13,7 @@ class Pm extends CI_Controller {
 		$data['user']= $this->m_auth2->get_datauser();
 		$data['unit2']= $this->m_home->get_data2();
 		$id_unit = $this->session->userdata('id_unit');
-		echo '<script>';
-		echo 'console.log('.json_encode($id_unit).')';
-		echo '</script>';
+		// Catatan: id_unit untuk UK (14) dikunci dari session, tidak bisa pilih unit lain
 		$tahun = $this->session->userdata('tahun');
 		/*$periode = $this->session->userdata('periode');*/
 		$data['mandiri']= $this->m_pm->get_data3($tahun,$id_unit);
@@ -63,20 +57,11 @@ class Pm extends CI_Controller {
 		$this->load->view('templates/header', $data);
 
 
-		if ($this->session->userdata('id_role')==4)  {
-		$this->load->view('v_pm', $data);}
-		elseif ($this->session->userdata('id_role')==5)  {
-		$this->load->view('v_pm', $data);}
-		elseif ($this->session->userdata('id_role')==6)  {
-		$this->load->view('v_pm', $data);}
-		elseif ($this->session->userdata('id_role')==7)  {
-		$this->load->view('v_pm', $data);}
-		elseif ($this->session->userdata('id_role')==1)  {
-		$this->load->view('v_pm', $data);}
-		elseif ($this->session->userdata('id_role')==2)  {
-		$this->load->view('v_pm', $data);}
-		elseif ($this->session->userdata('id_role')==3)  {
-		$this->load->view('v_pm', $data);}else {
+		// Role lama (1-7) + Tim Evaluator (13) + Unit Kerja baru (14)
+		$id_role = (int) $this->session->userdata('id_role');
+		$roles_allowed_pm = [1, 2, 3, 4, 5, 6, 7, 13, 14];
+		if (in_array($id_role, $roles_allowed_pm)) {
+		$this->load->view('v_pm', $data);} else {
 		$this->load->view('404');}
 
 		$this->load->view('templates/sidebar');

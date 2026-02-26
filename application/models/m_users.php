@@ -226,6 +226,52 @@ class M_users extends CI_Model {
 		$this->db->update($table,$data);
 	}
 
+	// ============================================================
+	// METHOD BARU — Admin Role (9)
+	// ============================================================
+
+	public function get_all_units()
+	{
+		return $this->db->order_by('nm_unit')->get('ref_unit')->result_array();
+	}
+
+	public function get_users_by_role($id_role)
+	{
+		$id_role = intval($id_role);
+		return $this->db->query("SELECT id_user, nm_user, username FROM ta_user WHERE id_role = $id_role ORDER BY nm_user")->result_array();
+	}
+
+	public function cek_username($username)
+	{
+		$username = $this->db->escape_str($username);
+		return $this->db->query("SELECT id_user FROM ta_user WHERE username = '$username' LIMIT 1")->num_rows() > 0;
+	}
+
+	public function insert_user(array $data)
+	{
+		return $this->db->insert('ta_user', $data);
+	}
+
+	public function get_new_role_users()
+	{
+		return $this->db->query(
+			"SELECT u.id_user, u.nm_user, u.username, u.id_role, r.nm_unit
+			 FROM ta_user u LEFT JOIN ref_unit r ON u.id_unit = r.id_unit
+			 WHERE u.id_role >= 9 ORDER BY u.id_role, u.nm_user"
+		)->result_array();
+	}
+
+	public function get_evaluator_assignments()
+	{
+		return $this->db->query(
+			"SELECT eu.*, u.nm_user, u.username, r.nm_unit
+			 FROM ta_evaluator_unit eu
+			 LEFT JOIN ta_user u ON eu.id_user = u.id_user
+			 LEFT JOIN ref_unit r ON eu.id_unit = r.id_unit
+			 ORDER BY eu.tahun DESC, u.nm_user"
+		)->result_array();
+	}
+
 }
 
  ?>

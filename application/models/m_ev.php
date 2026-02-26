@@ -1175,6 +1175,82 @@ class M_ev extends CI_Model {
 		return $query->result_array();
 	}
 
+
+	// ================================================================
+	// METHOD BARU — Sistem Role Baru (v2)
+	// ================================================================
+
+	/**
+	 * Ambil satu baris ta_ev berdasarkan id_ev.
+	 * Digunakan oleh audit trail di ev.php::update_data()
+	 */
+	public function get_single_ev($id_ev)
+	{
+		$id_ev = intval($id_ev);
+		$query = $this->db->query("SELECT * FROM ta_ev WHERE id_ev = $id_ev LIMIT 1");
+		return $query->row_array();
+	}
+
+	/**
+	 * Ambil satu baris ta_ev0 berdasarkan id_ev0.
+	 * Digunakan oleh audit trail di ev.php::update_data2()
+	 */
+	public function get_single_ev0($id_ev0)
+	{
+		$id_ev0 = intval($id_ev0);
+		$query = $this->db->query("SELECT * FROM ta_ev0 WHERE id_ev0 = $id_ev0 LIMIT 1");
+		return $query->row_array();
+	}
+
+	/**
+	 * Simpan satu baris ke tabel history perubahan EV (ta_ev_history).
+	 */
+	public function insert_ev_history(array $data)
+	{
+		$this->db->insert('ta_ev_history', $data);
+	}
+
+	/**
+	 * Ambil history perubahan untuk satu id_ev, diurutkan terbaru dulu.
+	 */
+	public function get_ev_history($id_ev)
+	{
+		$id_ev = intval($id_ev);
+		$query = $this->db->query(
+			"SELECT h.*, 
+			        CASE h.id_role
+			            WHEN 10 THEN 'Ketua Tim'
+			            WHEN 11 THEN 'Pengendali Teknis'
+			            WHEN 12 THEN 'Pengendali Mutu'
+			            WHEN 13 THEN 'Tim Evaluator'
+			            WHEN 3  THEN 'Evaluator'
+			            WHEN 4  THEN 'Admin'
+			            ELSE CONCAT('Role ', h.id_role)
+			        END as nm_role
+			 FROM ta_ev_history h
+			 WHERE h.id_ev = $id_ev
+			 ORDER BY h.changed_at DESC"
+		);
+		return $query->result_array();
+	}
+
+	/**
+	 * Ambil daftar unit kerja yang ditugaskan kepada seorang evaluator (id_user).
+	 * Digunakan untuk membatasi akses Tim Evaluator (role 13).
+	 */
+	public function get_assigned_units($id_user, $tahun)
+	{
+		$id_user = intval($id_user);
+		$tahun   = intval($tahun);
+		$query   = $this->db->query(
+			"SELECT eu.id_unit, u.nm_unit
+			 FROM ta_evaluator_unit eu
+			 JOIN ref_unit u ON eu.id_unit = u.id_unit
+			 WHERE eu.id_user = $id_user AND eu.tahun = $tahun"
+		);
+		return $query->result_array();
+	}
+
 }
 
  ?>

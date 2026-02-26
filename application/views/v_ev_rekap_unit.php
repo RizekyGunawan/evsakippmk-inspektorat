@@ -1,73 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<style>
-  .komponen-row {
-    background-color: #87CEEB !important;
-    color: #000000 !important;
-    font-weight: bold;
-  }
-  .subkomponen-row {
-    background-color: #FFE4C4 !important;
-    color: #000000 !important;
-    font-weight: bold;
-  }
-  .kriteria-row {
-    background-color: #FFFFE0 !important;
-    color: #000000 !important;
-  }
-  .total-row {
-    background-color: #1F4E78 !important;
-    color: #FFFFFF !important;
-    font-weight: bold;
-  }
-  .table-rekap {
-    font-size: 12px;
-    background-color: #FFFFFF !important;
-  }
-  .table-rekap td, .table-rekap th {
-    padding: 6px 4px;
-    vertical-align: middle;
-    color: #000000 !important;
-    background-color: #FFFFFF !important;
-  }
-  .table-rekap thead th {
-    background-color: #343a40 !important;
-    color: #FFFFFF !important;
-  }
-  /* Override untuk baris dengan class khusus */
-  .table-rekap .komponen-row td {
-    background-color: #87CEEB !important;
-    color: #000000 !important;
-  }
-  .table-rekap .subkomponen-row td {
-    background-color: #FFE4C4 !important;
-    color: #000000 !important;
-  }
-  .table-rekap .kriteria-row td {
-    background-color: #FFFFE0 !important;
-    color: #000000 !important;
-  }
-  .table-rekap .total-row td {
-    background-color: #1F4E78 !important;
-    color: #FFFFFF !important;
-  }
-</style>
-
-<body>
-
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <div class="container-fluid">
-        <div class="row mb-">
-          <div class="col-sm-5 col-7">
+        <div class="row mb-2">
+          <div class="col-sm-6">
             <h1>Rekapitulasi Unit Kerja</h1>
           </div>
-          <div class="col-sm-7 col-5">
+          <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item"><a href="<?php echo base_url('dashboard/index') ?>">Home</a></li>
               <li class="breadcrumb-item active">Rekapitulasi Unit Kerja</li>
             </ol>
           </div>
@@ -75,199 +17,217 @@
       </div><!-- /.container-fluid -->
     </section>
 
+    <!-- Style for Compact View -->
+    <style>
+        .table-compact {
+            font-size: 0.8rem;
+        }
+        .table-compact td, .table-compact th {
+            padding: 4px 5px !important;
+            vertical-align: middle !important;
+        }
+        .unit-header {
+            text-align: center;
+            vertical-align: middle !important;
+            min-width: 80px; 
+        }
+        .desc-col {
+            min-width: 200px;
+            max-width: 350px;
+            white-space: normal !important; 
+            line-height: 1.2;
+        }
+        
+        /* Sticky Column logic */
+        .sticky-col-1 {
+            position: sticky;
+            left: 0;
+            z-index: 10;
+            border-right: 1px solid #dee2e6;
+        }
+        .sticky-col-2 {
+            position: sticky;
+            left: 30px;
+            z-index: 10;
+            border-right: 1px solid #dee2e6;
+        }
+        .sticky-col-3 {
+            position: sticky;
+            left: 230px;
+            z-index: 10;
+            border-right: 1px solid #dee2e6;
+        }
+        
+        /* Forces colors even in Dark Mode */
+        .bg-header { background-color: #343a40 !important; color: white !important; }
+        
+        /* Component Row (Blue) - Force Black Text */
+        .row-comp, .row-comp > td { 
+            background-color: #87CEEB !important; 
+            color: #000000 !important; 
+        }
+        
+        /* Subcomponent Row (Peach) - Force Black Text */
+        .row-sub, .row-sub > td { 
+            background-color: #FFE4C4 !important; 
+            color: #000000 !important; 
+        }
+        
+        /* Criteria Row (White) - Force Black Text */
+        .row-criteria, .row-criteria > td { 
+            background-color: #ffffff !important; 
+            color: #000000 !important; 
+        }
+    </style>
+
     <!-- Main content -->
     <section class="content">
       <div class="container-fluid">
         <div class="row">
-          <div class="col-md-12">
-           <div class="card">
+          <div class="col-12">
+            
+            <div class="card">
               <div class="card-header">
                 <h3 class="card-title">Nilai Gabungan Unit Kerja - Tahun <?php echo $this->session->userdata('tahun'); ?></h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                </div>
               </div>
               <!-- /.card-header -->
+              <div class="card-body p-0"> 
+                <?php
+                // Data Processing Logic
+                $units = [];
+                $structure = [];
+                
+                if(isset($rekap_units) && is_array($rekap_units)){
+                    foreach($rekap_units as $unit){
+                        $units[$unit['id_unit']] = $unit['nm_unit'];
+                    }
+                }
 
-                <div class="card-body table-responsive p-0" style="max-height: 800px;">
-                  <table class="table table-bordered table-hover table-rekap table-sm">
-                    <thead class="thead-dark" style="position: sticky; top: 0; z-index: 10;">
-                      <tr>
-                        <th class="text-center align-middle" style="width: 50px">No</th>
-                        <th class="text-center align-middle" style="width: 400px">Komponen/Sub Komponen/Kriteria</th>
-                        <th class="text-center align-middle" style="width: 80px">Bobot</th>
-                        <?php foreach ($rekap_units as $unit): ?>
-                        <th class="text-center align-middle" style="width: 80px"><?php echo $unit['nm_unit']; ?></th>
-                        <?php endforeach; ?>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <?php 
-                      // Group data by komponen, subkomponen, kriteria
-                      $structured_data = [];
-                      $units_list = [];
-                      
-                      // Get list of units
-                      foreach ($rekap_units as $unit) {
-                        $units_list[$unit['id_unit']] = $unit['nm_unit'];
-                      }
-                      
-                      // Structure the detail data
-                      if (!empty($rekap_detail)) {
-                        foreach ($rekap_detail as $row) {
-                          $komp_id = $row['id_komponen'];
-                          $sub_id = $row['id_subkomponen'];
-                          $asp_id = $row['id_aspek'];
-                          $unit_id = $row['id_unit'];
-                          
-                          if (!isset($structured_data[$komp_id])) {
-                            $structured_data[$komp_id] = [
-                              'info' => $row,
-                              'subkomponen' => []
+                if(isset($rekap_detail) && is_array($rekap_detail)){
+                    foreach ($rekap_detail as $row) {
+                        $kid = $row['id_komponen'];
+                        $sid = $row['id_subkomponen'];
+                        $aid = $row['id_aspek'];
+                        $uid = $row['id_unit'];
+
+                        if (!isset($structure[$kid])) {
+                            $structure[$kid] = [
+                                'uraian' => $row['uraian_komponen'],
+                                'bobot' => $row['bobot_komponen'],
+                                'subs' => [],
+                                'scores' => [] 
                             ];
-                          }
-                          
-                          if (!isset($structured_data[$komp_id]['subkomponen'][$sub_id])) {
-                            $structured_data[$komp_id]['subkomponen'][$sub_id] = [
-                              'info' => $row,
-                              'units' => [],
-                              'kriteria' => []
-                            ];
-                          }
-                          
-                          // Store subkomponen nilai per unit
-                          if ($unit_id) {
-                            $structured_data[$komp_id]['subkomponen'][$sub_id]['units'][$unit_id] = $row['nilai_subkomp'];
-                          }
-                          
-                          // Store kriteria if exists
-                          if ($asp_id) {
-                            if (!isset($structured_data[$komp_id]['subkomponen'][$sub_id]['kriteria'][$asp_id])) {
-                              $structured_data[$komp_id]['subkomponen'][$sub_id]['kriteria'][$asp_id] = [
-                                'info' => $row,
-                                'units' => []
-                              ];
-                            }
-                            if ($unit_id) {
-                              $structured_data[$komp_id]['subkomponen'][$sub_id]['kriteria'][$asp_id]['units'][$unit_id] = $row['jawaban2'];
-                            }
-                          }
                         }
-                      }
-                      
-                      // Display the structured data
-                      $no = 1;
-                      foreach ($structured_data as $komp_id => $komp_data):
-                        // Get komponen totals from rekap_units
-                        $komp_field = 'komp' . $komp_id;
-                      ?>
-                      <!-- KOMPONEN ROW -->
-                      <tr class="komponen-row">
-                        <td class="text-center"><?php echo $komp_data['info']['kd_komponen']; ?></td>
-                        <td><strong><?php echo $komp_data['info']['uraian_komponen']; ?></strong></td>
-                        <td class="text-center"><?php echo number_format((float)$komp_data['info']['bobot_komponen'], 2, ',', '.'); ?></td>
-                        <?php foreach ($rekap_units as $unit): ?>
-                        <td class="text-center"><?php echo number_format((float)$unit[$komp_field], 2, ',', '.'); ?></td>
-                        <?php endforeach; ?>
-                      </tr>
-                      
-                      <?php foreach ($komp_data['subkomponen'] as $sub_id => $sub_data): ?>
-                      <!-- SUBKOMPONEN ROW -->
-                      <tr class="subkomponen-row">
-                        <td class="text-center"><?php echo $sub_data['info']['kd_subkomponen']; ?></td>
-                        <td><?php echo $sub_data['info']['uraian_subkomponen']; ?></td>
-                        <td class="text-center"><?php echo number_format((float)$sub_data['info']['bobot_subkomponen'], 2, ',', '.'); ?></td>
-                        <?php foreach ($units_list as $unit_id => $unit_name): ?>
-                        <td class="text-center">
-                          <?php 
-                          if (isset($sub_data['units'][$unit_id])) {
-                            echo number_format((float)$sub_data['units'][$unit_id], 2, ',', '.');
-                          } else {
-                            echo '-';
-                          }
-                          ?>
-                        </td>
-                        <?php endforeach; ?>
-                      </tr>
-                      
-                      <?php 
-                      // Display kriteria rows
-                      if (!empty($sub_data['kriteria'])):
-                        foreach ($sub_data['kriteria'] as $asp_id => $krit_data):
-                      ?>
-                      <!-- KRITERIA ROW -->
-                      <tr class="kriteria-row">
-                        <td class="text-center"><?php echo $krit_data['info']['kd_aspek']; ?></td>
-                        <td style="padding-left: 20px;"><?php echo $krit_data['info']['uraian_aspek']; ?></td>
-                        <td class="text-center">-</td>
-                        <?php foreach ($units_list as $unit_id => $unit_name): ?>
-                        <td class="text-center">
-                          <?php 
-                          if (isset($krit_data['units'][$unit_id])) {
-                            $jawaban = $krit_data['units'][$unit_id];
-                            if ($jawaban == '1') echo 'Ya';
-                            elseif ($jawaban == '0') echo 'Tidak';
-                            else echo '-';
-                          } else {
-                            echo '-';
-                          }
-                          ?>
-                        </td>
-                        <?php endforeach; ?>
-                      </tr>
-                      <?php 
-                        endforeach;
-                      endif;
-                      ?>
-                      
-                      <?php endforeach; // End subkomponen loop ?>
-                      
-                      <?php endforeach; // End komponen loop ?>
-                      
-                      <!-- Total Row -->
-                      <tr class="total-row">
-                        <td colspan="2" class="text-center"><strong>NILAI AKUNTABILITAS KINERJA</strong></td>
-                        <td class="text-center">100</td>
-                        <?php foreach ($rekap_units as $unit): ?>
-                        <td class="text-center"><?php echo number_format((float)$unit['total_nilai'], 2, ',', '.'); ?></td>
-                        <?php endforeach; ?>
-                      </tr>
-                      
-                      <!-- Predikat Row -->
-                      <tr class="total-row">
-                        <td colspan="3" class="text-center"><strong>PREDIKAT</strong></td>
-                        <?php foreach ($rekap_units as $unit): 
-                          $pemenuhan = (float)$unit['pemenuhan'];
-                          $predikat = '';
-                          
-                          // Mapping berdasarkan nilai pasti sesuai tabel referensi
-                          if ($pemenuhan == 100) {
-                            $predikat = "AA";
-                          } elseif ($pemenuhan >= 90 && $pemenuhan < 100) {
-                            $predikat = "A";
-                          } elseif ($pemenuhan >= 80 && $pemenuhan < 90) {
-                            $predikat = "BB";
-                          } elseif ($pemenuhan >= 70 && $pemenuhan < 80) {
-                            $predikat = "B";
-                          } elseif ($pemenuhan >= 60 && $pemenuhan < 70) {
-                            $predikat = "CC";
-                          } elseif ($pemenuhan >= 50 && $pemenuhan < 60) {
-                            $predikat = "C";
-                          } elseif ($pemenuhan >= 30 && $pemenuhan < 50) {
-                            $predikat = "D";
-                          } elseif ($pemenuhan > 0 && $pemenuhan < 30) {
-                            $predikat = "D";
-                          } elseif ($pemenuhan == 0) {
-                            $predikat = "E";
-                          }
-                          // Format persentase dengan 2 desimal, koma sebagai pemisah desimal (format Indonesia)
-                          $persentase_format = number_format($pemenuhan, 2, ',', '.');
+
+                        if (!isset($structure[$kid]['subs'][$sid])) {
+                            $structure[$kid]['subs'][$sid] = [
+                                'uraian' => $row['uraian_subkomponen'],
+                                'bobot' => $row['bobot_subkomponen'],
+                                'aspeks' => [],
+                                'scores' => []
+                            ];
+                        }
+                        $structure[$kid]['subs'][$sid]['scores'][$uid] = $row['nilai_subkomp'];
+
+                        if (!isset($structure[$kid]['subs'][$sid]['aspeks'][$aid])) {
+                            $structure[$kid]['subs'][$sid]['aspeks'][$aid] = [
+                                'uraian' => $row['uraian_aspek'],
+                                'answers' => []
+                            ];
+                        }
+                        $structure[$kid]['subs'][$sid]['aspeks'][$aid]['answers'][$uid] = $row['jawaban2'];
+                    }
+                }
+                
+                if(isset($rekap_units) && is_array($rekap_units)){
+                    foreach($rekap_units as $unit){
+                        if(isset($structure[1])) $structure[1]['scores'][$unit['id_unit']] = $unit['komp1'];
+                        if(isset($structure[2])) $structure[2]['scores'][$unit['id_unit']] = $unit['komp2'];
+                        if(isset($structure[3])) $structure[3]['scores'][$unit['id_unit']] = $unit['komp3'];
+                        if(isset($structure[4])) $structure[4]['scores'][$unit['id_unit']] = $unit['komp4'];
+                    }
+                }
+                ?>
+
+                <!-- Added .table-responsive for scroll safety on very small screens -->
+                <div class="table-responsive" style="max-height: 80vh;">
+                    <table class="table table-bordered table-hover text-nowrap table-sm table-compact">
+                      <thead>
+                        <tr class="bg-header text-center">
+                            <th width="30px" class="sticky-col-1 bg-header">No</th>
+                            <th class="desc-col sticky-col-2 bg-header">Komponen / Indikator</th>
+                            <th width="40px" class="sticky-col-3 bg-header">Bobot</th>
+                            <?php foreach($units as $nm_unit): ?>
+                                <th class="unit-header"><?php echo $nm_unit; ?></th>
+                            <?php endforeach; ?>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php 
+                        $no_comp = 1;
+                        foreach($structure as $comp_id => $comp): 
                         ?>
-                        <td class="text-center">
-                          <?php echo $predikat; ?>
-                        </td>
+                            <!-- Component Row (Blue) -->
+                            <tr class="row-comp font-weight-bold">
+                                <td class="text-center sticky-col-1"><?php echo $no_comp++; ?></td>
+                                <td class="desc-col sticky-col-2"><?php echo strtoupper($comp['uraian']); ?></td>
+                                <td class="text-center sticky-col-3"><?php echo number_format($comp['bobot'], 2); ?></td>
+                                <?php foreach($units as $uid => $nm): 
+                                    $score = isset($comp['scores'][$uid]) ? $comp['scores'][$uid] : 0;
+                                ?>
+                                    <td class="text-center"><?php echo number_format($score, 2); ?></td>
+                                <?php endforeach; ?>
+                            </tr>
+
+                            <?php 
+                            $char_sub = 'a';
+                            foreach($comp['subs'] as $sub_id => $sub): 
+                            ?>
+                                <!-- Subcomponent Row (Peach) -->
+                                <tr class="row-sub font-weight-bold">
+                                    <td class="text-center sticky-col-1"><?php echo $no_comp-1 . '.' . $char_sub++; ?></td>
+                                    <td class="desc-col sticky-col-2"><?php echo $sub['uraian']; ?></td>
+                                    <td class="text-center sticky-col-3"><?php echo number_format($sub['bobot'], 2); ?></td>
+                                    <?php foreach($units as $uid => $nm): 
+                                        $score = isset($sub['scores'][$uid]) ? $sub['scores'][$uid] : 0;
+                                    ?>
+                                        <td class="text-center"><?php echo number_format($score, 2); ?></td>
+                                    <?php endforeach; ?>
+                                </tr>
+
+                                <?php 
+                                $no_asp = 1;
+                                foreach($sub['aspeks'] as $asp_id => $asp): 
+                                ?>
+                                    <!-- Aspect/Criteria Row (White) -->
+                                    <tr class="row-criteria">
+                                        <td class="text-center sticky-col-1"><?php echo $no_asp++; ?></td>
+                                        <td class="desc-col sticky-col-2"><?php echo $asp['uraian']; ?></td>
+                                        <td class="text-center sticky-col-3">-</td>
+                                        <?php foreach($units as $uid => $nm): 
+                                            // Value Logic: DIRECT DISPLAY (User Request: Use Numbers)
+                                            $val = isset($asp['answers'][$uid]) ? $asp['answers'][$uid] : '';
+                                            $display = '<span class="text-muted">-</span>';
+                                            if($val !== '') $display = $val; 
+                                        ?>
+                                            <td class="text-center"><?php echo $display; ?></td>
+                                        <?php endforeach; ?>
+                                    </tr>
+                                <?php endforeach; ?>
+                            <?php endforeach; ?>
                         <?php endforeach; ?>
-                      </tr>
-                    </tbody>
-                  </table>
+                      </tbody>
+                    </table>
                 </div>
+              </div>
               <!-- /.card-body -->
             </div>
             <!-- /.card -->
@@ -275,11 +235,8 @@
           <!-- /.col -->
         </div>
         <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
+      <!-- /.container-fluid -->
     </section>
     <!-- /.content -->
   </div>
-  <!-- /.content-wrapper -->
-
-</body>
-</html>

@@ -73,7 +73,7 @@ class Auth2 extends CI_Controller
 		$data['image'] = $captcha['image'];
 
 
-		$this->form_validation->set_rules('username', 'Username', 'trim|required|alpha_dash');
+		$this->form_validation->set_rules('username', 'Username', 'trim|required|regex_match[/^[a-zA-Z0-9_\-\.]+$/]');
 		$this->form_validation->set_rules('password', 'Password', 'trim|required');
 		$this->form_validation->set_rules('captcha', 'Captcha', 'trim|required');
 
@@ -106,7 +106,13 @@ class Auth2 extends CI_Controller
 					}
 				}
 
-				if (($this->session->userdata('id_role') == 4) || ($this->session->userdata('id_role') == 3) || ($this->session->userdata('id_role') == 2) || ($this->session->userdata('id_role') == 1) || ($this->session->userdata('id_role') == 5) || ($this->session->userdata('id_role') == 6)) {
+				// Role lama (1-7) + Role baru (9-14)
+				$allowed_roles = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14];
+				if (in_array((int)$this->session->userdata('id_role'), $allowed_roles)) {
+					// Admin (role 9) langsung ke halaman Manajemen User
+					if ((int)$this->session->userdata('id_role') === 9) {
+						redirect('users/index');
+					}
 					redirect('dashboard/index');
 				} else {
 					echo "<script>alert('Username atau Password salah.');</script>";
