@@ -2,17 +2,11 @@
 
 
 
-class Tl extends CI_Controller {
+class Tl extends MY_Controller {
 
 	public function __construct()
 		{
-			parent::__construct();
-
-			if ($this->session->userdata('id_role')==null) {
-				redirect('auth2/index');
-			}
-
-			
+			parent::__construct(); // Auth guard ditangani MY_Controller
 		}
 
 	public function index (){
@@ -30,21 +24,12 @@ class Tl extends CI_Controller {
 
 		$this->load->view('templates/header', $data);
 
-		if ($this->session->userdata('id_role')==4)  {
-		$this->load->view('v_tl', $data);}
-		elseif ($this->session->userdata('id_role')==5)  {
-		$this->load->view('v_tl', $data);}
-		elseif ($this->session->userdata('id_role')==6)  {
-		$this->load->view('v_tl', $data);}
-		elseif ($this->session->userdata('id_role')==7)  {
-		$this->load->view('v_tl', $data);}
-		elseif ($this->session->userdata('id_role')==1)  {
-		$this->load->view('v_tl', $data);}
-		elseif ($this->session->userdata('id_role')==2)  {
-		$this->load->view('v_tl', $data);}
-		elseif ($this->session->userdata('id_role')==3)  {
-		$this->load->view('v_tl', $data);}else {
-		$this->load->view('404');}
+		$id_role = (int) $this->session->userdata('id_role');
+		if (in_array($id_role, self::ROLES_CAN_TL)) {
+			$this->load->view('v_tl', $data);
+		} else {
+			$this->load->view('404');
+		}
 
 		$this->load->view('templates/sidebar');
 		$this->load->view('templates/footer', $data);

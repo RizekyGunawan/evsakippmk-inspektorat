@@ -634,7 +634,7 @@
                                                                     <?php endif; ?>
                                                                   </td>
                                                                   <td class="text-center align-middle" style="width: 30px">
-                                                                    <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+                                                                    <?php if ($can_edit_ev && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
                                                                       <div <?php if ($krit['ev_modified_by'] != ""): ?>
                                                                           title="last modified by: <?php echo $krit['ev_modified_by']; ?>"
                                                                         <?php endif; ?> class="btn btn-success btn-xs open-modal"
@@ -784,6 +784,85 @@
             </div>
             <!-- /.card -->
 
+            <?php
+            $id_role_v = (int)$this->session->userdata('id_role');
+            ?>
+
+            <?php
+            /* =========================================================
+             * UNIT SWITCHER — hanya tampil untuk Tim Evaluator (role 13)
+             * jika ditugaskan ke lebih dari 1 unit
+             * ========================================================= */
+            if ($id_role_v === 13 && !empty($assigned_units) && count($assigned_units) > 1):
+            ?>
+            <div class="card card-info card-outline mt-3">
+              <div class="card-header">
+                <h3 class="card-title"><i class="fas fa-exchange-alt mr-1"></i>Ganti Unit Kerja</h3>
+              </div>
+              <div class="card-body">
+                <form action="<?php echo base_url('ev/set_unit_session') ?>" method="post" class="form-inline">
+                  <label class="mr-2">Unit yang Ditugaskan:</label>
+                  <select name="id_unit" class="form-control mr-2">
+                    <?php foreach($assigned_units as $au): ?>
+                    <option value="<?php echo $au['id_unit'] ?>"
+                      <?php echo ($this->session->userdata('id_unit') == $au['id_unit']) ? 'selected' : '' ?>>
+                      <?php echo htmlspecialchars($au['nm_unit']) ?>
+                    </option>
+                    <?php endforeach; ?>
+                  </select>
+                  <button type="submit" class="btn btn-info">
+                    <i class="fas fa-arrow-right mr-1"></i>Pindah Unit
+                  </button>
+                </form>
+              </div>
+            </div>
+            <?php endif; ?>
+
+            <?php
+            /* =========================================================
+             * HISTORY PERUBAHAN EV — hanya tampil untuk Supervisor (10, 11, 12)
+             * ========================================================= */
+            if (in_array($id_role_v, [10, 11, 12]) && !empty($ev_history)):
+            ?>
+            <div class="card card-warning card-outline mt-3">
+              <div class="card-header">
+                <h3 class="card-title">
+                  <i class="fas fa-history mr-1"></i>History Perubahan Penilaian EV
+                </h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body p-0">
+                <table class="table table-sm table-bordered table-striped mb-0">
+                  <thead class="bg-warning">
+                    <tr>
+                      <th style="width:140px">Waktu Perubahan</th>
+                      <th>Field</th>
+                      <th>Nilai Lama</th>
+                      <th>Nilai Baru</th>
+                      <th>Diubah Oleh</th>
+                      <th>Jabatan</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <?php foreach($ev_history as $h): ?>
+                    <tr>
+                      <td><small><?php echo htmlspecialchars($h['changed_at']) ?></small></td>
+                      <td><code><?php echo htmlspecialchars($h['field_name']) ?></code></td>
+                      <td class="text-danger"><?php echo htmlspecialchars($h['old_value'] ?: '-') ?></td>
+                      <td class="text-success"><strong><?php echo htmlspecialchars($h['new_value'] ?: '-') ?></strong></td>
+                      <td><strong><?php echo htmlspecialchars($h['changed_by']) ?></strong></td>
+                      <td><span class="badge badge-secondary"><?php echo htmlspecialchars($h['nm_role'] ?? 'Role '.$h['id_role']) ?></span></td>
+                    </tr>
+                    <?php endforeach; ?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <?php endif; ?>
 
           </div>
           <!-- /.col -->
@@ -881,7 +960,7 @@
 
               <div class="form-group col-md-2">
                 <label>Jawaban</label>
-                <select id="jawaban2" name="jawaban2" class="form-control" <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?> <?php else: ?> readonly disabled <?php endif; ?>>
+                <select id="jawaban2" name="jawaban2" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
                   <option hidden value="">Y/T</option>
                   <option value="1">Ya</option>
                   <option value="0">Tidak</option>
@@ -890,7 +969,7 @@
 
               <div class="form-group col-md-2">
                 <label>Konfirmasi?</label>
-                <select id="perbaikan" name="perbaikan" class="form-control" <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?> <?php else: ?> readonly disabled <?php endif; ?>>
+                <select id="perbaikan" name="perbaikan" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
                   <option value="0">Tidak</option>
                   <option value="1">Ya</option>
                 </select>
@@ -928,14 +1007,14 @@
               </div>
               <div class="form-group col-md-6">
                 <label>Catatan Evaluasi</label>
-                <textarea type="text" rows="7" name="catatan_ev" id="catatan_ev" class="form-control text-justify" <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?> <?php else: ?> readonly disabled <?php endif; ?>></textarea>
+                <textarea type="text" rows="7" name="catatan_ev" id="catatan_ev" class="form-control text-justify" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>></textarea>
               </div>
 
 
             </div>
 
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+            <?php if ($can_edit_ev): ?>
               <button id="submitkrit" class="btn btn-primary">Save</button>
             <?php endif; ?>
           </form>
@@ -1064,7 +1143,7 @@
 
               <div class="form-group col-md-3">
                 <label>Jawaban Akhir</label>
-                <select id="jawaban0ev" name="jawaban0ev" class="form-control" <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?> <?php else: ?> readonly disabled <?php endif; ?>>
+                <select id="jawaban0ev" name="jawaban0ev" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
                   <option value="" hidden>Pilih Jawaban</option>
                   <option value="100">AA</option>
                   <option value="90">A</option>
@@ -1080,7 +1159,7 @@
 
               <div class="form-group col-md-3">
                 <label>Perlu Konfirmasi?</label>
-                <select id="perbaikan0" name="perbaikan0" class="form-control" <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?> <?php else: ?> readonly disabled <?php endif; ?>>
+                <select id="perbaikan0" name="perbaikan0" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
                   <option value="0">Tidak</option>
                   <option value="1">Ya</option>
                 </select>
@@ -1097,7 +1176,7 @@
               <div class="form-group col-md-6">
                 <label>Catatan Evaluasi</label>
                 <textarea id="catatan_ev0" type="text" rows="7" name="catatan_ev0" class="form-control text-justify"
-                  <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?> <?php else: ?> readonly disabled <?php endif; ?>></textarea>
+                  <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>></textarea>
               </div>
 
 
@@ -1105,7 +1184,7 @@
             </div>
 
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+            <?php if ($can_edit_ev): ?>
               <button id="submitsub" class="btn btn-primary">Save</button>
             <?php endif; ?>
 

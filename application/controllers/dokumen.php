@@ -2,17 +2,11 @@
 
 
 
-class Dokumen extends CI_Controller {
+class Dokumen extends MY_Controller {
 
 	public function __construct()
 		{
-			parent::__construct();
-
-			if ($this->session->userdata('id_role')==null) {
-				redirect('auth2/index');
-			}
-
-			
+			parent::__construct(); // Auth guard ditangani MY_Controller
 		}
 
 	public function index (){
@@ -34,21 +28,14 @@ class Dokumen extends CI_Controller {
 
 		
 
-		if ($this->session->userdata('id_role')==4)  {
-		$this->load->view('v_dokumen', $data);}
-		elseif ($this->session->userdata('id_role')==5)  {
-		$this->load->view('v_dokumen', $data);}
-		elseif ($this->session->userdata('id_role')==6)  {
-		$this->load->view('v_dokumen2', $data);}
-		elseif ($this->session->userdata('id_role')==7)  {
-		$this->load->view('v_dokumen2', $data);}
-		elseif ($this->session->userdata('id_role')==1)  {
-		$this->load->view('v_dokumen', $data);}
-		elseif ($this->session->userdata('id_role')==2)  {
-		$this->load->view('v_dokumen2', $data);}
-		elseif ($this->session->userdata('id_role')==3)  {
-		$this->load->view('v_dokumen2', $data);}else {
-		$this->load->view('404');}
+		$id_role = (int) $this->session->userdata('id_role');
+		if (!in_array($id_role, self::ROLES_CAN_DOKUMEN)) {
+			$this->load->view('404');
+		} elseif (in_array($id_role, self::ROLES_DOKUMEN_FULL)) {
+			$this->load->view('v_dokumen', $data);  // Tampilan penuh (bisa input)
+		} else {
+			$this->load->view('v_dokumen2', $data); // Tampilan monitoring (read)
+		}
 
 		$this->load->view('templates/sidebar');
 		$this->load->view('templates/footer', $data);

@@ -27,6 +27,31 @@ class MY_Controller extends CI_Controller
     // Semua role gabungan
     const ROLES_ALL        = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14];
 
+    // ─── Permission Groups per Modul ────────────────────────────────────────
+    // Memusatkan definisi akses sehingga perubahan role cukup di satu tempat.
+
+    // Siapa yang boleh MELIHAT halaman Evaluasi Inspektorat (/ev)
+    const ROLES_CAN_VIEW_EV = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14];
+
+    // Siapa yang boleh MENGEDIT data di /ev (role 14 = hanya baca)
+    const ROLES_CAN_EDIT_EV = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13];
+
+    // Siapa yang boleh akses /rekomendasi
+    const ROLES_CAN_REKOMENDASI = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 14];
+
+    // Siapa yang boleh akses /tl (tindak lanjut)
+    const ROLES_CAN_TL = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 14];
+
+    // Siapa yang boleh akses /dokumen
+    const ROLES_CAN_DOKUMEN = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12];
+
+    // Siapa yang menggunakan tampilan v_dokumen (penuh, bisa input)
+    const ROLES_DOKUMEN_FULL = [1, 4, 5];
+
+    // Siapa yang menggunakan tampilan v_dokumen2 (monitoring/read)
+    const ROLES_DOKUMEN_READ = [2, 3, 6, 7, 10, 11, 12];
+    // ────────────────────────────────────────────────────────────────────────
+
     public function __construct()
     {
         parent::__construct();

@@ -14,7 +14,15 @@ class Dashboard extends CI_Controller {
 
 
 	public function index (){
-		
+
+		$id_role = (int) $this->session->userdata('id_role');
+
+		// Admin (9) tidak punya dashboard — langsung ke Manajemen User
+		if ($id_role === 9) {
+			redirect('users/index');
+			return;
+		}
+
 		$data['user']= $this->m_auth2->get_datauser();
 		$id_unit = $this->session->userdata('id_unit');
 		$tahun = $this->session->userdata('tahun');
@@ -41,23 +49,13 @@ class Dashboard extends CI_Controller {
 
 		$this->load->view('templates/header', $data);
 
-
-		if ($this->session->userdata('id_role')==4)  {
-		$this->load->view('v_dashboard', $data);}
-		elseif ($this->session->userdata('id_role')==5)  {
-		$this->load->view('v_dashboard', $data);}
-		elseif ($this->session->userdata('id_role')==6)  {
-		$this->load->view('v_dashboard', $data);}
-		elseif ($this->session->userdata('id_role')==7)  {
-		$this->load->view('v_dashboard', $data);}
-		elseif ($this->session->userdata('id_role')==1)  {
-		$this->load->view('v_dashboard', $data);}
-		elseif ($this->session->userdata('id_role')==2)  {
-		$this->load->view('v_dashboard', $data);}
-		elseif ($this->session->userdata('id_role')==3)  {
-		$this->load->view('v_dashboard', $data);}else {
-		$this->load->view('404');}
-
+		// Role lama (1-7) + Role baru Supervisor (10,11,12) + Tim Evaluator (13) + Unit Kerja (14)
+		$roles_dashboard = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14];
+		if (in_array($id_role, $roles_dashboard)) {
+			$this->load->view('v_dashboard', $data);
+		} else {
+			$this->load->view('404');
+		}
 
 		$this->load->view('templates/sidebar');
 		$this->load->view('templates/footer', $data);

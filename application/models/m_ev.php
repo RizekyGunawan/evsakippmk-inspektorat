@@ -1251,6 +1251,33 @@ class M_ev extends CI_Model {
 		return $query->result_array();
 	}
 
+	/**
+	 * Ambil history perubahan EV berdasarkan id_unit + tahun.
+	 * Digunakan oleh Supervisor (role 10, 11, 12) untuk melihat siapa yang mengubah.
+	 */
+	public function get_ev_history_by_unit($id_unit, $tahun)
+	{
+		$id_unit = intval($id_unit);
+		$tahun   = intval($tahun);
+		$query   = $this->db->query(
+			"SELECT h.*,
+			        CASE h.id_role
+			            WHEN 10 THEN 'Ketua Tim'
+			            WHEN 11 THEN 'Pengendali Teknis'
+			            WHEN 12 THEN 'Pengendali Mutu'
+			            WHEN 13 THEN 'Tim Evaluator'
+			            WHEN 3  THEN 'Evaluator'
+			            WHEN 4  THEN 'Admin'
+			            ELSE CONCAT('Role ', h.id_role)
+			        END as nm_role
+			 FROM ta_ev_history h
+			 WHERE h.id_unit = $id_unit AND h.tahun = $tahun
+			 ORDER BY h.changed_at DESC
+			 LIMIT 100"
+		);
+		return $query->result_array();
+	}
+
 }
 
  ?>

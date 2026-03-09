@@ -77,20 +77,55 @@ class Ev extends MY_Controller
 		$data['konfirmasi0notif'] = $this->m_ev->get_konfirmasi0notif($tahun, $id_unit);
 		$data['konfirmasi0notif2'] = $this->m_ev->get_konfirmasi0notif2($tahun, $id_unit);
 
+		// ---------------------------------------------------------------
+		// Ambil id_role sekarang agar bisa dipakai di blok berikutnya
+		// ---------------------------------------------------------------
+		$id_role = (int) $this->session->userdata('id_role');
+		$id_user = (int) $this->session->userdata('id_user');
+
+		// ---------------------------------------------------------------
+		// FILTERING: Tim Evaluator (13) hanya boleh akses unit tugasnya
+		// ---------------------------------------------------------------
+		$data['assigned_units'] = [];
+		if ($id_role === 13) {
+			$assigned      = $this->m_ev->get_assigned_units($id_user, $tahun);
+			$assigned_ids  = array_column($assigned, 'id_unit');
+			$data['assigned_units'] = $assigned;
+
+			if (!in_array((int)$id_unit, $assigned_ids)) {
+				if (!empty($assigned_ids)) {
+					// Arahkan ke unit pertama yang ditugaskan
+					$this->session->set_userdata('id_unit', $assigned_ids[0]);
+					redirect('ev/index');
+					return;
+				} else {
+					show_error('Anda belum ditugaskan ke unit manapun. Hubungi Admin untuk pengaturan penugasan.');
+					return;
+				}
+			}
+		}
+
+		// ---------------------------------------------------------------
+		// HISTORY: Supervisor (10, 11, 12) dapat melihat log perubahan EV
+		// ---------------------------------------------------------------
+		if (in_array($id_role, [10, 11, 12])) {
+			$data['ev_history'] = $this->m_ev->get_ev_history_by_unit($id_unit, $tahun);
+		} else {
+			$data['ev_history'] = [];
+		}
+
 		// Focal context for notification redirection
 		$data['focus_sub'] = $this->input->get('kode');
 		$data['focus_indikator'] = $this->input->get('indikator');
-
 
 		$data['unit4'] = $this->m_home->get_data4($id_unit);
 
 		$this->load->view('templates/header', $data);
 
-		// Role lama (1-7) + Supervisor (10-12) + Tim Evaluator (13)
-		// Unit Kerja baru (14) tidak bisa akses halaman EV Inspektorat
-		$id_role = (int) $this->session->userdata('id_role');
-		$roles_allowed_ev = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13];
-		if (in_array($id_role, $roles_allowed_ev)) {
+		// Semua role boleh melihat /ev — termasuk UK Baru (14) yang hanya baca.
+		// Kontrol tombol edit dilakukan di v_ev.php via $can_edit_ev.
+		if (in_array($id_role, self::ROLES_CAN_VIEW_EV)) {
+			$data['can_edit_ev'] = in_array($id_role, self::ROLES_CAN_EDIT_EV);
 			$this->load->view('v_ev', $data);
 		} else {
 			$this->load->view('404');
@@ -151,6 +186,30 @@ class Ev extends MY_Controller
 	{
 		$id_ev0 = $this->input->post('id_ev0');
 		$this->session->set_userdata('id_ev0', $id_ev0);
+	}
+
+
+	/**
+	 * Unit Switcher untuk Tim Evaluator (role 13).
+	 * Memvalidasi unit yang dipilih memang merupakan unit tugasnya,
+	 * lalu update id_unit di session dan redirect ke ev/index.
+	 */
+	public function set_unit_session()
+	{
+		$id_role  = (int) $this->session->userdata('id_role');
+		$id_unit  = (int) $this->input->post('id_unit');
+		$id_user  = (int) $this->session->userdata('id_user');
+		$tahun    = (int) $this->session->userdata('tahun');
+
+		if ($id_role === 13 && $id_unit > 0) {
+			$this->load->model('m_ev');
+			$assigned     = $this->m_ev->get_assigned_units($id_user, $tahun);
+			$assigned_ids = array_column($assigned, 'id_unit');
+			if (in_array($id_unit, $assigned_ids)) {
+				$this->session->set_userdata('id_unit', $id_unit);
+			}
+		}
+		redirect('ev/index');
 	}
 
 

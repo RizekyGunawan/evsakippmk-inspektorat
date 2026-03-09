@@ -32,7 +32,7 @@
                // Grup role untuk kemudahan referensi
                $roles_old       = [1, 2, 3, 4, 5, 6, 7];       // role lama
                $roles_supervisor = [10, 11, 12];                 // Ketua Tim, P.Teknis, P.Mutu
-               $roles_ev_access = [1,2,3,4,5,6,7,10,11,12,13]; // bisa akses EV
+               $roles_ev_access = [1,2,3,4,5,6,7,10,11,12,13,14]; // bisa akses EV (14 = read-only)
                $roles_pm_access = [1,2,3,4,5,6,7,13,14];        // bisa akses PM
                $roles_rekap     = [2,3,4,5,6,7,10,11,12,13];   // bisa akses Rekap
                $roles_users     = [4,5,6,7,9];                   // bisa akses manajemen user
@@ -58,8 +58,8 @@
                </li>
                <?php endif; ?>
 
-               <!-- Status Pengisian: role lama + role baru yang bisa akses PM/EV -->
-               <?php if (in_array($r, array_merge($roles_old, $roles_supervisor, [13, 14]))): ?>
+               <!-- Status Pengisian (Dokumen): role lama + supervisor (role 14 tidak bisa akses /dokumen) -->
+               <?php if (in_array($r, array_merge($roles_old, $roles_supervisor, [13]))): ?>
                <li class="nav-item">
                  <a href="<?php echo base_url() ?>dokumen/index" class="nav-link" data-id="dokumen-link">
                    <i class="nav-icon fas fa-copy"></i>
@@ -98,7 +98,7 @@
                </li>
                <?php endif; ?>
 
-               <!-- Dokumen Evaluasi, Rekomendasi, TL: role lama + supervisor -->
+               <!-- Dokumen Evaluasi: role lama + supervisor saja -->
                <?php if (in_array($r, array_merge($roles_old, $roles_supervisor))): ?>
                <li class="nav-item">
                  <a href="<?php echo base_url() ?>dok_ev/index" class="nav-link" data-id="dok_ev-link">
@@ -106,6 +106,10 @@
                    <p>Dokumen Evaluasi</p>
                  </a>
                </li>
+               <?php endif; ?>
+
+               <!-- Rekomendasi & Tindak Lanjut: role lama + supervisor + UK Baru (14) -->
+               <?php if (in_array($r, array_merge($roles_old, $roles_supervisor, [14]))): ?>
                <li class="nav-item">
                  <a href="<?php echo base_url() ?>rekomendasi/index" class="nav-link" data-id="rekomendasi-link">
                    <i class="nav-icon fas fa-file-alt"></i>
