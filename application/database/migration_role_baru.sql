@@ -68,7 +68,7 @@ INSERT IGNORE INTO ta_user (username, password, nm_user, id_role, id_unit) VALUE
 
 -- ============================================================
 -- SELESAI — Verifikasi dengan:
--- SELECT * FROM ref_role WHERE id_role >= 9;
+-- SELECT username, nm_user, id_role FROM ta_user WHERE id_role >= 9 ORDER BY id_role;
 -- SELECT * FROM ta_evaluator_unit LIMIT 1;
 -- SELECT * FROM ta_ev_history LIMIT 1;
 -- SELECT username, id_role FROM ta_user WHERE id_role >= 9;

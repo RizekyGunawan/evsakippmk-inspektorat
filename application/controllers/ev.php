@@ -283,20 +283,46 @@ class Ev extends MY_Controller
 	public function update_data2()
 	{
 
-		$id_ev0 = $this->input->post('id_ev0');
-		$jawaban0ev = $this->input->post('jawaban0ev');
-		$catatan_ev0 = $this->input->post('catatan_ev0');
+		$id_ev0       = $this->input->post('id_ev0');
+		$jawaban0ev   = $this->input->post('jawaban0ev');
+		$catatan_ev0  = $this->input->post('catatan_ev0');
 		$rekomendasi0 = $this->input->post('rekomendasi0');
-		$perbaikan0 = $this->input->post('perbaikan0');
-		$modified_by = $this->session->userdata('username');
+		$perbaikan0   = $this->input->post('perbaikan0');
+		$modified_by  = $this->session->userdata('username');
+		$id_role      = (int) $this->session->userdata('id_role');
+
+		// Audit trail: ambil data lama sebelum diupdate, catat setiap field yang berubah
+		$old0 = $this->m_ev->get_single_ev0($id_ev0);
+		if ($old0) {
+			$fields_to_track0 = [
+				'jawaban0ev'   => $jawaban0ev,
+				'catatan_ev0'  => $catatan_ev0,
+				'rekomendasi0' => $rekomendasi0,
+				'perbaikan0'   => $perbaikan0,
+			];
+			foreach ($fields_to_track0 as $field => $new_val) {
+				if ((string)($old0[$field] ?? '') !== (string)$new_val) {
+					$this->m_ev->insert_ev_history([
+						'id_ev0'     => $id_ev0,
+						'id_unit'    => $old0['id_unit'] ?? null,
+						'tahun'      => $old0['tahun']   ?? null,
+						'field_name' => $field,
+						'old_value'  => $old0[$field] ?? '',
+						'new_value'  => $new_val,
+						'changed_by' => $modified_by,
+						'id_role'    => $id_role,
+					]);
+				}
+			}
+		}
 
 		$data = array(
-			'id_ev0' => $id_ev0,
-			'jawaban0ev' => $jawaban0ev,
-			'catatan_ev0' => $catatan_ev0,
+			'id_ev0'       => $id_ev0,
+			'jawaban0ev'   => $jawaban0ev,
+			'catatan_ev0'  => $catatan_ev0,
 			'rekomendasi0' => $rekomendasi0,
-			'perbaikan0' => $perbaikan0,
-			'modified_by' => $modified_by,
+			'perbaikan0'   => $perbaikan0,
+			'modified_by'  => $modified_by,
 		);
 
 
