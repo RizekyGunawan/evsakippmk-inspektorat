@@ -22,16 +22,10 @@
     <div class="container-fluid">
 
       <?php if ($this->session->flashdata('success')): ?>
-      <div class="alert alert-success alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <?php echo $this->session->flashdata('success'); ?>
-      </div>
+      <script>window._flashSuccess = <?php echo json_encode($this->session->flashdata('success')); ?>;</script>
       <?php endif; ?>
       <?php if ($this->session->flashdata('error')): ?>
-      <div class="alert alert-danger alert-dismissible">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <?php echo $this->session->flashdata('error'); ?>
-      </div>
+      <script>window._flashError = <?php echo json_encode($this->session->flashdata('error')); ?>;</script>
       <?php endif; ?>
 
       <div class="row">
@@ -58,14 +52,14 @@
                 </div>
                 <div class="form-group">
                   <label>Role</label>
-                  <select name="id_role" class="form-control" required>
+                  <select name="id_role" id="create_role" class="form-control" required>
                     <option value="">-- Pilih Role --</option>
                     <option value="13">Tim Evaluator</option>
                     <option value="14">Unit Kerja</option>
                   </select>
                 </div>
-                <div class="form-group" id="unit_group">
-                  <label>Unit Kerja <span class="text-muted">(diperlukan untuk Unit Kerja)</span></label>
+                <div class="form-group" id="unit_group" style="display:none">
+                  <label>Unit Kerja <span class="text-muted">(wajib untuk Unit Kerja)</span></label>
                   <select name="id_unit" class="form-control select2" id="select_unit" style="width:100%">
                     <option value="">-- Pilih Unit Kerja --</option>
                     <?php foreach($unit_list as $u): ?>
@@ -132,6 +126,7 @@
                     <th>Username</th>
                     <th>Role</th>
                     <th>Unit Kerja</th>
+                    <th style="width:110px">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -147,6 +142,7 @@
                   $no = 1;
                   foreach($user_list as $u):
                     $role_badge = isset($role_map[$u['id_role']]) ? $role_map[$u['id_role']] : '<span class="badge badge-secondary">Role '.$u['id_role'].'</span>';
+                    $can_edit   = in_array((int)$u['id_role'], [13, 14]);
                   ?>
                   <tr>
                     <td><?php echo $no++ ?></td>
@@ -154,6 +150,25 @@
                     <td><code><?php echo htmlspecialchars($u['username']) ?></code></td>
                     <td><?php echo $role_badge ?></td>
                     <td><?php echo htmlspecialchars($u['nm_unit'] ?? '-') ?></td>
+                    <td>
+                      <?php if ($can_edit): ?>
+                      <button type="button" class="btn btn-xs btn-warning btn-edit-user"
+                        data-id="<?php echo $u['id_user'] ?>"
+                        data-nama="<?php echo htmlspecialchars($u['nm_user'], ENT_QUOTES) ?>"
+                        data-username="<?php echo htmlspecialchars($u['username'], ENT_QUOTES) ?>"
+                        title="Edit">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button type="button" class="btn btn-xs btn-danger btn-delete-user"
+                        data-id="<?php echo $u['id_user'] ?>"
+                        data-username="<?php echo htmlspecialchars($u['username'], ENT_QUOTES) ?>"
+                        title="Hapus / Nonaktifkan">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                      <?php else: ?>
+                      <span class="text-muted small">—</span>
+                      <?php endif; ?>
+                    </td>
                   </tr>
                   <?php endforeach; ?>
                 </tbody>
@@ -175,6 +190,7 @@
                     <th>Unit Kerja</th>
                     <th>Tahun</th>
                     <th>Dibuat oleh</th>
+                    <th style="width:70px">Aksi</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -185,10 +201,18 @@
                     <td><?php echo htmlspecialchars($a['nm_unit'] ?? '-') ?></td>
                     <td><?php echo $a['tahun'] ?></td>
                     <td><?php echo htmlspecialchars($a['created_by'] ?? '-') ?></td>
+                    <td>
+                      <button type="button" class="btn btn-xs btn-danger btn-remove-assign"
+                        data-id="<?php echo $a['id'] ?>"
+                        data-info="<?php echo htmlspecialchars(($a['nm_user']??'-').' → '.($a['nm_unit']??'-'), ENT_QUOTES) ?>"
+                        title="Cabut Penugasan">
+                        <i class="fas fa-unlink"></i>
+                      </button>
+                    </td>
                   </tr>
                   <?php endforeach; ?>
                   <?php if(empty($assignment_list)): ?>
-                  <tr><td colspan="5" class="text-center text-muted">Belum ada penugasan</td></tr>
+                  <tr><td colspan="6" class="text-center text-muted">Belum ada penugasan</td></tr>
                   <?php endif; ?>
                 </tbody>
               </table>
@@ -201,20 +225,139 @@
   </section>
 </div>
 
-<script>
-$(document).ready(function(){
-  // Init select2
-  $('.select2').select2();
+<!-- ===== Modal Edit User ===== -->
+<div class="modal fade" id="modalEditUser" tabindex="-1" role="dialog" aria-labelledby="modalEditUserLabel">
+  <div class="modal-dialog" role="document">
+    <form action="<?php echo base_url('users/edit_user') ?>" method="post">
+      <div class="modal-content">
+        <div class="modal-header bg-warning">
+          <h5 class="modal-title" id="modalEditUserLabel"><i class="fas fa-edit mr-1"></i> Edit User</h5>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <input type="hidden" name="id_user" id="edit_id_user">
+          <div class="form-group">
+            <label>Username</label>
+            <input type="text" id="edit_username_display" class="form-control" disabled>
+            <small class="text-muted">Username tidak dapat diubah.</small>
+          </div>
+          <div class="form-group">
+            <label>Nama Lengkap <span class="text-danger">*</span></label>
+            <input type="text" name="nm_user" id="edit_nm_user" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Password Baru <span class="text-muted">(kosongkan jika tidak ingin mengubah)</span></label>
+            <input type="password" name="password" id="edit_password" class="form-control" minlength="6" placeholder="Min. 6 karakter">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+          <button type="submit" class="btn btn-warning"><i class="fas fa-save mr-1"></i> Simpan Perubahan</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
-  // Tampilkan/sembunyikan pilihan unit berdasarkan role yang dipilih
-  $('select[name="id_role"]').on('change', function(){
-    if($(this).val() == '14'){
-      $('#unit_group').show();
-      $('#select_unit').prop('required', true);
-    } else {
-      $('#unit_group').hide();
-      $('#select_unit').prop('required', false);
-    }
-  }).trigger('change');
+<!-- ===== Form Hapus User (hidden) ===== -->
+<form id="formDeleteUser" action="<?php echo base_url('users/delete_user') ?>" method="post" style="display:none">
+  <input type="hidden" name="id_user" id="delete_id_user">
+</form>
+
+<!-- ===== Form Cabut Penugasan (hidden) ===== -->
+<form id="formRemoveAssign" action="<?php echo base_url('users/remove_assignment') ?>" method="post" style="display:none">
+  <input type="hidden" name="id_assignment" id="remove_id_assignment">
+</form>
+
+<script>
+// Semua JS dijalankan setelah window.load agar jQuery & Bootstrap sudah pasti tersedia
+window.addEventListener('load', function () {
+
+  // === Tampilkan Toastr dari flashdata PHP ===
+  if (window._flashSuccess) toastr.success(window._flashSuccess);
+  if (window._flashError)   toastr.error(window._flashError);
+
+  // === Init Select2 ===
+  if (typeof $ !== 'undefined' && $.fn && $.fn.select2) {
+    $('.select2').select2();
+  }
+
+  // === Tombol Edit User — isi modal lalu tampilkan ===
+  document.querySelectorAll('.btn-edit-user').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.getElementById('edit_id_user').value           = this.dataset.id;
+      document.getElementById('edit_nm_user').value           = this.dataset.nama;
+      document.getElementById('edit_username_display').value  = this.dataset.username;
+      document.getElementById('edit_password').value          = '';
+      if (typeof $ !== 'undefined') {
+        $('#modalEditUser').modal('show');
+      }
+    });
+  });
+
+  // === Tombol Hapus User — SweetAlert2 konfirmasi ===
+  document.querySelectorAll('.btn-delete-user').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id    = this.dataset.id;
+      var uname = this.dataset.username;
+      Swal.fire({
+        title: 'Hapus User?',
+        html: 'User <b>' + uname + '</b> akan dihapus permanen.<br>Tindakan ini tidak dapat dibatalkan.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#e3342f',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="fas fa-trash"></i> Ya, Hapus!',
+        cancelButtonText: 'Batal',
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          document.getElementById('delete_id_user').value = id;
+          document.getElementById('formDeleteUser').submit();
+        }
+      });
+    });
+  });
+
+  // === Tombol Cabut Penugasan — SweetAlert2 konfirmasi ===
+  document.querySelectorAll('.btn-remove-assign').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id   = this.dataset.id;
+      var info = this.dataset.info;
+      Swal.fire({
+        title: 'Cabut Penugasan?',
+        html: 'Penugasan berikut akan dihapus:<br><b>' + info + '</b>',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#e3342f',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: '<i class="fas fa-unlink"></i> Ya, Cabut!',
+        cancelButtonText: 'Batal',
+        reverseButtons: true
+      }).then(function (result) {
+        if (result.isConfirmed) {
+          document.getElementById('remove_id_assignment').value = id;
+          document.getElementById('formRemoveAssign').submit();
+        }
+      });
+    });
+  });
+
+  // === Role select → tampilkan/sembunyikan pilihan unit (form Buat User) ===
+  var createRole = document.getElementById('create_role');
+  var unitGroup  = document.getElementById('unit_group');
+  var selectUnit = document.getElementById('select_unit');
+  if (createRole && unitGroup) {
+    createRole.addEventListener('change', function () {
+      if (this.value === '14') {
+        unitGroup.style.display = 'block';
+        if (selectUnit) selectUnit.required = true;
+      } else {
+        unitGroup.style.display = 'none';
+        if (selectUnit) selectUnit.required = false;
+      }
+    });
+  }
+
 });
 </script>

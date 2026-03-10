@@ -272,6 +272,22 @@ class M_users extends CI_Model {
 		)->result_array();
 	}
 
+	public function get_user_by_id($id_user)
+	{
+		$id_user = intval($id_user);
+		$query = $this->db->query(
+			"SELECT id_user, nm_user, username, id_role, id_unit FROM ta_user WHERE id_user = $id_user LIMIT 1"
+		);
+		$row = $query->row_array();
+		return $row ?: null;
+	}
+
+	public function delete_user_by_id($id_user)
+	{
+		$id_user = intval($id_user);
+		return $this->db->where('id_user', $id_user)->delete('ta_user');
+	}
+
 }
 
  ?>

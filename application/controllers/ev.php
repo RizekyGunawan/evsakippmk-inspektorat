@@ -314,7 +314,7 @@ class Ev extends MY_Controller
 
 		$tahun = $this->input->post('tahun');
 		$id_unit = $this->input->post('id_unit');
-		$id_role = $this->input->post('id_role');
+		$id_role = (int) $this->session->userdata('id_role'); // [FIX] ambil dari session, bukan POST
 		$id_ev = $this->input->post('id_ev');
 		$uraian_konfirmasi = $this->input->post('uraian_konfirmasi');
 		$tenggat_waktu = $this->input->post('tenggat_waktu');
@@ -346,7 +346,7 @@ class Ev extends MY_Controller
 
 		$tahun = $this->input->post('tahun');
 		$id_unit = $this->input->post('id_unit');
-		$id_role = $this->input->post('id_role');
+		$id_role = (int) $this->session->userdata('id_role'); // [FIX] ambil dari session, bukan POST
 		$id_ev0 = $this->input->post('id_ev0');
 		$uraian_konfirmasi = $this->input->post('uraian_konfirmasi');
 		$tenggat_waktu = $this->input->post('tenggat_waktu');

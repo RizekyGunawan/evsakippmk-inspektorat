@@ -130,6 +130,24 @@
 <script src="<?php echo base_url() ?>assets/dist/js/pages/dashboard.js"></script>
 <!-- Toastr -->
 <script src="<?php echo base_url() ?>assets/plugins/toastr/toastr.min.js"></script>
+<!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+<script>
+// Toastr — konfigurasi global
+toastr.options = {
+  "closeButton": true,
+  "progressBar": true,
+  "positionClass": "toast-top-right",
+  "timeOut": "3500",
+  "extendedTimeOut": "1000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+};
+</script>
 
 
 
@@ -162,9 +180,12 @@
         }
 
         // Panggil fungsi filterSelect saat input berubah
-        document.getElementById('searchInput').addEventListener('input', function() {
-            filterSelect('searchInput', 'id_unit');
-        });
+        var searchInput = document.getElementById('searchInput');
+        if (searchInput) {
+            searchInput.addEventListener('input', function() {
+                filterSelect('searchInput', 'id_unit');
+            });
+        }
     </script>
 
 

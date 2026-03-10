@@ -317,6 +317,98 @@ public function update_data()
 	
 	
 
+
+	/**
+	 * Edit user (nama + password opsional) — hanya Admin (9)
+	 */
+	public function edit_user()
+	{
+		$this->_check_role([9]);
+		$this->load->model('m_users');
+
+		$id_user     = (int) $this->input->post('id_user');
+		$nm_user     = trim($this->input->post('nm_user'));
+		$password    = $this->input->post('password');
+		$modified_by = $this->session->userdata('username');
+
+		if (!$id_user || !$nm_user) {
+			$this->session->set_flashdata('error', 'Data tidak lengkap.');
+			redirect('users/index');
+			return;
+		}
+
+		// Pastikan hanya role 13/14 yang bisa diedit
+		$target = $this->m_users->get_user_by_id($id_user);
+		if (!$target || !in_array((int)$target['id_role'], [13, 14])) {
+			$this->session->set_flashdata('error', 'User tidak valid untuk diedit.');
+			redirect('users/index');
+			return;
+		}
+
+		$data = ['nm_user' => $nm_user, 'modified_by' => $modified_by];
+
+		if (!empty($password)) {
+			if (strlen($password) < 6) {
+				$this->session->set_flashdata('error', 'Password minimal 6 karakter.');
+				redirect('users/index');
+				return;
+			}
+			$data['password'] = password_hash($password, PASSWORD_BCRYPT);
+		}
+
+		$this->m_users->update_data(['id_user' => $id_user], $data, 'ta_user');
+		$this->session->set_flashdata('success', 'User "' . htmlspecialchars($target['username']) . '" berhasil diperbarui.');
+		redirect('users/index');
+	}
+
+
+	/**
+	 * Hapus user (soft delete — set status=0) — hanya Admin (9)
+	 */
+	public function delete_user()
+	{
+		$this->_check_role([9]);
+		$this->load->model('m_users');
+
+		$id_user = (int) $this->input->post('id_user');
+		if (!$id_user) {
+			$this->session->set_flashdata('error', 'ID user tidak valid.');
+			redirect('users/index');
+			return;
+		}
+
+		$target = $this->m_users->get_user_by_id($id_user);
+		if (!$target || !in_array((int)$target['id_role'], [13, 14])) {
+			$this->session->set_flashdata('error', 'User tidak dapat dihapus.');
+			redirect('users/index');
+			return;
+		}
+
+		$this->m_users->delete_user_by_id($id_user);
+		$this->session->set_flashdata('success', 'User "' . htmlspecialchars($target['username']) . '" berhasil dihapus.');
+		redirect('users/index');
+	}
+
+
+	/**
+	 * Cabut penugasan evaluator dari unit kerja — hanya Admin (9)
+	 */
+	public function remove_assignment()
+	{
+		$this->_check_role([9]);
+
+		$id_assignment = (int) $this->input->post('id_assignment');
+		if (!$id_assignment) {
+			$this->session->set_flashdata('error', 'ID penugasan tidak valid.');
+			redirect('users/index');
+			return;
+		}
+
+		$this->db->where('id', $id_assignment)->delete('ta_evaluator_unit');
+		$this->session->set_flashdata('success', 'Penugasan berhasil dicabut.');
+		redirect('users/index');
+	}
+
 }
 
  ?>
