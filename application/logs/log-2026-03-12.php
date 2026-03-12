@@ -11,3 +11,11 @@ ERROR - 2026-03-12 02:55:07 --> Severity: Warning --> Invalid argument supplied 
 ERROR - 2026-03-12 02:55:07 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 39
 ERROR - 2026-03-12 02:55:09 --> 404 Page Not Found: Assets/plugins
 ERROR - 2026-03-12 02:55:09 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-03-12 07:41:47 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-03-12 07:41:47 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-03-12 07:42:06 --> 404 Page Not Found: Dist/img
+ERROR - 2026-03-12 07:42:29 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-03-12 07:42:29 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 39
+ERROR - 2026-03-12 07:42:45 --> 404 Page Not Found: Dist/img
+ERROR - 2026-03-12 07:49:51 --> 404 Page Not Found: Dist/img
+ERROR - 2026-03-12 07:49:51 --> 404 Page Not Found: Dist/img

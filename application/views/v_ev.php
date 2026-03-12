@@ -822,7 +822,7 @@
             /* =========================================================
              * HISTORY PERUBAHAN EV — hanya tampil untuk Supervisor (10, 11, 12)
              * ========================================================= */
-            if (in_array($id_role_v, [10, 11, 12]) && !empty($ev_history)):
+            if (in_array($id_role_v, [10, 11, 12])):
             ?>
             <div class="card card-warning card-outline mt-3">
               <div class="card-header">
@@ -848,16 +848,22 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <?php foreach($ev_history as $h): ?>
-                    <tr>
-                      <td><small><?php echo htmlspecialchars($h['changed_at']) ?></small></td>
-                      <td><code><?php echo htmlspecialchars($h['field_name']) ?></code></td>
-                      <td class="text-danger"><?php echo htmlspecialchars($h['old_value'] ?: '-') ?></td>
-                      <td class="text-success"><strong><?php echo htmlspecialchars($h['new_value'] ?: '-') ?></strong></td>
-                      <td><strong><?php echo htmlspecialchars($h['changed_by']) ?></strong></td>
-                      <td><span class="badge badge-secondary"><?php echo htmlspecialchars($h['nm_role'] ?? 'Role '.$h['id_role']) ?></span></td>
-                    </tr>
-                    <?php endforeach; ?>
+                    <?php if(!empty($ev_history)): ?>
+                      <?php foreach($ev_history as $h): ?>
+                      <tr>
+                        <td><small><?php echo htmlspecialchars($h['changed_at']) ?></small></td>
+                        <td><code><?php echo htmlspecialchars($h['field_name']) ?></code></td>
+                        <td class="text-danger"><?php echo htmlspecialchars($h['old_value'] ?: '-') ?></td>
+                        <td class="text-success"><strong><?php echo htmlspecialchars($h['new_value'] ?: '-') ?></strong></td>
+                        <td><strong><?php echo htmlspecialchars($h['changed_by']) ?></strong></td>
+                        <td><span class="badge badge-secondary"><?php echo htmlspecialchars($h['nm_role'] ?? 'Role '.$h['id_role']) ?></span></td>
+                      </tr>
+                      <?php endforeach; ?>
+                    <?php else: ?>
+                      <tr>
+                        <td colspan="6" class="text-center text-muted"><em>Belum ada riwayat perubahan pada unit kerja/tahun ini.</em></td>
+                      </tr>
+                    <?php endif; ?>
                   </tbody>
                 </table>
               </div>
