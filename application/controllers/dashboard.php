@@ -1,16 +1,12 @@
 <?php 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
+class Dashboard extends MY_Controller {
 
 	public function __construct()
-		{
-			parent::__construct();
-
-			if ($this->session->userdata('id_role')==null) {
-				redirect('auth2/index');
-			}
-		}
+	{
+		parent::__construct(); // Auth guard terpusat ditangani MY_Controller
+	}
 
 
 	public function index (){
@@ -49,8 +45,8 @@ class Dashboard extends CI_Controller {
 
 		$this->load->view('templates/header', $data);
 
-		// Role lama (1-7) + Role baru Supervisor (10,11,12) + Tim Evaluator (13) + Unit Kerja (14)
-		$roles_dashboard = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14];
+		// Semua role kecuali Admin (9) boleh akses dashboard
+		$roles_dashboard = array_diff(self::ROLES_ALL, [self::ROLE_ADMIN]);
 		if (in_array($id_role, $roles_dashboard)) {
 			$this->load->view('v_dashboard', $data);
 		} else {
