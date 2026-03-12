@@ -136,7 +136,7 @@ class Auth2 extends CI_Controller
 	function logout()
 	{
 		$this->session->sess_destroy();
-		redirect('auth2/login');
+		redirect('auth2/index');
 	}
 
 	public function get_user_by_unit_ajax()
