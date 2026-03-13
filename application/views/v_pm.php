@@ -36,7 +36,7 @@
 
                    <div <?php if($this->session->userdata('id_unit') == ""){echo "hidden";}else{echo "";}; ?> class="col-">
 
-                    <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
+                    <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
                                $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && !empty($loadtu)): ?>
                     <?php foreach ($loadtu as $load): ?>
                         <button type="button" class="btn btn-primary" <?php if ($load['id_pm'] == "") { echo ""; } elseif ($load['id_pm'] != "") { echo "disabled"; } else { echo "disabled"; }; ?>
@@ -190,7 +190,7 @@
                                       </div>
                                 </td>
                                 <td class="text-center align-middle" style="width: 30px">
-                                <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
+                                <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
                                $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && $subk['status_data'] == "0"): ?>
                                     <div class="btn btn-primary btn-xs open-modal02" data-toggle="modal" data-id_pm0="<?php echo $subk['id_pm0']; ?>">
                                         <i class="fas fa-upload"></i>
@@ -202,7 +202,7 @@
                             </td>
 
                       <td class="text-center align-middle" style="width: 30px">
-                         <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
+                         <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
                                $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && $subk['status_data'] == "0"): ?>
                               <div 
                                <?php if ($subk['pm_modified_by'] != ""): ?>
@@ -212,7 +212,7 @@
                                   <i class="fas fa-edit"></i>
                               </div>
                           <?php endif; ?>
-                          <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
+                          <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
                               <div 
                                <?php if ($subk['pm_modified_by'] != ""): ?>
                                  title="last modified by: <?php echo $subk['pm_modified_by']; ?>"
@@ -298,7 +298,7 @@
                                     </td>
 
                                 <td class="text-center align-middle" style="width: 30px">
-                                     <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
+                                     <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
                                $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && $krit['status_data'] == "0"): ?>
                                           <div class="btn btn-primary btn-xs open-modal2" data-toggle="modal" data-id_pm="<?php echo $krit['id_pm']; ?>">
                                               <i class="fas fa-upload"></i>
@@ -313,7 +313,7 @@
 
                                   <?php echo $this->session->userdata('id_unit_es1'); ?>
                               <td class="text-center align-middle" style="width: 30px">
-                                <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
+                                <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
                                $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && $krit['status_data'] == "0"): ?>
                                     <div 
                                     <?php if ($krit['pm_modified_by'] != ""): ?>
@@ -323,7 +323,7 @@
                                         <i class="fas fa-edit"></i>
                                     </div>
                                 <?php endif; ?>
-                                 <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
+                                 <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
                                     <div 
                                     <?php if ($krit['pm_modified_by'] != ""): ?>
                                  title="last modified by: <?php echo $krit['pm_modified_by']; ?>"
@@ -533,7 +533,7 @@
             <div class="form-group col-md-2">
               <label>Jawaban1</label>
               <select name="jawaban1" id="jawaban1" class="form-control"
-              <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
+              <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
           <?php endif; ?>
               >
                 <option hidden value="">Pilih Jawaban 1</option>
@@ -550,7 +550,7 @@
             <div class="form-group col-md-5">
               <label>Bukti Dokumen (Link)</label>
               <input type="text" name="link_bukti" id="link_bukti" class="form-control" placeholder="Jawaban Ya Wajib isi Link/Upload Bukti"
-              <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
+              <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
           readonly
           <?php endif; ?>
               >
@@ -558,7 +558,7 @@
             <div class="form-group col-md-5">
               <label>Bukti Dokumen Tambahan (Link)</label>
               <input type="text" name="link_bukti3" id="link_bukti3" class="form-control"
-              <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
+              <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
           readonly
           <?php endif; ?>
               >
@@ -588,14 +588,14 @@
             <div class="form-group col-md-12">
               <label>Penjelasan Jawaban</label>
               <textarea type="text" rows="7" name="uraian_jawaban1" id="uraian_jawaban1" class="form-control text-justify"
-              <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
+              <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?>
           readonly
           <?php endif; ?>
               ></textarea>
             </div>
           </div>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
+          <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
                                $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && $krit['status_data'] == "0"): ?>
           <button id="submitkrit" class="btn btn-primary">Save</button>
           <?php endif; ?>
@@ -708,7 +708,7 @@
           <div class="form-group col-md-2">
             <label>Jawaban Akhir Otomatis</label>
             <select id="jawaban0" name="jawaban0" class="form-control"
-            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
+            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
           readonly
           <?php endif; ?>
             >
@@ -728,7 +728,7 @@
           <div class="form-group col-md-2">
             <label>Jawaban Akhir</label>
             <select id="jawaban0" name="jawaban0" class="form-control"
-            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
+            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
           readonly disabled
           <?php endif; ?>
             >
@@ -748,7 +748,7 @@
           <div class="form-group col-md-4">
             <label>Bukti Dokumen (Link)</label>
             <input title="Wajib isi Link Bukti / Upload Bukti jika Jawaban Akhir A / AA" type="text" id="link_bukti0" name="link_bukti0" class="form-control" placeholder="A/AA Wajib isi Link/Upload Bukti"
-            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
+            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
           readonly
           <?php endif; ?>
             >
@@ -756,7 +756,7 @@
           <div class="form-group col-md-4">
             <label>Bukti Dokumen Tambahan (Link)</label>
             <input title="Bukti Tambahan" type="text" id="link_bukti03" name="link_bukti03" class="form-control" placeholder="Bukti Tambahan"
-            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
+            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
           readonly
           <?php endif; ?>
             >
@@ -769,7 +769,7 @@
           <div class="form-group col-md-12">
             <label>Penjelasan Jawaban</label>
             <textarea id="uraian_jawaban0" title="Wajib diisi jika Jawaban Akhir A atau AA" type="text" rows="7" name="uraian_jawaban0" class="form-control text-justify" placeholder="Wajib diisi jika Jawaban Akhir A atau AA"
-            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
+            <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
           readonly
           <?php endif; ?>
             ></textarea>
@@ -780,7 +780,7 @@
           </div>
 
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
+        <?php if (($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || 
                                $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && $subk['status_data'] == "0"): ?>
           <button id="submitsub" class="btn btn-primary">Save</button>
           <?php endif; ?>

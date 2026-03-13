@@ -30,14 +30,14 @@ class M_pm extends CI_Model {
     	$id_unit = intval($id_unit);
 	    // Determine which table to join based on the year
 	    $ref_aspek_table = ($tahun >= 2024) ? 'ref_aspek2' : 'ref_aspek';
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 		(CASE 
-		WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-		WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-		WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-		WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-		WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-		WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+		WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+		WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+		WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+		WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+		WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+		WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 		ELSE ''
 		END) as jawabanantara
  		from ta_pm a  inner join $ref_aspek_table b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 where a.tahun = $tahun  and a.id_unit = $id_unit GROUP BY a.id_pm0 ");
@@ -76,14 +76,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub1ai ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -123,14 +123,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub1bi ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -168,14 +168,14 @@ class M_pm extends CI_Model {
 	
 	public function get_datasub1ci ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -213,14 +213,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub2ai ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -258,14 +258,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub2bi ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -303,14 +303,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub2ci ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -348,14 +348,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub3ai ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -393,14 +393,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub3bi ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -438,14 +438,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub3ci ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -483,14 +483,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub4ai ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -527,14 +527,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub4bi ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -571,14 +571,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub4ci ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -616,14 +616,14 @@ class M_pm extends CI_Model {
 
 	public function get_datasub ($tahun,$id_unit)
 	{
-		$query = $this->db->query("SELECT *, a.modified_by as pm_modified_by,  (avg(c.bobot2*a.jawaban1)/c.bobot2)*100 as skorpersen, avg(c.bobot2*a.jawaban1) as skor,
+		$query = $this->db->query("SELECT *, a.modified_by as pm_modified_by,  (avg(c.bobot2*a.jawaban1)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban1)/100) as skor,
 			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+			WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'BB'
+			WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='99' THEN 'B' 
+			WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='75' THEN 'CC'
+			WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='50' THEN 'C'  
+			WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)) <='25' THEN 'D'
+			WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)) THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 

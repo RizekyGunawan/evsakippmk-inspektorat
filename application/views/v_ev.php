@@ -412,7 +412,7 @@
                                                             <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 1 || $k0n['id_role'] == 5)): ?>
                                                               <span class="badge badge-danger blinking">!</span>
                                                             <?php endif; ?>
-                                                            <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 3 || $k0n['id_role'] == 7)): ?>
+                                                            <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 3 || $k0n['id_role'] == 7)): ?>
                                                               <span class="badge badge-danger blinking">!</span>
                                                             <?php endif; ?>
                                                           <?php endforeach; ?>
@@ -626,7 +626,7 @@
                                                                           <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 1 || $kn['id_role'] == 5)): ?>
                                                                             <span class="badge badge-danger blinking">!</span>
                                                                           <?php endif; ?>
-                                                                          <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 3 || $kn['id_role'] == 7)): ?>
+                                                                          <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 3 || $kn['id_role'] == 7)): ?>
                                                                             <span class="badge badge-danger blinking">!</span>
                                                                           <?php endif; ?>
                                                                         <?php endforeach; ?>
@@ -1560,7 +1560,7 @@
                       </div>
                     <?php endif; ?>
                     <?php if (
-                      $this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
+                      $this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
                         $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))
                     ): ?>
                       <div class="input-group col-md-1">
@@ -1745,7 +1745,7 @@
                       </div>
                     <?php endif; ?>
                     <?php if (
-                      $this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
+                      $this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
                         $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))
                     ): ?>
                       <div class="input-group col-md-1">
