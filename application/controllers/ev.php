@@ -80,8 +80,8 @@ class Ev extends MY_Controller
 		// ---------------------------------------------------------------
 		// Ambil id_role sekarang agar bisa dipakai di blok berikutnya
 		// ---------------------------------------------------------------
-		$id_role = (int)$this->session->userdata('id_role');
-		$id_user = (int)$this->session->userdata('id_user');
+		$id_role = (int) $this->session->userdata('id_role');
+		$id_user = (int) $this->session->userdata('id_user');
 
 		// ---------------------------------------------------------------
 		// FILTERING: Tim Evaluator (13) hanya boleh akses unit tugasnya
@@ -92,14 +92,13 @@ class Ev extends MY_Controller
 			$assigned_ids = array_column($assigned, 'id_unit');
 			$data['assigned_units'] = $assigned;
 
-			if (!in_array((int)$id_unit, $assigned_ids)) {
+			if (!in_array((int) $id_unit, $assigned_ids)) {
 				if (!empty($assigned_ids)) {
 					// Arahkan ke unit pertama yang ditugaskan
 					$this->session->set_userdata('id_unit', $assigned_ids[0]);
 					redirect('ev/index');
 					return;
-				}
-				else {
+				} else {
 					show_error('Anda belum ditugaskan ke unit manapun. Hubungi Admin untuk pengaturan penugasan.');
 					return;
 				}
@@ -111,8 +110,7 @@ class Ev extends MY_Controller
 		// ---------------------------------------------------------------
 		if (in_array($id_role, [10, 11, 12])) {
 			$data['ev_history'] = $this->m_ev->get_ev_history_by_unit($id_unit, $tahun);
-		}
-		else {
+		} else {
 			$data['ev_history'] = [];
 		}
 
@@ -129,8 +127,7 @@ class Ev extends MY_Controller
 		if (in_array($id_role, self::ROLES_CAN_VIEW_EV)) {
 			$data['can_edit_ev'] = in_array($id_role, self::ROLES_CAN_EDIT_EV);
 			$this->load->view('v_ev', $data);
-		}
-		else {
+		} else {
 			$this->load->view('404');
 		}
 
@@ -149,7 +146,7 @@ class Ev extends MY_Controller
 	{
 		// Role yang boleh akses: role lama (2-7) + Supervisor (10,11,12) + Tim Evaluator (13)
 		// Unit Kerja (14) dan Admin (9) tidak bisa akses halaman Rekapitulasi
-		$id_role = (int)$this->session->userdata('id_role');
+		$id_role = (int) $this->session->userdata('id_role');
 		$roles_rekap = [2, 3, 4, 5, 6, 7, 10, 11, 12, 13];
 		if (!in_array($id_role, $roles_rekap)) {
 			show_404();
@@ -198,10 +195,10 @@ class Ev extends MY_Controller
 	 */
 	public function set_unit_session()
 	{
-		$id_role = (int)$this->session->userdata('id_role');
-		$id_unit = (int)$this->input->post('id_unit');
-		$id_user = (int)$this->session->userdata('id_user');
-		$tahun = (int)$this->session->userdata('tahun');
+		$id_role = (int) $this->session->userdata('id_role');
+		$id_unit = (int) $this->input->post('id_unit');
+		$id_user = (int) $this->session->userdata('id_user');
+		$tahun = (int) $this->session->userdata('tahun');
 
 		if ($id_role === 13 && $id_unit > 0) {
 			$this->load->model('m_ev');
@@ -239,7 +236,7 @@ class Ev extends MY_Controller
 		$rekomendasi = $this->input->post('rekomendasi');
 		$perbaikan = $this->input->post('perbaikan');
 		$modified_by = $this->session->userdata('username');
-		$id_role = (int)$this->session->userdata('id_role');
+		$id_role = (int) $this->session->userdata('id_role');
 
 		// Ambil data lama sebelum di-update untuk audit trail
 		$old = $this->m_ev->get_single_ev($id_ev);
@@ -251,7 +248,7 @@ class Ev extends MY_Controller
 				'perbaikan' => $perbaikan,
 			];
 			foreach ($fields_to_track as $field => $new_val) {
-				if ((string)$old[$field] !== (string)$new_val) {
+				if ((string) $old[$field] !== (string) $new_val) {
 					$this->m_ev->insert_ev_history([
 						'id_ev' => $id_ev,
 						'id_unit' => $old['id_unit'] ?? null,
@@ -291,7 +288,7 @@ class Ev extends MY_Controller
 		$rekomendasi0 = $this->input->post('rekomendasi0');
 		$perbaikan0 = $this->input->post('perbaikan0');
 		$modified_by = $this->session->userdata('username');
-		$id_role = (int)$this->session->userdata('id_role');
+		$id_role = (int) $this->session->userdata('id_role');
 
 		// Audit trail: ambil data lama sebelum diupdate, catat setiap field yang berubah
 		$old0 = $this->m_ev->get_single_ev0($id_ev0);
@@ -303,7 +300,7 @@ class Ev extends MY_Controller
 				'perbaikan0' => $perbaikan0,
 			];
 			foreach ($fields_to_track0 as $field => $new_val) {
-				if ((string)($old0[$field] ?? '') !== (string)$new_val) {
+				if ((string) ($old0[$field] ?? '') !== (string) $new_val) {
 					$this->m_ev->insert_ev_history([
 						'id_ev0' => $id_ev0,
 						'id_unit' => $old0['id_unit'] ?? null,
@@ -342,7 +339,7 @@ class Ev extends MY_Controller
 
 		$tahun = $this->input->post('tahun');
 		$id_unit = $this->input->post('id_unit');
-		$id_role = (int)$this->session->userdata('id_role'); // [FIX] ambil dari session, bukan POST
+		$id_role = (int) $this->session->userdata('id_role'); // [FIX] ambil dari session, bukan POST
 		$id_ev = $this->input->post('id_ev');
 		$uraian_konfirmasi = $this->input->post('uraian_konfirmasi');
 		$tenggat_waktu = $this->input->post('tenggat_waktu');
@@ -374,7 +371,7 @@ class Ev extends MY_Controller
 
 		$tahun = $this->input->post('tahun');
 		$id_unit = $this->input->post('id_unit');
-		$id_role = (int)$this->session->userdata('id_role'); // [FIX] ambil dari session, bukan POST
+		$id_role = (int) $this->session->userdata('id_role'); // [FIX] ambil dari session, bukan POST
 		$id_ev0 = $this->input->post('id_ev0');
 		$uraian_konfirmasi = $this->input->post('uraian_konfirmasi');
 		$tenggat_waktu = $this->input->post('tenggat_waktu');
@@ -649,26 +646,19 @@ class Ev extends MY_Controller
 					$nilai = '';
 					if ($ev0['jawaban0ev'] == "100") {
 						$nilai = "AA";
-					}
-					elseif ($ev0['jawaban0ev'] == "90") {
+					} elseif ($ev0['jawaban0ev'] == "90") {
 						$nilai = "A";
-					}
-					elseif ($ev0['jawaban0ev'] == "80") {
+					} elseif ($ev0['jawaban0ev'] == "80") {
 						$nilai = "BB";
-					}
-					elseif ($ev0['jawaban0ev'] == "70") {
+					} elseif ($ev0['jawaban0ev'] == "70") {
 						$nilai = "B";
-					}
-					elseif ($ev0['jawaban0ev'] == "60") {
+					} elseif ($ev0['jawaban0ev'] == "60") {
 						$nilai = "CC";
-					}
-					elseif ($ev0['jawaban0ev'] == "50") {
+					} elseif ($ev0['jawaban0ev'] == "50") {
 						$nilai = "C";
-					}
-					elseif ($ev0['jawaban0ev'] == "30") {
+					} elseif ($ev0['jawaban0ev'] == "30") {
 						$nilai = "D";
-					}
-					elseif ($ev0['jawaban0ev'] == "0") {
+					} elseif ($ev0['jawaban0ev'] == "0") {
 						$nilai = "E";
 					}
 					if ($ev0['id_ev0'] == $ev['id_ev0']) {
@@ -724,21 +714,17 @@ class Ev extends MY_Controller
 				$opsi = '';
 				if ($ev['jawaban2'] == "1") {
 					$opsi = "Ya";
-				}
-				elseif ($ev['jawaban2'] == "0") {
+				} elseif ($ev['jawaban2'] == "0") {
 					$opsi = "Tidak";
-				}
-				elseif ($ev['jawaban2'] == "") {
+				} elseif ($ev['jawaban2'] == "") {
 					$opsi = "Y/T";
 				}
 				$jawaban2 = '';
 				if ($ev['jawaban2'] == "1") {
 					$jawaban2 = "100";
-				}
-				elseif ($ev['jawaban2'] == "0") {
+				} elseif ($ev['jawaban2'] == "0") {
 					$jawaban2 = "0";
-				}
-				elseif ($ev['jawaban2'] == "") {
+				} elseif ($ev['jawaban2'] == "") {
 					$jawaban2 = "Belum Diisi";
 				}
 				$informasi_tambahan = $ev['ket_pengisian1'] . "\n" . $ev['ket_pengisian2'] . "\n" . $ev['ket_pengisian3'];
@@ -775,26 +761,19 @@ class Ev extends MY_Controller
 				$sumnilaik = floatval(str_replace(',', '.', $ev000['sumnilaik']));
 				if ($sumnilaik >= 90.01 && $sumnilaik <= 100) {
 					$predikat = "AA";
-				}
-				elseif ($sumnilaik >= 80.01 && $sumnilaik <= 90.00) {
+				} elseif ($sumnilaik >= 80.01 && $sumnilaik <= 90.00) {
 					$predikat = "A";
-				}
-				elseif ($sumnilaik >= 70.01 && $sumnilaik <= 80.00) {
+				} elseif ($sumnilaik >= 70.01 && $sumnilaik <= 80.00) {
 					$predikat = "BB";
-				}
-				elseif ($sumnilaik >= 60.01 && $sumnilaik <= 70.00) {
+				} elseif ($sumnilaik >= 60.01 && $sumnilaik <= 70.00) {
 					$predikat = "B";
-				}
-				elseif ($sumnilaik >= 50.01 && $sumnilaik <= 60.00) {
+				} elseif ($sumnilaik >= 50.01 && $sumnilaik <= 60.00) {
 					$predikat = "CC";
-				}
-				elseif ($sumnilaik >= 30.01 && $sumnilaik <= 50.00) {
+				} elseif ($sumnilaik >= 30.01 && $sumnilaik <= 50.00) {
 					$predikat = "C";
-				}
-				elseif ($sumnilaik >= 0.01 && $sumnilaik <= 30.00) {
+				} elseif ($sumnilaik >= 0.01 && $sumnilaik <= 30.00) {
 					$predikat = "D";
-				}
-				elseif ($sumnilaik == 0) {
+				} elseif ($sumnilaik == 0) {
 					$predikat = "E";
 				}
 				$object->getActiveSheet()->setCellValue('B' . $baris, 'NILAI AKUNTABILITAS KINERJA');
@@ -973,26 +952,19 @@ class Ev extends MY_Controller
 					$nilai = '';
 					if ($ev0['jawaban0ev'] == "100") {
 						$nilai = "AA";
-					}
-					elseif ($ev0['jawaban0ev'] == "90") {
+					} elseif ($ev0['jawaban0ev'] == "90") {
 						$nilai = "A";
-					}
-					elseif ($ev0['jawaban0ev'] == "80") {
+					} elseif ($ev0['jawaban0ev'] == "80") {
 						$nilai = "BB";
-					}
-					elseif ($ev0['jawaban0ev'] == "70") {
+					} elseif ($ev0['jawaban0ev'] == "70") {
 						$nilai = "B";
-					}
-					elseif ($ev0['jawaban0ev'] == "60") {
+					} elseif ($ev0['jawaban0ev'] == "60") {
 						$nilai = "CC";
-					}
-					elseif ($ev0['jawaban0ev'] == "50") {
+					} elseif ($ev0['jawaban0ev'] == "50") {
 						$nilai = "C";
-					}
-					elseif ($ev0['jawaban0ev'] == "30") {
+					} elseif ($ev0['jawaban0ev'] == "30") {
 						$nilai = "D";
-					}
-					elseif ($ev0['jawaban0ev'] == "0") {
+					} elseif ($ev0['jawaban0ev'] == "0") {
 						$nilai = "E";
 					}
 					if ($ev0['id_ev0'] == $ev['id_ev0']) {
@@ -1047,21 +1019,17 @@ class Ev extends MY_Controller
 				$opsi = '';
 				if ($ev['jawaban2'] == "1") {
 					$opsi = "Ya";
-				}
-				elseif ($ev['jawaban2'] == "0") {
+				} elseif ($ev['jawaban2'] == "0") {
 					$opsi = "Tidak";
-				}
-				elseif ($ev['jawaban2'] == "") {
+				} elseif ($ev['jawaban2'] == "") {
 					$opsi = "Y/T";
 				}
 				$jawaban2 = '';
 				if ($ev['jawaban2'] == "1") {
 					$jawaban2 = "100";
-				}
-				elseif ($ev['jawaban2'] == "0") {
+				} elseif ($ev['jawaban2'] == "0") {
 					$jawaban2 = "0";
-				}
-				elseif ($ev['jawaban2'] == "") {
+				} elseif ($ev['jawaban2'] == "") {
 					$jawaban2 = "Belum Diisi";
 				}
 				$object->getActiveSheet()->setCellValue('A' . $baris, $ev['kd_aspek']);
@@ -1095,26 +1063,19 @@ class Ev extends MY_Controller
 				$sumnilaik = floatval(str_replace(',', '.', $ev000['sumnilaik']));
 				if ($sumnilaik >= 90.01 && $sumnilaik <= 100) {
 					$predikat = "AA";
-				}
-				elseif ($sumnilaik >= 80.01 && $sumnilaik <= 90.00) {
+				} elseif ($sumnilaik >= 80.01 && $sumnilaik <= 90.00) {
 					$predikat = "A";
-				}
-				elseif ($sumnilaik >= 70.01 && $sumnilaik <= 80.00) {
+				} elseif ($sumnilaik >= 70.01 && $sumnilaik <= 80.00) {
 					$predikat = "BB";
-				}
-				elseif ($sumnilaik >= 60.01 && $sumnilaik <= 70.00) {
+				} elseif ($sumnilaik >= 60.01 && $sumnilaik <= 70.00) {
 					$predikat = "B";
-				}
-				elseif ($sumnilaik >= 50.01 && $sumnilaik <= 60.00) {
+				} elseif ($sumnilaik >= 50.01 && $sumnilaik <= 60.00) {
 					$predikat = "CC";
-				}
-				elseif ($sumnilaik >= 30.01 && $sumnilaik <= 50.00) {
+				} elseif ($sumnilaik >= 30.01 && $sumnilaik <= 50.00) {
 					$predikat = "C";
-				}
-				elseif ($sumnilaik >= 0.01 && $sumnilaik <= 30.00) {
+				} elseif ($sumnilaik >= 0.01 && $sumnilaik <= 30.00) {
 					$predikat = "D";
-				}
-				elseif ($sumnilaik == 0) {
+				} elseif ($sumnilaik == 0) {
 					$predikat = "E";
 				}
 				$object->getActiveSheet()->setCellValue('B' . $baris, 'NILAI AKUNTABILITAS KINERJA');

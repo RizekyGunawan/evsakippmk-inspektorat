@@ -45,8 +45,11 @@ class Dok_ev extends CI_Controller {
 		elseif ($this->session->userdata('id_role')==2)  {
 		$this->load->view('v_dok_ev', $data);}
 		elseif ($this->session->userdata('id_role')==3)  {
-		$this->load->view('v_dok_ev', $data);}else {
-		$this->load->view('404');}
+		$this->load->view('v_dok_ev', $data);}
+		elseif (in_array($this->session->userdata('id_role'), [10, 11, 12])) {
+		$this->load->view('v_dok_ev', $data);}
+		else {
+		$this->load->view('403');}
 
 		$this->load->view('templates/sidebar');
 		$this->load->view('templates/footer', $data);
@@ -191,8 +194,11 @@ public function dashboard_rekap (){
 	elseif ($this->session->userdata('id_role')==2)  {
 	$this->load->view('v_dok_ev_dashboard', $data);}
 	elseif ($this->session->userdata('id_role')==3)  {
-	$this->load->view('v_dok_ev_dashboard', $data);}else {
-	$this->load->view('404');}
+	$this->load->view('v_dok_ev_dashboard', $data);}
+	elseif (in_array($this->session->userdata('id_role'), [10, 11, 12])) {
+	$this->load->view('v_dok_ev_dashboard', $data);}
+	else {
+	$this->load->view('403');}
 
 	$this->load->view('templates/sidebar');
 	$this->load->view('templates/footer', $data);
@@ -228,8 +234,11 @@ public function perbandingan (){
 	elseif ($this->session->userdata('id_role')==2)  {
 	$this->load->view('v_dok_ev_perbandingan', $data);}
 	elseif ($this->session->userdata('id_role')==3)  {
-	$this->load->view('v_dok_ev_perbandingan', $data);}else {
-	$this->load->view('404');}
+	$this->load->view('v_dok_ev_perbandingan', $data);}
+	elseif (in_array($this->session->userdata('id_role'), [10, 11, 12])) {
+	$this->load->view('v_dok_ev_perbandingan', $data);}
+	else {
+	$this->load->view('403');}
 
 	$this->load->view('templates/sidebar');
 	$this->load->view('templates/footer', $data);

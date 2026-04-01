@@ -246,7 +246,7 @@
                                                 <th class="text-center align-middle" style="width: 50px">Nilai Akhir</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">Nilai
                                                   Akuntabilitas Kinerja</th>
-                                                <th class="text-center align-middle" style="width: 50px">Catatan Evalauasi
+                                                <th class="text-center align-middle" style="width: 50px">Catatan Evaluasi
                                                 </th>
                                                 <th class="text-center align-middle" style="width: 20px">Konfir-
                                                   masi</th>
@@ -510,24 +510,30 @@
                                                                   }
                                                                   ; ?> class="text-center align-middle">
                                                                     <?php
-                                                                    if ($krit['jawaban1'] == "0") {
-                                                                      echo "Tidak";
-                                                                    } elseif ($krit['jawaban1'] == "0.5") {
-                                                                      echo "Sebagian";
-                                                                    } elseif ($krit['jawaban1'] == "1") {
-                                                                      echo "Ya";
-                                                                    } elseif ($krit['jawaban1'] == "0.33") {
-                                                                      echo "Sebagian Kecil";
-                                                                    } elseif ($krit['jawaban1'] == "0.66") {
-                                                                      echo "Sebagian Besar";
+                                                                    if ($krit['jawaban1'] == "100") {
+                                                                      echo "AA";
+                                                                    } elseif ($krit['jawaban1'] == "90") {
+                                                                      echo "A";
+                                                                    } elseif ($krit['jawaban1'] == "80") {
+                                                                      echo "BB";
+                                                                    } elseif ($krit['jawaban1'] == "70") {
+                                                                      echo "B";
+                                                                    } elseif ($krit['jawaban1'] == "60") {
+                                                                      echo "CC";
+                                                                    } elseif ($krit['jawaban1'] == "50") {
+                                                                      echo "C";
+                                                                    } elseif ($krit['jawaban1'] == "30") {
+                                                                      echo "D";
+                                                                    } elseif ($krit['jawaban1'] === "0" || $krit['jawaban1'] === 0) {
+                                                                      echo "E";
                                                                     } else {
-                                                                      echo "Y/T";
+                                                                      echo "";
                                                                     }
-                                                                    ; ?>
+                                                                    ?>
                                                                   </td>
                                                                   <td
                                                                     title="<?php echo htmlspecialchars($krit['uraian_jawaban1'], ENT_QUOTES, 'UTF-8'); ?>"
-                                                                    class="text-center align-middle" style="width: 100px">
+                                                                    class=" text-center align-middle" style="width: 100px">
                                                                     <i class="expandable-table-caret"></i>
                                                                     <?php
                                                                     $fullText = htmlspecialchars($krit['uraian_jawaban1'], ENT_QUOTES, 'UTF-8');
@@ -539,7 +545,7 @@
                                                                     ?>
                                                                   </td>
                                                                   <td title="<?php echo $krit['dok_pendukung2']; ?>"
-                                                                    class="text-truncate align-middle" style="max-width: 100px;"
+                                                                    class=" text-truncate align-middle" style="max-width: 100px;"
                                                                     style="width: 100px">
                                                                     <i class="expandable-table-caret "></i>
                                                                     <div class="text-truncate">
@@ -551,8 +557,9 @@
                                                                         $url = "http://" . $url;
                                                                       }
                                                                       ?>
-                                                                      <a href="<?php echo $url; ?>"
-                                                                        target="_blank"><?php echo htmlspecialchars($krit['link_bukti'], ENT_QUOTES, 'UTF-8'); ?></a>
+                                                                      <a href="<?php echo $url; ?>" target=" _blank">
+                                                                        <?php echo htmlspecialchars($krit['link_bukti'], ENT_QUOTES, 'UTF-8'); ?>
+                                                                        < /a>
                                                                     </div>
                                                                     <div class="text-truncate">
                                                                       <?php
@@ -563,15 +570,16 @@
                                                                         $url = "http://" . $url;
                                                                       }
                                                                       ?>
-                                                                      <a href="<?php echo $url; ?>"
-                                                                        target="_blank"><?php echo htmlspecialchars($krit['link_bukti3'], ENT_QUOTES, 'UTF-8'); ?></a>
+                                                                      <a href="<?php echo $url; ?>" target=" _blank">
+                                                                        <?php echo htmlspecialchars($krit['link_bukti3'], ENT_QUOTES, 'UTF-8'); ?>
+                                                                        < /a>
                                                                     </div>
                                                                   </td>
                                                                   <td class="text-center align-middle" style="width: 30px">
-                                                                    <?php if ($krit['link_bukti2'] != ""): ?>
-                                                                      <button class="btn btn-secondary btn-xs view-files-btn-pm"
+                                                                    <?php if ($krit['link_bukti2'] != ""): ?> <button
+                                                                        class="btn btn-secondary btn-xs view-files-btn-pm"
                                                                         data-files="<?php echo $krit['link_bukti2']; ?>"
-                                                                        data-id_pm="<?php echo $krit['id_pm']; ?>"><i
+                                                                        data-id_pm=" <?php echo $krit['id_pm']; ?>"><i
                                                                           class="fas fa-search"></i></button>
                                                                     <?php endif; ?>
                                                                   </td>
@@ -589,20 +597,26 @@
                                                                      } else {
                                                                        echo "hidden";
                                                                      }
-                                                                     ; ?> class="text-center align-middle">
+                                                                     ; ?> class=" text-center align-middle">
                                                                     <?php
-                                                                    if ($krit['jawaban2'] == "0") {
-                                                                      echo "Tidak";
-                                                                    } elseif ($krit['jawaban2'] == "0.5") {
-                                                                      echo "Sebagian";
-                                                                    } elseif ($krit['jawaban2'] == "1") {
-                                                                      echo "Ya";
-                                                                    } elseif ($krit['jawaban2'] == "0.33") {
-                                                                      echo "Sebagian Kecil";
-                                                                    } elseif ($krit['jawaban2'] == "0.66") {
-                                                                      echo "Sebagian Besar";
+                                                                    if ($krit['jawaban2'] == "100") {
+                                                                      echo "AA";
+                                                                    } elseif ($krit['jawaban2'] == "90") {
+                                                                      echo "A";
+                                                                    } elseif ($krit['jawaban2'] == "80") {
+                                                                      echo "BB";
+                                                                    } elseif ($krit['jawaban2'] == "70") {
+                                                                      echo "B";
+                                                                    } elseif ($krit['jawaban2'] == "60") {
+                                                                      echo "CC";
+                                                                    } elseif ($krit['jawaban2'] == "50") {
+                                                                      echo "C";
+                                                                    } elseif ($krit['jawaban2'] == "30") {
+                                                                      echo "D";
+                                                                    } elseif ($krit['jawaban2'] === "0" || $krit['jawaban2'] === 0) {
+                                                                      echo "E";
                                                                     } else {
-                                                                      echo "Y/T";
+                                                                      echo "";
                                                                     }
                                                                     ; ?>
                                                                   </td>
@@ -785,7 +799,7 @@
             <!-- /.card -->
 
             <?php
-            $id_role_v = (int)$this->session->userdata('id_role');
+            $id_role_v = (int) $this->session->userdata('id_role');
             ?>
 
             <?php
@@ -794,28 +808,27 @@
              * jika ditugaskan ke lebih dari 1 unit
              * ========================================================= */
             if ($id_role_v === 13 && !empty($assigned_units) && count($assigned_units) > 1):
-            ?>
-            <div class="card card-info card-outline mt-3">
-              <div class="card-header">
-                <h3 class="card-title"><i class="fas fa-exchange-alt mr-1"></i>Ganti Unit Kerja</h3>
+              ?>
+              <div class="card card-info card-outline mt-3">
+                <div class="card-header">
+                  <h3 class="card-title"><i class="fas fa-exchange-alt mr-1"></i>Ganti Unit Kerja</h3>
+                </div>
+                <div class="card-body">
+                  <form action="<?php echo base_url('ev/set_unit_session') ?>" method="post" class="form-inline">
+                    <label class="mr-2">Unit yang Ditugaskan:</label>
+                    <select name="id_unit" class="form-control mr-2">
+                      <?php foreach ($assigned_units as $au): ?>
+                        <option value="<?php echo $au['id_unit'] ?>" <?php echo ($this->session->userdata('id_unit') == $au['id_unit']) ? 'selected' : '' ?>>
+                          <?php echo htmlspecialchars($au['nm_unit']) ?>
+                        </option>
+                      <?php endforeach; ?>
+                    </select>
+                    <button type="submit" class="btn btn-info">
+                      <i class="fas fa-arrow-right mr-1"></i>Pindah Unit
+                    </button>
+                  </form>
+                </div>
               </div>
-              <div class="card-body">
-                <form action="<?php echo base_url('ev/set_unit_session') ?>" method="post" class="form-inline">
-                  <label class="mr-2">Unit yang Ditugaskan:</label>
-                  <select name="id_unit" class="form-control mr-2">
-                    <?php foreach($assigned_units as $au): ?>
-                    <option value="<?php echo $au['id_unit'] ?>"
-                      <?php echo ($this->session->userdata('id_unit') == $au['id_unit']) ? 'selected' : '' ?>>
-                      <?php echo htmlspecialchars($au['nm_unit']) ?>
-                    </option>
-                    <?php endforeach; ?>
-                  </select>
-                  <button type="submit" class="btn btn-info">
-                    <i class="fas fa-arrow-right mr-1"></i>Pindah Unit
-                  </button>
-                </form>
-              </div>
-            </div>
             <?php endif; ?>
 
             <?php
@@ -823,51 +836,55 @@
              * HISTORY PERUBAHAN EV — hanya tampil untuk Supervisor (10, 11, 12)
              * ========================================================= */
             if (in_array($id_role_v, [10, 11, 12])):
-            ?>
-            <div class="card card-warning card-outline mt-3">
-              <div class="card-header">
-                <h3 class="card-title">
-                  <i class="fas fa-history mr-1"></i>History Perubahan Penilaian EV
-                </h3>
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
+              ?>
+              <div class="card card-warning card-outline mt-3">
+                <div class="card-header">
+                  <h3 class="card-title">
+                    <i class="fas fa-history mr-1"></i>History Perubahan Penilaian EV
+                  </h3>
+                  <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="card-body p-0">
+                  <table class="table table-sm table-bordered table-striped mb-0">
+                    <thead class="bg-warning">
+                      <tr>
+                        <th style="width:140px">Waktu Perubahan</th>
+                        <th>Field</th>
+                        <th>Nilai Lama</th>
+                        <th>Nilai Baru</th>
+                        <th>Diubah Oleh</th>
+                        <th>Jabatan</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php if (!empty($ev_history)): ?>
+                        <?php foreach ($ev_history as $h): ?>
+                          <tr>
+                            <td><small><?php echo htmlspecialchars($h['changed_at']) ?></small></td>
+                            <td><code><?php echo htmlspecialchars($h['field_name']) ?></code></td>
+                            <td class="text-danger"><?php echo htmlspecialchars($h['old_value'] ?: '-') ?></td>
+                            <td class="text-success"><strong><?php echo htmlspecialchars($h['new_value'] ?: '-') ?></strong>
+                            </td>
+                            <td><strong><?php echo htmlspecialchars($h['changed_by']) ?></strong></td>
+                            <td><span
+                                class="badge badge-secondary"><?php echo htmlspecialchars($h['nm_role'] ?? 'Role ' . $h['id_role']) ?></span>
+                            </td>
+                          </tr>
+                        <?php endforeach; ?>
+                      <?php else: ?>
+                        <tr>
+                          <td colspan="6" class="text-center text-muted"><em>Belum ada riwayat perubahan pada unit
+                              kerja/tahun ini.</em></td>
+                        </tr>
+                      <?php endif; ?>
+                    </tbody>
+                  </table>
                 </div>
               </div>
-              <div class="card-body p-0">
-                <table class="table table-sm table-bordered table-striped mb-0">
-                  <thead class="bg-warning">
-                    <tr>
-                      <th style="width:140px">Waktu Perubahan</th>
-                      <th>Field</th>
-                      <th>Nilai Lama</th>
-                      <th>Nilai Baru</th>
-                      <th>Diubah Oleh</th>
-                      <th>Jabatan</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php if(!empty($ev_history)): ?>
-                      <?php foreach($ev_history as $h): ?>
-                      <tr>
-                        <td><small><?php echo htmlspecialchars($h['changed_at']) ?></small></td>
-                        <td><code><?php echo htmlspecialchars($h['field_name']) ?></code></td>
-                        <td class="text-danger"><?php echo htmlspecialchars($h['old_value'] ?: '-') ?></td>
-                        <td class="text-success"><strong><?php echo htmlspecialchars($h['new_value'] ?: '-') ?></strong></td>
-                        <td><strong><?php echo htmlspecialchars($h['changed_by']) ?></strong></td>
-                        <td><span class="badge badge-secondary"><?php echo htmlspecialchars($h['nm_role'] ?? 'Role '.$h['id_role']) ?></span></td>
-                      </tr>
-                      <?php endforeach; ?>
-                    <?php else: ?>
-                      <tr>
-                        <td colspan="6" class="text-center text-muted"><em>Belum ada riwayat perubahan pada unit kerja/tahun ini.</em></td>
-                      </tr>
-                    <?php endif; ?>
-                  </tbody>
-                </table>
-              </div>
-            </div>
             <?php endif; ?>
 
           </div>
@@ -958,26 +975,40 @@
               <div class="form-group col-md-2">
                 <label>Jawaban Unit</label>
                 <select readonly disabled name="jawaban1" id="jawaban1" class="form-control">
-                  <option hidden value="">Y/T</option>
-                  <option hidden value="1">Ya</option>
-                  <option hidden value="0">Tidak</option>
+                  <option hidden value="">Pilih Jawaban</option>
+                  <option value="100">AA</option>
+                  <option value="90">A</option>
+                  <option value="80">BB</option>
+                  <option value="70">B</option>
+                  <option value="60">CC</option>
+                  <option value="50">C</option>
+                  <option value="30">D</option>
+                  <option value="0">E</option>
                 </select>
               </div>
 
               <div class="form-group col-md-2">
                 <label>Jawaban</label>
-                <select id="jawaban2" name="jawaban2" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
-                  <option hidden value="">Y/T</option>
-                  <option value="1">Ya</option>
-                  <option value="0">Tidak</option>
+                <select id="jawaban2" name="jawaban2" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?>
+                    readonly disabled <?php endif; ?>>
+                  <option hidden value="">Pilih Jawaban</option>
+                  <option value="100">AA</option>
+                  <option value="90">A</option>
+                  <option value="80">BB</option>
+                  <option value="70">B</option>
+                  <option value="60">CC</option>
+                  <option value="50">C</option>
+                  <option value="30">D</option>
+                  <option value="0">E</option>
                 </select>
               </div>
 
               <div class="form-group col-md-2">
                 <label>Konfirmasi?</label>
-                <select id="perbaikan" name="perbaikan" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
+                <select id="perbaikan" name="perbaikan" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?>
+                    readonly disabled <?php endif; ?>>
                   <option value="0">Tidak</option>
-                  <option value="1">Ya</option>
+                  <option value="1" selected>Ya</option>
                 </select>
               </div>
 
@@ -1129,17 +1160,7 @@
 
               <div class="form-group col-md-3">
                 <label>Jawaban Akhir Unit</label>
-                <select readonly disabled name="jawaban0" id="jawaban0" class="form-control">
-                  <option hidden value=""></option>
-                  <option hidden value="100">AA</option>
-                  <option hidden value="90">A</option>
-                  <option hidden value="80">BB</option>
-                  <option hidden value="70">B</option>
-                  <option hidden value="60">CC</option>
-                  <option hidden value="50">C</option>
-                  <option hidden value="30">D</option>
-                  <option hidden value="0">E</option>
-                </select>
+                <input readonly type="text" id="jawaban0" class="form-control">
               </div>
 
               <div class="form-group col-md-3">
@@ -1167,7 +1188,7 @@
                 <label>Perlu Konfirmasi?</label>
                 <select id="perbaikan0" name="perbaikan0" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
                   <option value="0">Tidak</option>
-                  <option value="1">Ya</option>
+                  <option value="1" selected>Ya</option>
                 </select>
               </div>
 
@@ -1863,7 +1884,11 @@
             $('#ket_pengisian2').html(response.ket_pengisian2);
             $('#ket_pengisian3').html(response.ket_pengisian3);
             $('#catatan_ev').val(response.catatan_ev);
-            $('#perbaikan').val(response.perbaikan);
+            // Default Konfirmasi = Ya (1) jika jawaban evaluasi belum pernah diisi
+            // Jika jawaban2 kosong = data fresh, paksa Konfirmasi = Ya
+            // Jika jawaban2 sudah ada = ikuti nilai perbaikan dari DB
+            var konfirmasiVal = (response.jawaban2 === null || response.jawaban2 === '') ? '1' : response.perbaikan;
+            $('#perbaikan').val(konfirmasiVal);
             // Tampilkan modal
             $('#EditData').modal('show');
           },
@@ -1901,11 +1926,16 @@
             $('#uraian_subkomponen').val(response.uraian_subkomponen);
             $('#dok_pendukung').val(response.dok_pendukung);
             $('#jawabanantara').val(response.jawabanantara);
-            $('#jawaban0').val(response.jawaban0);
+            // Konversi nilai numerik jawaban0 ke label huruf untuk ditampilkan
+            var jawaban0Map = { '100': 'AA', '90': 'A', '80': 'BB', '70': 'B', '60': 'CC', '50': 'C', '30': 'D', '0': 'E' };
+            var jawaban0Label = (response.jawaban0 !== null && response.jawaban0 !== '') ? (jawaban0Map[String(response.jawaban0)] || response.jawaban0) : '';
+            $('#jawaban0').val(jawaban0Label);
             $('#jawaban0ev').val(response.jawaban0ev);
             $('#uraian_jawaban0').val(response.uraian_jawaban0);
             $('#catatan_ev0').val(response.catatan_ev0);
-            $('#perbaikan0').val(response.perbaikan0);
+            // Default Perlu Konfirmasi = Ya (1) jika jawaban evaluasi belum pernah diisi
+            var konfirmasi0Val = (response.jawaban0ev === null || response.jawaban0ev === '') ? '1' : response.perbaikan0;
+            $('#perbaikan0').val(konfirmasi0Val);
             // Tampilkan modal
             $('#EditDataSub').modal('show');
           },
@@ -1931,6 +1961,10 @@
   <script>
     $(document).ready(function () {
 
+      $.validator.addMethod("allowedValue", function (value, element, param) {
+        return param.includes(parseInt(value, 10));
+      }, "Jawaban hanya boleh 0, 30, 50, 60, 70, 80, 90, atau 100.");
+
       $.validator.addMethod("noLeadingZero", function (value, element) {
         return /^(?!0\d+)/.test(value);
       }, "Angka tidak boleh memiliki 0 di depannya.");
@@ -1940,7 +1974,7 @@
           jawaban2: {
             required: true,
             digits: true,
-            range: [0, 1],
+            allowedValue: [0, 30, 50, 60, 70, 80, 90, 100],
             noLeadingZero: true
           }
         },
@@ -1948,7 +1982,7 @@
           jawaban2: {
             required: "Jawaban harus diisi!",
             digits: "Jawaban hanya boleh sesuai pilihan!",
-            range: "Jawaban hanya boleh sesuai pilihan!",
+            allowedValue: "Jawaban hanya boleh sesuai pilihan!",
             noLeadingZero: "Jawaban hanya boleh sesuai pilihan!"
           }
         },

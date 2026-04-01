@@ -59,3 +59,5 @@ ERROR - 2026-03-13 08:18:12 --> 404 Page Not Found: Assets/plugins
 ERROR - 2026-03-13 08:22:39 --> 404 Page Not Found: Dist/img
 ERROR - 2026-03-13 08:22:48 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
 ERROR - 2026-03-13 08:22:48 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 39
+ERROR - 2026-03-13 08:56:17 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-03-13 08:56:17 --> 404 Page Not Found: Assets/plugins
