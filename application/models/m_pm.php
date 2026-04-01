@@ -997,6 +997,42 @@ class M_pm extends CI_Model
 	}
 	//---Batas akhir Load Data PM
 
+	public function sync_jawaban0($id_pm) {
+		// 1. Dapatkan id_pm0 dari tabel ta_pm berdasarkan id_pm yang sedang diupdate
+		$query = $this->db->query("SELECT id_pm0 FROM ta_pm WHERE id_pm = ?", array($id_pm));
+		$row = $query->row();
+		if (!$row) return;
+		$id_pm0 = $row->id_pm0;
+
+		// 2. Hitung rata-rata indikator (jawaban1) untuk id_pm0 tersebut
+		//    menggunakan formula bobot dan konversi threshold (>=90 = '100'/AA, dll)
+		$query_avg = $this->db->query("
+			SELECT 
+			(CASE 
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN '100'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN '90'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN '80'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN '70'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN '60'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN '50'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >  0  THEN '30'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) =  0  THEN '0'
+			ELSE ''
+			END) as new_jawaban0
+			FROM ta_pm a
+			INNER JOIN ref_subkomponen c ON a.id_subkomponen = c.id_subkomponen
+			WHERE a.id_pm0 = ?
+		", array($id_pm0));
+
+		$row_avg = $query_avg->row();
+		if ($row_avg && $row_avg->new_jawaban0 !== '') {
+			// 3. Update kembali hasil kalkulasi ini ke ta_pm0 agar nilai sub-komponen sinkron
+			$new_jawaban0 = $row_avg->new_jawaban0;
+			$this->db->where('id_pm0', $id_pm0);
+			$this->db->update('ta_pm0', array('jawaban0' => $new_jawaban0));
+		}
+	}
+
 	public function input_data($data, $table)
 	{
 		$this->db->insert($table, $data);

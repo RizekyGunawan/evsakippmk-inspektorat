@@ -280,3 +280,7 @@ ERROR - 2026-04-01 11:24:10 --> 404 Page Not Found: Dist/img
 ERROR - 2026-04-01 11:24:20 --> 404 Page Not Found: Dist/img
 ERROR - 2026-04-01 11:34:14 --> 404 Page Not Found: Dist/img
 ERROR - 2026-04-01 11:34:17 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 11:45:21 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 11:45:23 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 11:46:09 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-04-01 11:46:09 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 29
