@@ -274,3 +274,9 @@ ERROR - 2026-04-01 08:59:25 --> 404 Page Not Found: Assets/plugins
 ERROR - 2026-04-01 10:38:31 --> 404 Page Not Found: Assets/plugins
 ERROR - 2026-04-01 10:38:31 --> 404 Page Not Found: Assets/plugins
 ERROR - 2026-04-01 11:02:33 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 11:14:13 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 11:17:05 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 11:24:10 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 11:24:20 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 11:34:14 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 11:34:17 --> 404 Page Not Found: Dist/img

@@ -156,7 +156,7 @@
                                                 <th class="text-center align-middle" style="width: 50px">Bobot</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">
                                                   Keberadaan, Kualitas dan Pemanfaatan</th>
-                                                <th class="text-center align-middle" style="width: 50px">Jawaban Antara 0a
+                                                <th class="text-center align-middle" style="width: 50px">Jawaban Antara
                                                 </th>
                                                 <th class="text-center align-middle" style="width: 50px">Nilai Akhir</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">Nilai
@@ -191,8 +191,35 @@
                                                       <?php $format = number_format($subk['skor'], 2, ",", ".");
                                                       echo $format; ?>
                                                     </td>
+                                                    <?php
+                                                    /**
+                                                     * [KOLOM: Jawaban Antara]
+                                                     * Sumber  : $subk['jawabanantara'] → dihitung di m_pm.php get_datasub()
+                                                     * Formula : AVG(ta_pm.jawaban1 * bobot) / bobot
+                                                     * Isi     : Rata-rata tertimbang jawaban UNIT per indikator (otomatis).
+                                                     */
+                                                    ?>
                                                     <td class="text-center align-middle"><?php echo $subk['jawabanantara']; ?>
                                                     </td>
+                                                    <?php
+                                                    /**
+                                                     * [KOLOM: Nilai Akhir]
+                                                     * Sumber  : $subk['jawabanantara'] (saat ini — setelah perbaikan 2026-04-01)
+                                                     *
+                                                     * [CATATAN UNTUK PROGRAMMER — Fix #1 Pending]
+                                                     * Masalah : Kolom ini sebelumnya menggunakan $subk['jawaban0']
+                                                     *           (ta_pm0.jawaban0) yang merupakan nilai manual unit.
+                                                     *           Diubah sementara ke jawabanantara agar konsisten.
+                                                     *
+                                                     * Keputusan desain diperlukan:
+                                                     *   A) Kembalikan ke $subk['jawaban0'] jika "Nilai Akhir" dimaksudkan
+                                                     *      sebagai nilai konfirmasi manual yang bisa berbeda dari rata-rata.
+                                                     *   B) Hapus kolom ini jika dianggap duplikat dari "Jawaban Antara".
+                                                     *   C) Pertahankan jawabanantara dan hapus kolom "Jawaban Antara".
+                                                     *
+                                                     * Lihat juga: Fix #2 — sinkronisasi ta_pm0.jawaban0 dengan jawabanantara.
+                                                     */
+                                                    ?>
                                                     <td class="text-center align-middle">
                                                       <?php echo $subk['jawabanantara']; ?>
                                                     </td>
@@ -305,7 +332,7 @@
                                                               <th class="text-center align-middle" style="width: 300px">
                                                                 Kriteria yang dinilai</th>
                                                               <th class="text-center align-middle" style="width: 50px">
-                                                                Jawaban1a</th>
+                                                                Jawaban Unit</th>
                                                               <th class="text-center align-middle" style="width: 300px">
                                                                 Penjelasan Jawaban</th>
                                                               <th class="text-center align-middle" style="width: 50px"

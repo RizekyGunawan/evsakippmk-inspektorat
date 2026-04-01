@@ -242,7 +242,8 @@
                                                 <th class="text-center align-middle" style="width: 50px">Bobot</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">
                                                   Keberadaan, Kualitas dan Pemanfaatan</th>
-                                                <th class="text-center align-middle" style="width: 50px">Jwbn Antara</th>
+                                                <th class="text-center align-middle" style="width: 50px">Jawaban Antara
+                                                </th>
                                                 <th class="text-center align-middle" style="width: 50px">Nilai Akhir</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">Nilai
                                                   Akuntabilitas Kinerja</th>
@@ -273,28 +274,30 @@
                                                       <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
                                                       <?php echo $subk['uraian_subkomponen']; ?>
                                                     </td>
+                                                    <?php
+                                                    /**
+                                                     * [KOLOM: Nilai Akhir Unit]
+                                                     * Sumber  : $subk['jawaban0'] → ta_pm0.jawaban0
+                                                     * Isi     : Nilai sub-komponen yang disimpan oleh unit secara manual.
+                                                     *
+                                                     * [CATATAN UNTUK PROGRAMMER — Fix #4 Pending]
+                                                     * Masalah : Nilai ini bisa stale (tidak sinkron) jika unit
+                                                     *           hanya mengisi indikator (jawaban1 di ta_pm) tanpa
+                                                     *           menyimpan ulang nilai sub-komponen nya.
+                                                     *
+                                                     * Solusi  : Tambahkan alias 'jawabanantara_unit' pada query
+                                                     *           get_datasub() di m_ev.php yang menghitung:
+                                                     *           AVG(ta_pm.jawaban1) — rata-rata jawaban UNIT per indikator.
+                                                     *           Lalu ganti $subk['jawaban0'] di bawah ini
+                                                     *           dengan $subk['jawabanantara_unit'].
+                                                     *
+                                                     * PERHATIAN: Jangan ganti dengan $subk['jawabanantara'] karena
+                                                     *            di konteks v_ev.php, jawabanantara = AVG(ta_ev.jawaban2)
+                                                     *            yaitu rata-rata jawaban EVALUATOR, bukan unit.
+                                                     */
+                                                    ?>
                                                     <td class="text-center align-middle">
-                                                      <?php
-                                                      if ($subk['jawaban0'] == "100") {
-                                                        echo "AA";
-                                                      } elseif ($subk['jawaban0'] == "90") {
-                                                        echo "A";
-                                                      } elseif ($subk['jawaban0'] == "80") {
-                                                        echo "BB";
-                                                      } elseif ($subk['jawaban0'] == "70") {
-                                                        echo "B";
-                                                      } elseif ($subk['jawaban0'] == "60") {
-                                                        echo "CC";
-                                                      } elseif ($subk['jawaban0'] == "50") {
-                                                        echo "C";
-                                                      } elseif ($subk['jawaban0'] == "30") {
-                                                        echo "D";
-                                                      } elseif ($subk['jawaban0'] == "0") {
-                                                        echo "E";
-                                                      } else {
-                                                        echo "";
-                                                      }
-                                                      ; ?>
+                                                      <?php echo $subk['jawabanantara_unit']; ?>
                                                     </td>
                                                     <td
                                                       title="<?php echo htmlspecialchars($subk['uraian_jawaban0'], ENT_QUOTES, 'UTF-8'); ?>"
@@ -356,6 +359,18 @@
                                                       <?php $format = number_format($subk['skor'], 2, ",", ".");
                                                       echo $format; ?>
                                                     </td>
+                                                    <?php
+                                                    /**
+                                                     * [KOLOM: Jawaban Antara]
+                                                     * Sumber  : $subk['jawabanantara'] → dihitung di m_ev.php get_datasub()
+                                                     * Formula : AVG(ta_ev.jawaban2 * bobot) / bobot
+                                                     * Isi     : Rata-rata tertimbang jawaban EVALUATOR per indikator.
+                                                     *
+                                                     * PENTING : Ini adalah rata-rata jawaban evaluator (jawaban2),
+                                                     *           BUKAN rata-rata jawaban unit (jawaban1).
+                                                     *           Keduanya adalah field berbeda di tabel yang berbeda.
+                                                     */
+                                                    ?>
                                                     <td class="text-center align-middle"><?php echo $subk['jawabanantara']; ?>
                                                     </td>
                                                     <td class="text-center align-middle">

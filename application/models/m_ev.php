@@ -665,7 +665,28 @@ class M_ev extends CI_Model {
 			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
 			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
 			ELSE ''
-			END) as jawabanantara, 
+			END) as jawabanantara,
+			/*
+			 * [ALIAS: jawabanantara_unit]
+			 * Rata-rata tertimbang jawaban UNIT per indikator (ta_pm.jawaban1).
+			 * Digunakan untuk kolom 'Nilai Akhir Unit' di v_ev.php agar
+			 * evaluator dapat melihat nilai dinamis unit, bukan nilai statis
+			 * dari ta_pm0.jawaban0 yang bisa saja sudah usang (stale).
+			 *
+			 * SKALA: menggunakan threshold SAKIP (>=90=AA, >=80=A, dst.)
+			 * sama dengan yang digunakan di m_pm.php get_datasub().
+			 */
+			(CASE 
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >  0  THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) =  0  THEN 'E'
+			ELSE ''
+			END) as jawabanantara_unit,
 			(CASE 
 			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
 			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
@@ -691,6 +712,7 @@ class M_ev extends CI_Model {
 			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.tahun = '$tahun' and a.id_unit = '$id_unit' GROUP BY a.id_subkomponen ");
 		return $query->result_array();
 	}
+
 
 
 	public function get_datakrit ($tahun,$id_unit)
