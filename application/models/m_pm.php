@@ -33,12 +33,12 @@ class M_pm extends CI_Model
 		$ref_aspek_table = ($tahun >= 2024) ? 'ref_aspek2' : 'ref_aspek';
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 		(CASE 
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 		ELSE ''
@@ -81,12 +81,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -130,12 +130,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -177,12 +177,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -224,12 +224,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -271,12 +271,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -318,12 +318,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -365,12 +365,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -412,12 +412,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -459,12 +459,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -506,12 +506,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -552,12 +552,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -598,12 +598,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -645,12 +645,12 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *, a.modified_by as pm_modified_by,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
 			ELSE ''
@@ -957,7 +957,12 @@ class M_pm extends CI_Model
         JOIN 
         ta_dokumen b
         WHERE
-        b.tahun = $tahun and b.id_unit = $id_unit ");
+        b.tahun = $tahun and b.id_unit = $id_unit
+        AND NOT EXISTS (
+            SELECT 1 FROM ta_pm0 exist 
+            WHERE exist.tahun = b.tahun AND exist.id_unit = b.id_unit 
+            AND exist.id_subkomponen = a.id_subkomponen
+        )");
 
 		$query5 = $this->db->query('SELECT MAX(id_pm0) AS max_id FROM ta_pm0');
 		$row = $query5->row();
@@ -986,7 +991,12 @@ class M_pm extends CI_Model
          ta_pm0 b
          ON a.id_subkomponen=b.id_subkomponen
         WHERE
-        b.tahun = $tahun and b.id_unit = $id_unit ");
+        b.tahun = $tahun and b.id_unit = $id_unit 
+        AND NOT EXISTS (
+            SELECT 1 FROM ta_pm exist 
+            WHERE exist.tahun = b.tahun AND exist.id_unit = b.id_unit 
+            AND exist.id_aspek = a.id_aspek
+        )");
 
 		$query3 = $this->db->query('SELECT MAX(id_pm) AS max_id FROM ta_pm');
 		$row = $query3->row();
@@ -1009,12 +1019,12 @@ class M_pm extends CI_Model
 		$query_avg = $this->db->query("
 			SELECT 
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN '100'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN '90'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN '80'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN '70'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN '60'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 30 THEN '50'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN '100'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN '90'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN '80'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN '70'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN '60'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN '50'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >  0  THEN '30'
 			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) =  0  THEN '0'
 			ELSE ''

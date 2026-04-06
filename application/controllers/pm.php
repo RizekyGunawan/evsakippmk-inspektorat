@@ -18,6 +18,12 @@ class Pm extends MY_Controller
 		// Catatan: id_unit untuk UK (14) dikunci dari session, tidak bisa pilih unit lain
 		$tahun = $this->session->userdata('tahun');
 		/*$periode = $this->session->userdata('periode');*/
+		
+		// Auto-generate form pengisian menggunakan idempotent insert
+		if (!empty($tahun) && !empty($id_unit)) {
+			$this->m_pm->insert_pm($tahun, $id_unit);
+		}
+
 		$data['mandiri'] = $this->m_pm->get_data3($tahun, $id_unit);
 		$data['mandiri0'] = $this->m_pm->get_data30($tahun, $id_unit);
 		$data['sub1ai'] = $this->m_pm->get_datasub1ai($tahun, $id_unit);

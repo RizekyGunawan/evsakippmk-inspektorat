@@ -257,7 +257,14 @@ class M_users extends CI_Model {
 		return $this->db->query(
 			"SELECT u.id_user, u.nm_user, u.username, u.id_role, r.nm_unit
 			 FROM ta_user u LEFT JOIN ref_unit r ON u.id_unit = r.id_unit
-			 WHERE u.id_role >= 9 ORDER BY u.id_role, u.nm_user"
+			 ORDER BY 
+			   CASE 
+			     WHEN u.id_role = 9 THEN 1 
+			     WHEN u.id_role BETWEEN 1 AND 8 THEN 2 
+			     ELSE 3 
+			   END ASC, 
+			   u.id_role ASC, 
+			   u.nm_user ASC"
 		)->result_array();
 	}
 

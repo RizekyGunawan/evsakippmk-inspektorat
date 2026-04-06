@@ -22,11 +22,23 @@ class Datasub_ev extends CI_Controller {
                     WHEN AVG(a.jawaban2) >= 50 THEN 'C'
                     WHEN AVG(a.jawaban2) >= 30 THEN 'D'
                     ELSE 'E'
-                END) as jawabanantara
+                END) as jawabanantara,
+                (CASE
+                    WHEN (AVG(c.bobot2 * NULLIF(e.jawaban1, '')) / c.bobot2) >  90 THEN 'AA'
+                    WHEN (AVG(c.bobot2 * NULLIF(e.jawaban1, '')) / c.bobot2) >  80 THEN 'A'
+                    WHEN (AVG(c.bobot2 * NULLIF(e.jawaban1, '')) / c.bobot2) >  70 THEN 'BB'
+                    WHEN (AVG(c.bobot2 * NULLIF(e.jawaban1, '')) / c.bobot2) >  60 THEN 'B'
+                    WHEN (AVG(c.bobot2 * NULLIF(e.jawaban1, '')) / c.bobot2) >  50 THEN 'CC'
+                    WHEN (AVG(c.bobot2 * NULLIF(e.jawaban1, '')) / c.bobot2) >  30 THEN 'C'
+                    WHEN (AVG(c.bobot2 * NULLIF(e.jawaban1, '')) / c.bobot2) >   0 THEN 'D'
+                    WHEN (AVG(c.bobot2 * NULLIF(e.jawaban1, '')) / c.bobot2) =   0 THEN 'E'
+                    ELSE ''
+                END) as jawabanantara_unit
             FROM ta_ev a  
             INNER JOIN ref_aspek b ON a.id_aspek = b.id_aspek 
             INNER JOIN ref_subkomponen c ON a.id_subkomponen = c.id_subkomponen 
-            INNER JOIN ta_ev0 d ON a.id_ev0 = d.id_ev0 
+            INNER JOIN ta_ev0 d ON a.id_ev0 = d.id_ev0
+            INNER JOIN ta_pm e ON a.id_pm = e.id_pm
             WHERE d.id_ev0 = ?
             GROUP BY d.id_ev0
         ", array($id_ev0));

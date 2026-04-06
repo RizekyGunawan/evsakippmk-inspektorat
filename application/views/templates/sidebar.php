@@ -58,8 +58,8 @@
                </li>
                <?php endif; ?>
 
-               <!-- Status Pengisian (Dokumen): role lama + supervisor (role 14 tidak bisa akses /dokumen) -->
-               <?php if (in_array($r, array_merge($roles_old, $roles_supervisor, [13]))): ?>
+               <!-- Status Pengisian (Dokumen): role lama + supervisor + evaluator + unit kerja -->
+               <?php if (in_array($r, array_merge($roles_old, $roles_supervisor, [13, 14]))): ?>
                <li class="nav-item">
                  <a href="<?php echo base_url() ?>dokumen/index" class="nav-link" data-id="dokumen-link">
                    <i class="nav-icon fas fa-copy"></i>

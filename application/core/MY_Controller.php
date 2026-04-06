@@ -43,10 +43,10 @@ class MY_Controller extends CI_Controller
     const ROLES_CAN_TL = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 14];
 
     // Siapa yang boleh akses /dokumen
-    const ROLES_CAN_DOKUMEN = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12];
+    const ROLES_CAN_DOKUMEN = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14];
 
     // Siapa yang menggunakan tampilan v_dokumen (penuh, bisa input)
-    const ROLES_DOKUMEN_FULL = [1, 4, 5, 14];
+    const ROLES_DOKUMEN_FULL = [1, 4, 5, 13, 14];
 
     // Siapa yang menggunakan tampilan v_dokumen2 (monitoring/read)
     const ROLES_DOKUMEN_READ = [2, 3, 6, 7, 10, 11, 12];

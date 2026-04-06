@@ -42,31 +42,7 @@
                 ; ?>
                   class="col-">
 
-                  <?php if (
-                    ($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
-                      $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && !empty($loadtu)
-                  ): ?>
-                    <?php foreach ($loadtu as $load): ?>
-                      <button type="button" class="btn btn-primary" <?php if ($load['id_pm'] == "") {
-                        echo "";
-                      } elseif ($load['id_pm'] != "") {
-                        echo "disabled";
-                      } else {
-                        echo "disabled";
-                      }
-                      ; ?> data-toggle="modal"
-                        data-target="<?php if ($load['id_pm'] == "") {
-                          echo "#InsertData";
-                        } elseif ($load['id_pm'] != "") {
-                          echo "#";
-                        } else {
-                          echo "#";
-                        }
-                        ; ?>">
-                        Load Data
-                      </button>
-                    <?php endforeach; ?>
-                  <?php endif; ?>
+
 
 
                   <?php foreach ($loadtu as $load): ?>
@@ -645,39 +621,7 @@
   </script>
 
 
-  <!-- Modal Insert -->
-  <div class="modal fade" id="InsertData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Load Data PM</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
 
-        <div class="modal-body">
-
-          <?php echo form_open_multipart('pm/insert_pm'); ?>
-
-
-
-
-
-        </div>
-
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-        <button type="submit" class="btn btn-primary">Load</button>
-
-        <?php echo form_close(); ?>
-      </div>
-
-
-    </div>
-  </div>
-  </div>
 
 
 
@@ -1390,8 +1334,20 @@
             $('#uraian_subkomponen').val(response.uraian_subkomponen);
             $('#dok_pendukung').val(response.dok_pendukung);
             $('#jawabanantara').val(response.jawabanantara);
-            // Auto-fill: Jawaban Akhir Otomatis (hidden) tetap dikirim ke backend
-            $('#jawaban0otomatis').val(response.jawaban0);
+
+            // Auto-fill: Jawaban Akhir Otomatis (hidden) dipaksa sinkron dengan jawabanantara terbaru
+            var jwb = response.jawabanantara;
+            var j_val = "";
+            if (jwb === 'AA') j_val = "100";
+            else if (jwb === 'A') j_val = "90";
+            else if (jwb === 'BB') j_val = "80";
+            else if (jwb === 'B') j_val = "70";
+            else if (jwb === 'CC') j_val = "60";
+            else if (jwb === 'C') j_val = "50";
+            else if (jwb === 'D') j_val = "30";
+            else if (jwb === 'E') j_val = "0";
+            $('#jawaban0otomatis').val(j_val);
+
             // Jawaban Akhir (display) terisi otomatis = Jawaban Antara
             $('#jawaban0display').val(response.jawabanantara);
             $('#link_bukti0').val(response.link_bukti0);

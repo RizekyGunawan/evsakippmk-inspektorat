@@ -10,7 +10,7 @@
         </div>
         <div class="col-sm-6">
           <ol class="breadcrumb float-sm-right">
-            <li class="breadcrumb-item"><a href="<?php echo base_url()?>dashboard/index">Home</a></li>
+            <li class="breadcrumb-item"><a href="<?php echo base_url() ?>dashboard/index">Home</a></li>
             <li class="breadcrumb-item active">Manajemen User</li>
           </ol>
         </div>
@@ -22,10 +22,10 @@
     <div class="container-fluid">
 
       <?php if ($this->session->flashdata('success')): ?>
-      <script>window._flashSuccess = <?php echo json_encode($this->session->flashdata('success')); ?>;</script>
+        <script>window._flashSuccess = <?php echo json_encode($this->session->flashdata('success')); ?>;</script>
       <?php endif; ?>
       <?php if ($this->session->flashdata('error')): ?>
-      <script>window._flashError = <?php echo json_encode($this->session->flashdata('error')); ?>;</script>
+        <script>window._flashError = <?php echo json_encode($this->session->flashdata('error')); ?>;</script>
       <?php endif; ?>
 
       <div class="row">
@@ -43,12 +43,14 @@
                 </div>
                 <div class="form-group">
                   <label>Username</label>
-                  <input type="text" name="username" class="form-control" placeholder="Contoh: UK1 atau evaluator2" required>
+                  <input type="text" name="username" class="form-control" placeholder="Contoh: UK1 atau evaluator2"
+                    required>
                   <small class="text-muted">Boleh mengandung huruf, angka, titik, underscore, atau dash.</small>
                 </div>
                 <div class="form-group">
                   <label>Password</label>
-                  <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required minlength="6">
+                  <input type="password" name="password" class="form-control" placeholder="Minimal 6 karakter" required
+                    minlength="6">
                 </div>
                 <div class="form-group">
                   <label>Role</label>
@@ -62,8 +64,8 @@
                   <label>Unit Kerja <span class="text-muted">(wajib untuk Unit Kerja)</span></label>
                   <select name="id_unit" class="form-control select2" id="select_unit" style="width:100%">
                     <option value="">-- Pilih Unit Kerja --</option>
-                    <?php foreach($unit_list as $u): ?>
-                    <option value="<?php echo $u['id_unit'] ?>"><?php echo htmlspecialchars($u['nm_unit']) ?></option>
+                    <?php foreach ($unit_list as $u): ?>
+                      <option value="<?php echo $u['id_unit'] ?>"><?php echo htmlspecialchars($u['nm_unit']) ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>
@@ -85,8 +87,10 @@
                   <label>Tim Evaluator</label>
                   <select name="id_user" class="form-control select2" style="width:100%" required>
                     <option value="">-- Pilih Evaluator --</option>
-                    <?php foreach($evaluator_list as $ev): ?>
-                    <option value="<?php echo $ev['id_user'] ?>"><?php echo htmlspecialchars($ev['nm_user'].' ('.$ev['username'].')') ?></option>
+                    <?php foreach ($evaluator_list as $ev): ?>
+                      <option value="<?php echo $ev['id_user'] ?>">
+                        <?php echo htmlspecialchars($ev['nm_user'] . ' (' . $ev['username'] . ')') ?>
+                      </option>
                     <?php endforeach; ?>
                   </select>
                 </div>
@@ -94,14 +98,15 @@
                   <label>Unit Kerja yang Ditugaskan</label>
                   <select name="id_unit" class="form-control select2" style="width:100%" required>
                     <option value="">-- Pilih Unit Kerja --</option>
-                    <?php foreach($unit_list as $u): ?>
-                    <option value="<?php echo $u['id_unit'] ?>"><?php echo htmlspecialchars($u['nm_unit']) ?></option>
+                    <?php foreach ($unit_list as $u): ?>
+                      <option value="<?php echo $u['id_unit'] ?>"><?php echo htmlspecialchars($u['nm_unit']) ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>
                 <div class="form-group">
                   <label>Tahun</label>
-                  <input type="number" name="tahun" class="form-control" value="<?php echo $this->session->userdata('tahun') ?>" required>
+                  <input type="number" name="tahun" class="form-control"
+                    value="<?php echo $this->session->userdata('tahun') ?>" required>
                 </div>
                 <button type="submit" class="btn btn-info btn-block">
                   <i class="fas fa-link mr-1"></i> Assign Evaluator
@@ -132,7 +137,15 @@
                 <tbody>
                   <?php
                   $role_map = [
-                    9  => '<span class="badge badge-danger">Admin</span>',
+                    1 => '<span class="badge badge-secondary">Unit Kerja (Role Lama)</span>',
+                    2 => '<span class="badge badge-secondary">Pembina (Role Lama)</span>',
+                    3 => '<span class="badge badge-secondary">Evaluator (Role Lama)</span>',
+                    4 => '<span class="badge badge-secondary">Admin (Role Lama)</span>',
+                    5 => '<span class="badge badge-secondary">Admin Unit Kerja (Role Lama)</span>',
+                    6 => '<span class="badge badge-secondary">Admin Pembina (Role Lama)</span>',
+                    7 => '<span class="badge badge-secondary">Admin Evaluator (Role Lama)</span>',
+                    8 => '<span class="badge badge-secondary">No Role (Role Lama)</span>',
+                    9 => '<span class="badge badge-danger">Admin</span>',
                     10 => '<span class="badge badge-warning">Ketua Tim</span>',
                     11 => '<span class="badge badge-warning">P. Teknis</span>',
                     12 => '<span class="badge badge-warning">P. Mutu</span>',
@@ -140,36 +153,35 @@
                     14 => '<span class="badge badge-success">Unit Kerja</span>',
                   ];
                   $no = 1;
-                  foreach($user_list as $u):
-                    $role_badge = isset($role_map[$u['id_role']]) ? $role_map[$u['id_role']] : '<span class="badge badge-secondary">Role '.$u['id_role'].'</span>';
-                    $can_edit   = in_array((int)$u['id_role'], [13, 14]);
-                  ?>
-                  <tr>
-                    <td><?php echo $no++ ?></td>
-                    <td><?php echo htmlspecialchars($u['nm_user']) ?></td>
-                    <td><code><?php echo htmlspecialchars($u['username']) ?></code></td>
-                    <td><?php echo $role_badge ?></td>
-                    <td><?php echo htmlspecialchars($u['nm_unit'] ?? '-') ?></td>
-                    <td>
-                      <?php if ($can_edit): ?>
-                      <button type="button" class="btn btn-xs btn-warning btn-edit-user"
-                        data-id="<?php echo $u['id_user'] ?>"
-                        data-nama="<?php echo htmlspecialchars($u['nm_user'], ENT_QUOTES) ?>"
-                        data-username="<?php echo htmlspecialchars($u['username'], ENT_QUOTES) ?>"
-                        title="Edit">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button type="button" class="btn btn-xs btn-danger btn-delete-user"
-                        data-id="<?php echo $u['id_user'] ?>"
-                        data-username="<?php echo htmlspecialchars($u['username'], ENT_QUOTES) ?>"
-                        title="Hapus / Nonaktifkan">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                      <?php else: ?>
-                      <span class="text-muted small">—</span>
-                      <?php endif; ?>
-                    </td>
-                  </tr>
+                  foreach ($user_list as $u):
+                    $role_badge = isset($role_map[$u['id_role']]) ? $role_map[$u['id_role']] : '<span class="badge badge-secondary">Role ' . $u['id_role'] . '</span>';
+                    $can_edit = in_array((int) $u['id_role'], [13, 14]);
+                    ?>
+                    <tr>
+                      <td><?php echo $no++ ?></td>
+                      <td><?php echo htmlspecialchars($u['nm_user']) ?></td>
+                      <td><code><?php echo htmlspecialchars($u['username']) ?></code></td>
+                      <td><?php echo $role_badge ?></td>
+                      <td><?php echo htmlspecialchars($u['nm_unit'] ?? '-') ?></td>
+                      <td>
+                        <?php if ($can_edit): ?>
+                          <button type="button" class="btn btn-xs btn-warning btn-edit-user"
+                            data-id="<?php echo $u['id_user'] ?>"
+                            data-nama="<?php echo htmlspecialchars($u['nm_user'], ENT_QUOTES) ?>"
+                            data-username="<?php echo htmlspecialchars($u['username'], ENT_QUOTES) ?>" title="Edit">
+                            <i class="fas fa-edit"></i>
+                          </button>
+                          <button type="button" class="btn btn-xs btn-danger btn-delete-user"
+                            data-id="<?php echo $u['id_user'] ?>"
+                            data-username="<?php echo htmlspecialchars($u['username'], ENT_QUOTES) ?>"
+                            title="Hapus / Nonaktifkan">
+                            <i class="fas fa-trash"></i>
+                          </button>
+                        <?php else: ?>
+                          <span class="text-muted small">—</span>
+                        <?php endif; ?>
+                      </td>
+                    </tr>
                   <?php endforeach; ?>
                 </tbody>
               </table>
@@ -194,25 +206,28 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <?php $no2 = 1; foreach($assignment_list as $a): ?>
-                  <tr>
-                    <td><?php echo $no2++ ?></td>
-                    <td><?php echo htmlspecialchars($a['nm_user'] ?? '-') ?></td>
-                    <td><?php echo htmlspecialchars($a['nm_unit'] ?? '-') ?></td>
-                    <td><?php echo $a['tahun'] ?></td>
-                    <td><?php echo htmlspecialchars($a['created_by'] ?? '-') ?></td>
-                    <td>
-                      <button type="button" class="btn btn-xs btn-danger btn-remove-assign"
-                        data-id="<?php echo $a['id'] ?>"
-                        data-info="<?php echo htmlspecialchars(($a['nm_user']??'-').' → '.($a['nm_unit']??'-'), ENT_QUOTES) ?>"
-                        title="Cabut Penugasan">
-                        <i class="fas fa-unlink"></i>
-                      </button>
-                    </td>
-                  </tr>
+                  <?php $no2 = 1;
+                  foreach ($assignment_list as $a): ?>
+                    <tr>
+                      <td><?php echo $no2++ ?></td>
+                      <td><?php echo htmlspecialchars($a['nm_user'] ?? '-') ?></td>
+                      <td><?php echo htmlspecialchars($a['nm_unit'] ?? '-') ?></td>
+                      <td><?php echo $a['tahun'] ?></td>
+                      <td><?php echo htmlspecialchars($a['created_by'] ?? '-') ?></td>
+                      <td>
+                        <button type="button" class="btn btn-xs btn-danger btn-remove-assign"
+                          data-id="<?php echo $a['id'] ?>"
+                          data-info="<?php echo htmlspecialchars(($a['nm_user'] ?? '-') . ' → ' . ($a['nm_unit'] ?? '-'), ENT_QUOTES) ?>"
+                          title="Cabut Penugasan">
+                          <i class="fas fa-unlink"></i>
+                        </button>
+                      </td>
+                    </tr>
                   <?php endforeach; ?>
-                  <?php if(empty($assignment_list)): ?>
-                  <tr><td colspan="6" class="text-center text-muted">Belum ada penugasan</td></tr>
+                  <?php if (empty($assignment_list)): ?>
+                    <tr>
+                      <td colspan="6" class="text-center text-muted">Belum ada penugasan</td>
+                    </tr>
                   <?php endif; ?>
                 </tbody>
               </table>
@@ -247,7 +262,8 @@
           </div>
           <div class="form-group">
             <label>Password Baru <span class="text-muted">(kosongkan jika tidak ingin mengubah)</span></label>
-            <input type="password" name="password" id="edit_password" class="form-control" minlength="6" placeholder="Min. 6 karakter">
+            <input type="password" name="password" id="edit_password" class="form-control" minlength="6"
+              placeholder="Min. 6 karakter">
           </div>
         </div>
         <div class="modal-footer">
@@ -265,99 +281,100 @@
 </form>
 
 <!-- ===== Form Cabut Penugasan (hidden) ===== -->
-<form id="formRemoveAssign" action="<?php echo base_url('users/remove_assignment') ?>" method="post" style="display:none">
+<form id="formRemoveAssign" action="<?php echo base_url('users/remove_assignment') ?>" method="post"
+  style="display:none">
   <input type="hidden" name="id_assignment" id="remove_id_assignment">
 </form>
 
 <script>
-// Semua JS dijalankan setelah window.load agar jQuery & Bootstrap sudah pasti tersedia
-window.addEventListener('load', function () {
+  // Semua JS dijalankan setelah window.load agar jQuery & Bootstrap sudah pasti tersedia
+  window.addEventListener('load', function () {
 
-  // === Tampilkan Toastr dari flashdata PHP ===
-  if (window._flashSuccess) toastr.success(window._flashSuccess);
-  if (window._flashError)   toastr.error(window._flashError);
+    // === Tampilkan Toastr dari flashdata PHP ===
+    if (window._flashSuccess) toastr.success(window._flashSuccess);
+    if (window._flashError) toastr.error(window._flashError);
 
-  // === Init Select2 ===
-  if (typeof $ !== 'undefined' && $.fn && $.fn.select2) {
-    $('.select2').select2();
-  }
+    // === Init Select2 ===
+    if (typeof $ !== 'undefined' && $.fn && $.fn.select2) {
+      $('.select2').select2();
+    }
 
-  // === Tombol Edit User — isi modal lalu tampilkan ===
-  document.querySelectorAll('.btn-edit-user').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      document.getElementById('edit_id_user').value           = this.dataset.id;
-      document.getElementById('edit_nm_user').value           = this.dataset.nama;
-      document.getElementById('edit_username_display').value  = this.dataset.username;
-      document.getElementById('edit_password').value          = '';
-      if (typeof $ !== 'undefined') {
-        $('#modalEditUser').modal('show');
-      }
-    });
-  });
-
-  // === Tombol Hapus User — SweetAlert2 konfirmasi ===
-  document.querySelectorAll('.btn-delete-user').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var id    = this.dataset.id;
-      var uname = this.dataset.username;
-      Swal.fire({
-        title: 'Hapus User?',
-        html: 'User <b>' + uname + '</b> akan dihapus permanen.<br>Tindakan ini tidak dapat dibatalkan.',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#e3342f',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: '<i class="fas fa-trash"></i> Ya, Hapus!',
-        cancelButtonText: 'Batal',
-        reverseButtons: true
-      }).then(function (result) {
-        if (result.isConfirmed) {
-          document.getElementById('delete_id_user').value = id;
-          document.getElementById('formDeleteUser').submit();
+    // === Tombol Edit User — isi modal lalu tampilkan ===
+    document.querySelectorAll('.btn-edit-user').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        document.getElementById('edit_id_user').value = this.dataset.id;
+        document.getElementById('edit_nm_user').value = this.dataset.nama;
+        document.getElementById('edit_username_display').value = this.dataset.username;
+        document.getElementById('edit_password').value = '';
+        if (typeof $ !== 'undefined') {
+          $('#modalEditUser').modal('show');
         }
       });
     });
-  });
 
-  // === Tombol Cabut Penugasan — SweetAlert2 konfirmasi ===
-  document.querySelectorAll('.btn-remove-assign').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-      var id   = this.dataset.id;
-      var info = this.dataset.info;
-      Swal.fire({
-        title: 'Cabut Penugasan?',
-        html: 'Penugasan berikut akan dihapus:<br><b>' + info + '</b>',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#e3342f',
-        cancelButtonColor: '#6c757d',
-        confirmButtonText: '<i class="fas fa-unlink"></i> Ya, Cabut!',
-        cancelButtonText: 'Batal',
-        reverseButtons: true
-      }).then(function (result) {
-        if (result.isConfirmed) {
-          document.getElementById('remove_id_assignment').value = id;
-          document.getElementById('formRemoveAssign').submit();
-        }
+    // === Tombol Hapus User — SweetAlert2 konfirmasi ===
+    document.querySelectorAll('.btn-delete-user').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = this.dataset.id;
+        var uname = this.dataset.username;
+        Swal.fire({
+          title: 'Hapus User?',
+          html: 'User <b>' + uname + '</b> akan dihapus permanen.<br>Tindakan ini tidak dapat dibatalkan.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#e3342f',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: '<i class="fas fa-trash"></i> Ya, Hapus!',
+          cancelButtonText: 'Batal',
+          reverseButtons: true
+        }).then(function (result) {
+          if (result.isConfirmed) {
+            document.getElementById('delete_id_user').value = id;
+            document.getElementById('formDeleteUser').submit();
+          }
+        });
       });
     });
-  });
 
-  // === Role select → tampilkan/sembunyikan pilihan unit (form Buat User) ===
-  var createRole = document.getElementById('create_role');
-  var unitGroup  = document.getElementById('unit_group');
-  var selectUnit = document.getElementById('select_unit');
-  if (createRole && unitGroup) {
-    createRole.addEventListener('change', function () {
-      if (this.value === '14') {
-        unitGroup.style.display = 'block';
-        if (selectUnit) selectUnit.required = true;
-      } else {
-        unitGroup.style.display = 'none';
-        if (selectUnit) selectUnit.required = false;
-      }
+    // === Tombol Cabut Penugasan — SweetAlert2 konfirmasi ===
+    document.querySelectorAll('.btn-remove-assign').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var id = this.dataset.id;
+        var info = this.dataset.info;
+        Swal.fire({
+          title: 'Cabut Penugasan?',
+          html: 'Penugasan berikut akan dihapus:<br><b>' + info + '</b>',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonColor: '#e3342f',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: '<i class="fas fa-unlink"></i> Ya, Cabut!',
+          cancelButtonText: 'Batal',
+          reverseButtons: true
+        }).then(function (result) {
+          if (result.isConfirmed) {
+            document.getElementById('remove_id_assignment').value = id;
+            document.getElementById('formRemoveAssign').submit();
+          }
+        });
+      });
     });
-  }
 
-});
+    // === Role select → tampilkan/sembunyikan pilihan unit (form Buat User) ===
+    var createRole = document.getElementById('create_role');
+    var unitGroup = document.getElementById('unit_group');
+    var selectUnit = document.getElementById('select_unit');
+    if (createRole && unitGroup) {
+      createRole.addEventListener('change', function () {
+        if (this.value === '14') {
+          unitGroup.style.display = 'block';
+          if (selectUnit) selectUnit.required = true;
+        } else {
+          unitGroup.style.display = 'none';
+          if (selectUnit) selectUnit.required = false;
+        }
+      });
+    }
+
+  });
 </script>

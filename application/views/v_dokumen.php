@@ -158,9 +158,23 @@
                             <?php
                             $role = (int) $this->session->userdata('id_role');
                             $is_admin = in_array($role, [4, 9]);
+                            $is_evaluator = ($role === 13) && ($this->session->userdata('id_unit') == $unt['id_unit']);
                             $is_unit_allowed = in_array($role, [1, 5, 14]) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') || $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1'));
 
-                            if ($unt['status_data'] == "0" && ($is_admin || $is_unit_allowed)):
+                            $can_edit_status = false;
+                            if ($unt['status_data'] == "0") {
+                              // Bila DRAFT: Admin, Evaluator, atau Unit berwenang boleh mengubahnya ke Final
+                              if ($is_admin || $is_evaluator || $is_unit_allowed) {
+                                $can_edit_status = true;
+                              }
+                            } else if ($unt['status_data'] == "1") {
+                              // Bila FINAL: HANYA Admin dan Evaluator yang boleh membuka kembali kuncian ke Draft
+                              if ($is_admin || $is_evaluator) {
+                                $can_edit_status = true;
+                              }
+                            }
+
+                            if ($can_edit_status):
                               ?>
                               <div class="btn btn-success btn-xs" data-toggle="modal"
                                 data-target="#EditData<?php echo $unt['id_dokumen']; ?>"><i class="fas fa-edit"></i></div>
@@ -288,14 +302,16 @@
 
       // Query untuk memeriksa jawaban0
       $ref_aspek_table = ($tahun >= 2024) ? 'ref_aspek2' : 'ref_aspek';
-      $query_jawaban0 = "SELECT jawaban0,
+      $query_jawaban0 = "SELECT c.kd_subkomponen, jawaban0,
     (CASE 
-    WHEN '100'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'BB'
-    WHEN '75'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='99' THEN 'B' 
-    WHEN '50'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='75' THEN 'CC'
-    WHEN '25'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='50' THEN 'C'  
-    WHEN '0'<((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) && ((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) <='25' THEN 'D'
-    WHEN '0'=((avg(c.bobot2*a.jawaban1)/c.bobot2)*100) THEN 'E'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
     ELSE ''
     END) as jawabanantara
     FROM ta_pm a INNER JOIN $ref_aspek_table b ON a.id_aspek=b.id_aspek INNER JOIN ref_subkomponen c ON a.id_subkomponen=c.id_subkomponen INNER JOIN ta_pm0 d ON a.id_pm0=d.id_pm0 WHERE a.id_dokumen = $id_dokumen GROUP BY a.id_pm0";
@@ -311,8 +327,9 @@
       $has_empty_jawaban0 = false;
       $has_empty_jawaban1 = false;
       $has_mismatch = false;
+      $mismatched_details = [];
 
-      // Periksa apakah ada empty string di jawaban0
+      // Periksa apakah ada empty string di jawaban1
       foreach ($rows_jawaban1 as $row) {
         if ($row->jawaban1 === '') {
           $has_empty_jawaban1 = true;
@@ -320,43 +337,72 @@
         }
       }
 
-      // Periksa apakah ada empty string di jawaban1
+      // Periksa apakah ada empty string di jawaban0
       foreach ($rows_jawaban0 as $row) {
         if ($row->jawaban0 === '') {
           $has_empty_jawaban0 = true;
           break;
         }
+        $is_mismatch = false;
         // Validasi jawaban0 dengan jawabanantara
         switch ($row->jawaban0) {
           case '100':
+            if ($row->jawabanantara !== 'AA')
+              $is_mismatch = true;
+            break;
           case '90':
+            if ($row->jawabanantara !== 'A')
+              $is_mismatch = true;
+            break;
           case '80':
             if ($row->jawabanantara !== 'BB')
-              $has_mismatch = true;
+              $is_mismatch = true;
             break;
           case '70':
             if ($row->jawabanantara !== 'B')
-              $has_mismatch = true;
+              $is_mismatch = true;
             break;
           case '60':
             if ($row->jawabanantara !== 'CC')
-              $has_mismatch = true;
+              $is_mismatch = true;
             break;
           case '50':
             if ($row->jawabanantara !== 'C')
-              $has_mismatch = true;
+              $is_mismatch = true;
             break;
           case '30':
             if ($row->jawabanantara !== 'D')
-              $has_mismatch = true;
+              $is_mismatch = true;
             break;
           case '0':
             if ($row->jawabanantara !== 'E')
-              $has_mismatch = true;
+              $is_mismatch = true;
+            break;
+          default:
+            $is_mismatch = true;
             break;
         }
-        if ($has_mismatch)
-          break;
+        if ($is_mismatch) {
+          $has_mismatch = true;
+          $jawaban0_mapped = $row->jawaban0;
+          if ($row->jawaban0 == '100')
+            $jawaban0_mapped = 'AA';
+          if ($row->jawaban0 == '90')
+            $jawaban0_mapped = 'A';
+          if ($row->jawaban0 == '80')
+            $jawaban0_mapped = 'BB';
+          if ($row->jawaban0 == '70')
+            $jawaban0_mapped = 'B';
+          if ($row->jawaban0 == '60')
+            $jawaban0_mapped = 'CC';
+          if ($row->jawaban0 == '50')
+            $jawaban0_mapped = 'C';
+          if ($row->jawaban0 == '30')
+            $jawaban0_mapped = 'D';
+          if ($row->jawaban0 == '0')
+            $jawaban0_mapped = 'E';
+          $mismatched_details[] = $row->kd_subkomponen . " (Akhir: " . $jawaban0_mapped . " vs Antara: " . $row->jawabanantara . ")";
+        }
       }
       ?>
       <div class="modal fade" id="EditData<?php echo $unt['id_dokumen']; ?>" tabindex="-1" role="dialog"
@@ -380,7 +426,14 @@
                   <?php endif; ?>
                   <?php if ($has_mismatch): ?>
                     <i class="fas fa-exclamation-triangle"></i> Masih terdapat Jawaban Akhir pada Subkomponen yang tidak
-                    sesuai dengan Jawaban Antara. Harap periksa dan perbaiki jawaban tersebut.
+                    sesuai dengan Jawaban Antara:
+                    <ul class="mb-0 mt-1 pl-3 text-sm">
+                      <?php foreach ($mismatched_details as $md): ?>
+                        <li><?php echo $md; ?></li>
+                      <?php endforeach; ?>
+                    </ul>
+                    <br>Harap masuk ke menu Pengisian Penilaian lalu tekan Save pada form Subkomponen tersebut agar nilainya
+                    terupdate otomatis.
                   <?php endif; ?>
                 </div>
               <?php else: ?>

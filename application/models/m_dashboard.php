@@ -153,6 +153,13 @@ class M_dashboard extends CI_Model {
 	 return $query->result_array();
 	}
 
+	public function get_total_unit ()
+	{
+	 $query = $this->db->query("SELECT COUNT(*) as total FROM ref_unit");
+	 $result = $query->row_array();
+	 return (int) $result['total'];
+	}
+
 }	
 
  ?>

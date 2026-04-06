@@ -284,3 +284,50 @@ ERROR - 2026-04-01 11:45:21 --> 404 Page Not Found: Dist/img
 ERROR - 2026-04-01 11:45:23 --> 404 Page Not Found: Dist/img
 ERROR - 2026-04-01 11:46:09 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
 ERROR - 2026-04-01 11:46:09 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 29
+ERROR - 2026-04-01 11:50:08 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:50:08 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:50:12 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:50:12 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:50:23 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:50:23 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:50:43 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:50:43 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:50:56 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-04-01 11:50:56 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 284
+ERROR - 2026-04-01 11:50:56 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 39
+ERROR - 2026-04-01 11:51:24 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-04-01 11:51:24 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 284
+ERROR - 2026-04-01 11:51:24 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 39
+ERROR - 2026-04-01 11:51:28 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-04-01 11:51:28 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 284
+ERROR - 2026-04-01 11:51:28 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 39
+ERROR - 2026-04-01 11:51:36 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:51:36 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:51:48 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:51:48 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:52:07 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-04-01 11:52:07 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 284
+ERROR - 2026-04-01 11:52:07 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 39
+ERROR - 2026-04-01 11:53:06 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-04-01 11:53:06 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 284
+ERROR - 2026-04-01 11:53:06 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 39
+ERROR - 2026-04-01 11:53:15 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 11:53:15 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 12:09:41 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 12:09:41 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 12:19:13 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 12:19:13 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 12:19:32 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 12:19:32 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 12:20:01 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-04-01 12:20:01 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 29
+ERROR - 2026-04-01 12:20:09 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 12:20:33 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 12:30:00 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 12:30:08 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 12:30:34 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 12:30:34 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 12:31:11 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-01 12:40:34 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 12:40:34 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-01 12:42:36 --> 404 Page Not Found: Dist/img

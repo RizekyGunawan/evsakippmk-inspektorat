@@ -29,6 +29,11 @@ class Ev extends MY_Controller
 		$id_ev = $this->session->userdata('id_ev');
 		$id_ev0 = $this->session->userdata('id_ev0');
 
+		// Auto-generate form evaluasi menggunakan idempotent insert
+		if (!empty($tahun) && !empty($id_unit)) {
+			$this->m_ev->insert_ev($tahun, $id_unit);
+		}
+
 		$data['evaluasi'] = $this->m_ev->get_data3($tahun, $id_unit);
 		$data['evaluasi0'] = $this->m_ev->get_data30($tahun, $id_unit);
 		$data['sub1ai'] = $this->m_ev->get_datasub1ai($tahun, $id_unit);
@@ -82,6 +87,23 @@ class Ev extends MY_Controller
 		// ---------------------------------------------------------------
 		$id_role = (int) $this->session->userdata('id_role');
 		$id_user = (int) $this->session->userdata('id_user');
+
+		// ---------------------------------------------------------------
+		// UNIT SWITCHER: Supervisor (10, 11, 12) bisa lihat semua unit.
+		// Jika id_unit kosong (akun supervisor tidak punya unit default),
+		// otomatis pilih unit pertama dari daftar semua unit kerja.
+		// ---------------------------------------------------------------
+		$all_units = $this->m_home->get_data2();
+		$data['all_units'] = $all_units; // dikirim ke view untuk dropdown
+
+		if (in_array($id_role, [10, 11, 12])) {
+			if (empty($id_unit) && !empty($all_units)) {
+				$id_unit = $all_units[0]['id_unit'];
+				$this->session->set_userdata('id_unit', $id_unit);
+				redirect('ev/index');
+				return;
+			}
+		}
 
 		// ---------------------------------------------------------------
 		// FILTERING: Tim Evaluator (13) hanya boleh akses unit tugasnya
@@ -207,6 +229,22 @@ class Ev extends MY_Controller
 			if (in_array($id_unit, $assigned_ids)) {
 				$this->session->set_userdata('id_unit', $id_unit);
 			}
+		}
+		redirect('ev/index');
+	}
+
+	/**
+	 * Unit Switcher untuk Supervisor (role 10, 11, 12).
+	 * Supervisor boleh memilih unit kerja manapun tanpa batasan penugasan.
+	 * Update id_unit di session lalu redirect ke ev/index.
+	 */
+	public function set_unit_session_supervisor()
+	{
+		$id_role = (int) $this->session->userdata('id_role');
+		$id_unit = (int) $this->input->post('id_unit');
+
+		if (in_array($id_role, [10, 11, 12]) && $id_unit > 0) {
+			$this->session->set_userdata('id_unit', $id_unit);
 		}
 		redirect('ev/index');
 	}

@@ -42,6 +42,7 @@ class Dashboard extends MY_Controller {
 		$data['persensubev']= $this->m_dashboard->get_persensubev($tahun,$id_unit);
 		$data['rekomendasi']= $this->m_dashboard->get_rekomendasi($tahun,$id_unit);
 		$data['tl']= $this->m_dashboard->get_tl($tahun,$id_unit);
+		$data['total_unit']= $this->m_dashboard->get_total_unit();
 
 		$this->load->view('templates/header', $data);
 

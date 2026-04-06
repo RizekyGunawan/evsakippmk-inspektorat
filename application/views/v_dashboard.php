@@ -344,6 +344,9 @@
                 // Ambil data dari PHP dan ubah menjadi array JavaScript
                 var status_data = <?php echo json_encode($status_data); ?>;
 
+                // Total unit kerja dari ref_unit (dinamis dari database)
+                var totalUnit = <?php echo (int) $total_unit; ?>;
+
                 // Hitung jumlah data dari status_data
                  var dataCount = <?php echo count($status_data); ?>;
 
@@ -365,7 +368,7 @@
                     data: {
                         labels: ['Final', 'Draft', 'Belum Input'],
                         datasets: [{
-                            data: [finalCount, notFinalCount, 74 - dataCount],
+                            data: [finalCount, notFinalCount, totalUnit - dataCount],
                             backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(128, 128, 128, 0.2)'],
                             borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(128, 128, 128, 1)'],
                             borderWidth: 1
@@ -470,7 +473,7 @@
                     data: {
                         labels: ['Final', 'Draft', 'Belum Input'],
                         datasets: [{
-                            data: [finalCount, dataCount - finalCount, 74 - dataCount],
+                            data: [finalCount, dataCount - finalCount, totalUnit - dataCount],
                             backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(255, 99, 132, 0.2)', 'rgba(128, 128, 128, 0.2)'],
                             borderColor: ['rgba(75, 192, 192, 1)', 'rgba(255, 99, 132, 1)', 'rgba(128, 128, 128, 1)'],
                             borderWidth: 1

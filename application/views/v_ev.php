@@ -126,7 +126,29 @@
             <div class="card">
               <div class="card-header">
 
-                <div <?php if ($this->session->userdata('id_unit') == "") {
+  
+              <?php
+              $id_role_switcher = (int) $this->session->userdata('id_role');
+              if (in_array($id_role_switcher, [10, 11, 12])): ?>
+              <!-- Unit Switcher untuk Supervisor (Ketua Tim / Pengendali Teknis / Pengendali Mutu) -->
+              <div class="col-12 mb-2 d-flex align-items-center" style="gap: 8px;">
+                <label class="mb-0 font-weight-bold text-secondary" style="white-space:nowrap; font-size:13px;">
+                  <i class="fas fa-building mr-1"></i>Unit Kerja:
+                </label>
+                <form method="post" action="<?php echo base_url('ev/set_unit_session_supervisor'); ?>" style="margin:0; display:flex; align-items:center; gap:6px;">
+                  <select name="id_unit" class="form-control form-control-sm" style="min-width:220px;" onchange="this.form.submit()">
+                    <?php foreach ($all_units as $u): ?>
+                      <option value="<?php echo $u['id_unit']; ?>"
+                        <?php echo ($u['id_unit'] == $this->session->userdata('id_unit')) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($u['nm_unit'], ENT_QUOTES, 'UTF-8'); ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </select>
+                </form>
+              </div>
+              <?php endif; ?>
+
+              <div <?php if ($this->session->userdata('id_unit') == "") {
                   echo "hidden";
                 } else {
                   echo "";
@@ -135,32 +157,8 @@
                   class="col-">
 
 
-                  <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7) && !empty($loadtu)): ?>
-                    <?php foreach ($loadtu as $load): ?>
-                      <button type="button" class="btn btn-primary" <?php if ($load['id_ev'] == "") {
-                        echo "";
-                      } elseif ($load['id_ev'] != "") {
-                        echo "disabled";
-                      } else {
-                        echo "disabled";
-                      }
-                      ; ?> data-toggle="modal"
-                        data-target="<?php if ($load['id_ev'] == "") {
-                          echo "#InsertData";
-                        } elseif ($load['id_ev'] != "") {
-                          echo "#";
-                        } else {
-                          echo "#";
-                        }
-                        ; ?>">
-                        Load Data Evaluasi
-                      </button>
-                    <?php endforeach; ?>
-                  <?php endif; ?>
-
-
                   <?php foreach ($loadtu as $load): ?>
-                    <?php if ($load['id_ev'] != "" && ($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 6)): ?>
+                    <?php if ($load['id_ev'] != "" && in_array($this->session->userdata('id_role'), [2, 3, 4, 6, 7, 10, 11, 12, 13])): ?>
                       <a class="btn btn-success" href="<?php echo base_url('ev/excel') ?>">Hasil Penilain.xlsx</a>
                     <?php endif; ?>
                   <?php endforeach; ?>
@@ -424,10 +422,10 @@
                                                           onclick="setSessionIdEv0('<?php echo $subk['id_ev0']; ?>')"><i
                                                             class="fas fa-comments text-danger"></i>
                                                           <?php foreach ($konfirmasi0notif as $k0n): ?>
-                                                            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 1 || $k0n['id_role'] == 5)): ?>
+                                                            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 13) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 1 || $k0n['id_role'] == 5)): ?>
                                                               <span class="badge badge-danger blinking">!</span>
                                                             <?php endif; ?>
-                                                            <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 3 || $k0n['id_role'] == 7)): ?>
+                                                            <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 3 || $k0n['id_role'] == 7 || $k0n['id_role'] == 13)): ?>
                                                               <span class="badge badge-danger blinking">!</span>
                                                             <?php endif; ?>
                                                           <?php endforeach; ?>
@@ -437,7 +435,7 @@
 
 
                                                     <td class="text-center align-middle" style="width: 30px">
-                                                      <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $subk['status_data'] == "1" && $subk['status_data1'] == "0"): ?>
+                                                      <?php if ($can_edit_ev && $subk['status_data'] == "1" && $subk['status_data1'] == "0"): ?>
                                                         <div <?php if ($subk['ev_modified_by'] != ""): ?>
                                                             title="last modified by: <?php echo $subk['ev_modified_by']; ?>" <?php endif; ?> class="btn btn-info btn-xs open-modal0"
                                                           data-id_ev0="<?php echo $subk['id_ev0']; ?>"><i
@@ -652,10 +650,10 @@
                                                                         onclick="setSessionIdEv('<?php echo $krit['id_ev']; ?>')"><i
                                                                           class="fas fa-comments text-danger"></i>
                                                                         <?php foreach ($konfirmasinotif as $kn): ?>
-                                                                          <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 1 || $kn['id_role'] == 5)): ?>
+                                                                          <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 13) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 1 || $kn['id_role'] == 5)): ?>
                                                                             <span class="badge badge-danger blinking">!</span>
                                                                           <?php endif; ?>
-                                                                          <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 3 || $kn['id_role'] == 7)): ?>
+                                                                          <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 3 || $kn['id_role'] == 7 || $kn['id_role'] == 13)): ?>
                                                                             <span class="badge badge-danger blinking">!</span>
                                                                           <?php endif; ?>
                                                                         <?php endforeach; ?>
@@ -1264,38 +1262,7 @@
   </script>
 
 
-  <!-- Modal Insert -->
-  <div class="modal fade" id="InsertData" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Load Data Evaluasi</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
 
-        <div class="modal-body">
-
-          <?php echo form_open_multipart('ev/insert_ev'); ?>
-
-
-
-
-
-        </div>
-
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-        <button type="submit" class="btn btn-primary">Load</button>
-
-        <?php echo form_close(); ?>
-      </div>
-
-
-    </div>
-  </div>
 
 
 
@@ -1502,7 +1469,7 @@
                 <div class="direct-chat-messages" style="height:500px;">
                   <?php foreach ($h_konfirmasi as $hkon): ?>
                     <!-- Message. Default to the left -->
-                    <?php if ($hkon['id_role'] == 3 || $hkon['id_role'] == 7): ?>
+                    <?php if ($hkon['id_role'] == 3 || $hkon['id_role'] == 7 || $hkon['id_role'] == 13): ?>
                       <div class="direct-chat-msg col-md-6 ml-auto">
                         <div class="direct-chat-infos clearfix">
                           <span class="direct-chat-name float-left"><?php echo $hkon['log_user']; ?></span>
@@ -1579,7 +1546,7 @@
               <div class="card-footer">
                 <form action="#" method="post">
                   <div class="row">
-                    <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7)): ?>
+                    <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 13)): ?>
                       <div class="input-group col-md-2 date" id="datetimepicker" data-target-input="nearest">
                         <input required type="text" name="tenggat_waktu" class="form-control datetimepicker-input"
                           data-target="#datetimepicker" />
@@ -1687,7 +1654,7 @@
                 <div class="direct-chat-messages" style="height:500px;">
                   <?php foreach ($h_konfirmasi0 as $hkon0): ?>
                     <!-- Message. Default to the left -->
-                    <?php if ($hkon0['id_role'] == 3 || $hkon0['id_role'] == 7): ?>
+                    <?php if ($hkon0['id_role'] == 3 || $hkon0['id_role'] == 7 || $hkon0['id_role'] == 13): ?>
                       <div class="direct-chat-msg col-md-6 ml-auto">
                         <div class="direct-chat-infos clearfix">
                           <span class="direct-chat-name float-left"><?php echo $hkon0['log_user']; ?></span>
@@ -1764,7 +1731,7 @@
               <div class="card-footer">
                 <form action="#" method="post">
                   <div class="row">
-                    <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7)): ?>
+                    <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 13)): ?>
                       <div class="input-group col-md-2 date" id="datetimepicker0" data-target-input="nearest">
                         <input required type="text" name="tenggat_waktu" class="form-control datetimepicker-input"
                           data-target="#datetimepicker0" />
@@ -1941,10 +1908,8 @@
             $('#uraian_subkomponen').val(response.uraian_subkomponen);
             $('#dok_pendukung').val(response.dok_pendukung);
             $('#jawabanantara').val(response.jawabanantara);
-            // Konversi nilai numerik jawaban0 ke label huruf untuk ditampilkan
-            var jawaban0Map = { '100': 'AA', '90': 'A', '80': 'BB', '70': 'B', '60': 'CC', '50': 'C', '30': 'D', '0': 'E' };
-            var jawaban0Label = (response.jawaban0 !== null && response.jawaban0 !== '') ? (jawaban0Map[String(response.jawaban0)] || response.jawaban0) : '';
-            $('#jawaban0').val(jawaban0Label);
+            // Menampilkan Jawaban Akhir Unit (dihitung dinamis dari indikator unit)
+            $('#jawaban0').val(response.jawabanantara_unit || '');
             $('#jawaban0ev').val(response.jawaban0ev);
             $('#uraian_jawaban0').val(response.uraian_jawaban0);
             $('#catatan_ev0').val(response.catatan_ev0);
@@ -2099,7 +2064,11 @@
           }
 
           // Menambahkan opsi jawaban akhir yang sesuai berdasarkan jawaban antara
-          if (jawabanantara === 'BB') {
+          if (jawabanantara === 'AA') {
+            jawaban0evDropdown.find('option[value!="100"]').attr('hidden', true);
+          } else if (jawabanantara === 'A') {
+            jawaban0evDropdown.find('option[value!="90"][value!="100"]').attr('hidden', true);
+          } else if (jawabanantara === 'BB') {
             jawaban0evDropdown.find('option[value!="80"][value!="90"][value!="100"]').attr('hidden', true);
           } else if (jawabanantara === 'B') {
             jawaban0evDropdown.find('option[value!="70"]').attr('hidden', true);
