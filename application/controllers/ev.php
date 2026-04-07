@@ -458,16 +458,60 @@ class Ev extends MY_Controller
 			'isi_komentar' => $this->input->post('komentar')
 		]);
 
-		$this->Notifikasi_model->create([
-			'user_id' => $this->input->post('target_user'),
-			'komentar_id' => $komentar_id,
-			'indikator_id' => $this->input->post('indikator'),
-			'subkomponen_id' => $this->input->post('subkomponen'),
-			'subkomponen_kode' => $this->input->post('subkomponen_kode'),
-			'judul' => ($pengirim_role == 'subkomponen' ? 'Balasan' : 'Komentar') . ' Evaluasi',
-			'pesan' => 'Komentar pada: ' . $this->input->post('label_lokasi'),
-			'url_target' => 'ev/index' # Akan diarahkan ke halaman evaluasi
-		]);
+		$pengirim_nama = $this->session->userdata('nm_unit') ?: $this->session->userdata('username');
+		$judul = ($pengirim_role == 'subkomponen' ? 'Balasan' : 'Komentar') . ' Evaluasi dari ' . $pengirim_nama;
+		$pesan = 'Komentar pada: ' . $this->input->post('label_lokasi');
+
+		$target_users = [];
+		$id_unit = $this->session->userdata('id_unit');
+		$tahun = $this->session->userdata('tahun');
+
+		if ($pengirim_role == 'subkomponen') {
+			$this->db->select('id_user, id_role');
+			$this->db->where_in('id_role', [3,4,6,7,10,11,12,13]);
+			$evaluators = $this->db->get('ta_user')->result();
+			foreach ($evaluators as $ev) {
+				if ($ev->id_role == 13) {
+					$this->db->where('id_user', $ev->id_user);
+					$this->db->where('id_unit', $id_unit);
+					$this->db->where('tahun', $tahun);
+					$assigned = $this->db->get('ta_evaluator_unit')->row();
+					if ($assigned) {
+						$target_users[] = $ev->id_user;
+					}
+				} else {
+					$target_users[] = $ev->id_user;
+				}
+			}
+		} else {
+			$this->db->select('id_user');
+			$this->db->where('id_unit', $id_unit);
+			$this->db->where_in('id_role', [1, 5, 14]);
+			$units = $this->db->get('ta_user')->result();
+			foreach ($units as $u) {
+				$target_users[] = $u->id_user;
+			}
+		}
+
+		if (empty($target_users)) {
+			// Fallback jika tidak ditemukan
+			$target_users[] = $this->input->post('target_user');
+		}
+
+		foreach (array_unique($target_users) as $uid) {
+			if ($uid) {
+				$this->Notifikasi_model->create([
+					'user_id' => $uid,
+					'komentar_id' => $komentar_id,
+					'indikator_id' => $this->input->post('indikator'),
+					'subkomponen_id' => $this->input->post('subkomponen'),
+					'subkomponen_kode' => $this->input->post('subkomponen_kode'),
+					'judul' => $judul,
+					'pesan' => $pesan,
+					'url_target' => 'ev/index'
+				]);
+			}
+		}
 
 		echo json_encode(['status' => 'success']);
 	}

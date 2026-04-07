@@ -83,6 +83,7 @@ function renderNotifications(notifications) {
         const isUnread = notification.is_read === 0;
         const timeAgo = timeSince(new Date(notification.created_at));
         
+        const senderHtml = notification.sender_name ? `<p class="text-sm font-italic text-secondary">Dari: ${notification.sender_name}</p>` : '';
         html += `
         <a href="${notification.url || '#'}" class="dropdown-item ${isUnread ? 'bg-light' : ''}" data-id="${notification.id}">
             <div class="media">
@@ -91,6 +92,7 @@ function renderNotifications(notifications) {
                         ${notification.title}
                         ${isUnread ? '<span class="float-right text-sm text-warning"><i class="fas fa-star"></i></span>' : ''}
                     </h3>
+                    ${senderHtml}
                     <p class="text-sm">${notification.message}</p>
                     <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> ${timeAgo}</p>
                 </div>

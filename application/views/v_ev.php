@@ -196,6 +196,13 @@
 
                                 </thead>
                                 <tbody>
+                                  <?php
+                                  $evaluator_roles = [3, 4, 7, 10, 11, 12, 13];
+                                  $unit_roles = [1, 5, 14];
+                                  $current_role = $this->session->userdata('id_role');
+                                  $is_evaluator = in_array($current_role, $evaluator_roles);
+                                  $is_unit = in_array($current_role, $unit_roles);
+                                  ?>
 
 
                                   <?php foreach ($komp as $kom): ?>
@@ -422,10 +429,10 @@
                                                           onclick="setSessionIdEv0('<?php echo $subk['id_ev0']; ?>')"><i
                                                             class="fas fa-comments text-danger"></i>
                                                           <?php foreach ($konfirmasi0notif as $k0n): ?>
-                                                            <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 13) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 1 || $k0n['id_role'] == 5)): ?>
+                                                            <?php if ($is_evaluator && $k0n['id_ev0'] == $subk['id_ev0'] && in_array($k0n['id_role'], $unit_roles)): ?>
                                                               <span class="badge badge-danger blinking">!</span>
                                                             <?php endif; ?>
-                                                            <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $k0n['id_ev0'] == $subk['id_ev0'] && ($k0n['id_role'] == 3 || $k0n['id_role'] == 7 || $k0n['id_role'] == 13)): ?>
+                                                            <?php if ($is_unit && $k0n['id_ev0'] == $subk['id_ev0'] && in_array($k0n['id_role'], $evaluator_roles)): ?>
                                                               <span class="badge badge-danger blinking">!</span>
                                                             <?php endif; ?>
                                                           <?php endforeach; ?>
@@ -650,10 +657,10 @@
                                                                         onclick="setSessionIdEv('<?php echo $krit['id_ev']; ?>')"><i
                                                                           class="fas fa-comments text-danger"></i>
                                                                         <?php foreach ($konfirmasinotif as $kn): ?>
-                                                                          <?php if (($this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 13) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 1 || $kn['id_role'] == 5)): ?>
+                                                                          <?php if ($is_evaluator && $kn['id_ev'] == $krit['id_ev'] && in_array($kn['id_role'], $unit_roles)): ?>
                                                                             <span class="badge badge-danger blinking">!</span>
                                                                           <?php endif; ?>
-                                                                          <?php if (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $kn['id_ev'] == $krit['id_ev'] && ($kn['id_role'] == 3 || $kn['id_role'] == 7 || $kn['id_role'] == 13)): ?>
+                                                                          <?php if ($is_unit && $kn['id_ev'] == $krit['id_ev'] && in_array($kn['id_role'], $evaluator_roles)): ?>
                                                                             <span class="badge badge-danger blinking">!</span>
                                                                           <?php endif; ?>
                                                                         <?php endforeach; ?>
@@ -1469,7 +1476,7 @@
                 <div class="direct-chat-messages" style="height:500px;">
                   <?php foreach ($h_konfirmasi as $hkon): ?>
                     <!-- Message. Default to the left -->
-                    <?php if ($hkon['id_role'] == 3 || $hkon['id_role'] == 7 || $hkon['id_role'] == 13): ?>
+                    <?php if (in_array($hkon['id_role'], [3, 4, 7, 10, 11, 12, 13])): ?>
                       <div class="direct-chat-msg col-md-6 ml-auto">
                         <div class="direct-chat-infos clearfix">
                           <span class="direct-chat-name float-left"><?php echo $hkon['log_user']; ?></span>
@@ -1493,7 +1500,7 @@
                     <!-- /.direct-chat-msg -->
 
                     <!-- Message to the right -->
-                    <?php if ($hkon['id_role'] == 1 || $hkon['id_role'] == 5): ?>
+                    <?php if (in_array($hkon['id_role'], [1, 5, 14])): ?>
                       <div class="direct-chat-msg right col-md-6">
                         <div class="direct-chat-infos clearfix">
                           <span class="direct-chat-name float-right"><?php echo $hkon['log_user']; ?></span>
@@ -1546,7 +1553,7 @@
               <div class="card-footer">
                 <form action="#" method="post">
                   <div class="row">
-                    <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 13)): ?>
+                    <?php if (in_array($this->session->userdata('id_role'), [3, 4, 7, 10, 11, 12, 13])): ?>
                       <div class="input-group col-md-2 date" id="datetimepicker" data-target-input="nearest">
                         <input required type="text" name="tenggat_waktu" class="form-control datetimepicker-input"
                           data-target="#datetimepicker" />
@@ -1563,7 +1570,7 @@
                       </div>
                     <?php endif; ?>
                     <?php if (
-                      $this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
+                      $this->session->userdata('id_role') == 4 || (in_array($this->session->userdata('id_role'), [1, 5, 14]) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
                         $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))
                     ): ?>
                       <div class="input-group col-md-1">
@@ -1654,7 +1661,7 @@
                 <div class="direct-chat-messages" style="height:500px;">
                   <?php foreach ($h_konfirmasi0 as $hkon0): ?>
                     <!-- Message. Default to the left -->
-                    <?php if ($hkon0['id_role'] == 3 || $hkon0['id_role'] == 7 || $hkon0['id_role'] == 13): ?>
+                    <?php if (in_array($hkon0['id_role'], [3, 4, 7, 10, 11, 12, 13])): ?>
                       <div class="direct-chat-msg col-md-6 ml-auto">
                         <div class="direct-chat-infos clearfix">
                           <span class="direct-chat-name float-left"><?php echo $hkon0['log_user']; ?></span>
@@ -1678,7 +1685,7 @@
                     <!-- /.direct-chat-msg -->
 
                     <!-- Message to the right -->
-                    <?php if ($hkon0['id_role'] == 1 || $hkon0['id_role'] == 5): ?>
+                    <?php if (in_array($hkon0['id_role'], [1, 5, 14])): ?>
                       <div class="direct-chat-msg right col-md-6">
                         <div class="direct-chat-infos clearfix">
                           <span class="direct-chat-name float-right"><?php echo $hkon0['log_user']; ?></span>
@@ -1731,7 +1738,7 @@
               <div class="card-footer">
                 <form action="#" method="post">
                   <div class="row">
-                    <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 7 || $this->session->userdata('id_role') == 13)): ?>
+                    <?php if (in_array($this->session->userdata('id_role'), [3, 4, 7, 10, 11, 12, 13])): ?>
                       <div class="input-group col-md-2 date" id="datetimepicker0" data-target-input="nearest">
                         <input required type="text" name="tenggat_waktu" class="form-control datetimepicker-input"
                           data-target="#datetimepicker0" />
@@ -1748,7 +1755,7 @@
                       </div>
                     <?php endif; ?>
                     <?php if (
-                      $this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
+                      $this->session->userdata('id_role') == 4 || (in_array($this->session->userdata('id_role'), [1, 5, 14]) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
                         $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))
                     ): ?>
                       <div class="input-group col-md-1">
@@ -2350,7 +2357,7 @@
         $('#revision-notice-box').hide();
 
         const currentUserRole = '<?php echo $this->session->userdata("id_role"); ?>';
-        const isSubkomponen = (currentUserRole == 1 || currentUserRole == 5);
+        const isSubkomponen = (currentUserRole == 1 || currentUserRole == 5 || currentUserRole == 14);
 
         if (isSubkomponen) {
           // If subkomponen, target is the Evaluator (usually role 3/4/7)
