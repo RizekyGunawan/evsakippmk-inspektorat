@@ -739,21 +739,21 @@ class Pm extends MY_Controller
 
 				$predikat = '';
 				$sumnilaik = floatval(str_replace(',', '.', $pm000['sumnilaik']));
-				if ($sumnilaik >= 90.01 && $sumnilaik <= 100) {
+				if ($sumnilaik == 100) {
 					$predikat = "AA";
-				} elseif ($sumnilaik >= 80.01 && $sumnilaik <= 90.00) {
+				} elseif ($sumnilaik >= 90) {
 					$predikat = "A";
-				} elseif ($sumnilaik >= 70.01 && $sumnilaik <= 80.00) {
+				} elseif ($sumnilaik >= 80) {
 					$predikat = "BB";
-				} elseif ($sumnilaik >= 60.01 && $sumnilaik <= 70.00) {
+				} elseif ($sumnilaik >= 70) {
 					$predikat = "B";
-				} elseif ($sumnilaik >= 50.01 && $sumnilaik <= 60.00) {
+				} elseif ($sumnilaik >= 60) {
 					$predikat = "CC";
-				} elseif ($sumnilaik >= 30.01 && $sumnilaik <= 50.00) {
+				} elseif ($sumnilaik >= 50) {
 					$predikat = "C";
-				} elseif ($sumnilaik >= 0.01 && $sumnilaik <= 30.00) {
+				} elseif ($sumnilaik >= 30) {
 					$predikat = "D";
-				} elseif ($sumnilaik == 0) {
+				} elseif ($sumnilaik >= 0) {
 					$predikat = "E";
 				}
 				$object->getActiveSheet()->setCellValue('B' . $baris, 'NILAI AKUNTABILITAS KINERJA');

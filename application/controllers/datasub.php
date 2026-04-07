@@ -22,7 +22,8 @@ class Datasub extends CI_Controller {
                     WHEN AVG(a.jawaban1) >= 60 THEN 'CC'
                     WHEN AVG(a.jawaban1) >= 50 THEN 'C'
                     WHEN AVG(a.jawaban1) >= 30 THEN 'D'
-                    ELSE 'E'
+                    WHEN AVG(a.jawaban1) >= 0 THEN 'E'
+                    ELSE ''
                 END) as jawabanantara
             from ta_pm a  
             inner join ref_aspek b on a.id_aspek=b.id_aspek 

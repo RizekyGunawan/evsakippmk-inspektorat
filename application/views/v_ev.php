@@ -572,7 +572,7 @@
                                                                       ?>
                                                                       <a href="<?php echo $url; ?>" target=" _blank">
                                                                         <?php echo htmlspecialchars($krit['link_bukti'], ENT_QUOTES, 'UTF-8'); ?>
-                                                                        < /a>
+                                                                        </a>
                                                                     </div>
                                                                     <div class="text-truncate">
                                                                       <?php
@@ -585,7 +585,7 @@
                                                                       ?>
                                                                       <a href="<?php echo $url; ?>" target=" _blank">
                                                                         <?php echo htmlspecialchars($krit['link_bukti3'], ENT_QUOTES, 'UTF-8'); ?>
-                                                                        < /a>
+                                                                        </a>
                                                                     </div>
                                                                   </td>
                                                                   <td class="text-center align-middle" style="width: 30px">

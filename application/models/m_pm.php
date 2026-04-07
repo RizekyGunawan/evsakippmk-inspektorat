@@ -33,14 +33,14 @@ class M_pm extends CI_Model
 		$ref_aspek_table = ($tahun >= 2024) ? 'ref_aspek2' : 'ref_aspek';
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 		(CASE 
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+		WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 		ELSE ''
 		END) as jawabanantara
  		from ta_pm a  inner join $ref_aspek_table b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 where a.tahun = $tahun  and a.id_unit = $id_unit GROUP BY a.id_pm0 ");
@@ -81,14 +81,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -113,7 +113,7 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 1 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 1 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -121,7 +121,7 @@ class M_pm extends CI_Model
 
 	public function get_datasub1a($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 1 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 1 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -130,14 +130,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -162,13 +162,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 2 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 2 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub1b($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 2 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 2 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -177,14 +177,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -209,13 +209,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 3 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 3 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub1c($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 3 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 3 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -224,14 +224,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -256,13 +256,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 4 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 4 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub2a($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 4 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 4 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -271,14 +271,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -303,13 +303,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 5 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 5 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub2b($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 5 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 5 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -318,14 +318,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -350,13 +350,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 6 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 6 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub2c($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 6 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 6 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -365,14 +365,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -397,13 +397,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 7 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 7 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub3a($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 7 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 7 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -412,14 +412,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -444,13 +444,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 8 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 8 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub3b($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 8 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 8 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -459,14 +459,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -491,13 +491,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0  inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 9 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0  left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 9 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub3c($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 9 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 9 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -506,14 +506,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -538,13 +538,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 10 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 10 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub4a($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 10 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 10 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -552,14 +552,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -584,13 +584,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 11 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 11 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub4b($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 11 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 11 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -598,14 +598,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -630,13 +630,13 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 12 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 12 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
 	public function get_datasub4c($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 12 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.id_subkomponen = 12 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
 		return $query->result_array();
 	}
 
@@ -645,14 +645,14 @@ class M_pm extends CI_Model
 	{
 		$query = $this->db->query("SELECT *, a.modified_by as pm_modified_by,  (avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2) as skorpersen, (avg(c.bobot2*NULLIF(a.jawaban1, ''))/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(a.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara, 
 			(CASE 
@@ -677,7 +677,7 @@ class M_pm extends CI_Model
 			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
 			ELSE ''
 			END/c.bobot2)*100) as nilaipersen
-			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 inner join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.tahun = '$tahun' and a.id_unit = '$id_unit' GROUP BY a.id_subkomponen ");
+			from ta_pm a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_pm0 d on a.id_pm0=d.id_pm0 left join ta_dokumen e on a.id_dokumen=e.id_dokumen where a.tahun = '$tahun' and a.id_unit = '$id_unit' GROUP BY a.id_subkomponen ");
 		return $query->result_array();
 	}
 

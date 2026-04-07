@@ -74,16 +74,16 @@ class M_ev extends CI_Model
 		$ref_aspek_table = ($tahun >= 2024) ? 'ref_aspek2' : 'ref_aspek';
 		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
 		(CASE 
-		WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 90 THEN 'AA'
-		WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  80 THEN 'A'
-		WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  70 THEN 'BB'
-		WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  60 THEN 'B'
-		WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  50 THEN 'CC'
-		WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  30 THEN 'C'
-		WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >   0 THEN 'D'
-		WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) =   0 THEN 'E'
-		ELSE ''
-		END) as jawabanantara
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) = 0 THEN 'E'
+			ELSE ''
+			END) as jawabanantara
  		from ta_ev a  inner join $ref_aspek_table b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_pm e on a.id_pm=e.id_pm inner join ta_pm0 f on d.id_pm0=f.id_pm0 where a.tahun = $tahun  and a.id_unit = $id_unit GROUP BY a.id_ev0 ");
 		return $query->result_array();
 	}
@@ -661,14 +661,14 @@ class M_ev extends CI_Model
 	{
 		$query = $this->db->query("SELECT *, a.modified_by AS ev_modified_by,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
 			(CASE 
-			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  80 THEN 'A'
-			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  70 THEN 'BB'
-			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  60 THEN 'B'
-			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  50 THEN 'CC'
-			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  30 THEN 'C'
-			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >   0 THEN 'D'
-			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) =   0 THEN 'E'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara,
 			/*
@@ -682,14 +682,14 @@ class M_ev extends CI_Model
 			 * sama dengan yang digunakan di m_pm.php get_datasub().
 			 */
 			(CASE 
-			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) > 90 THEN 'AA'
-			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) > 80 THEN 'A'
-			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) > 70 THEN 'BB'
-			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) > 60 THEN 'B'
-			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) > 50 THEN 'CC'
-			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) > 30 THEN 'C'
-			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >  0  THEN 'D'
-			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) =  0  THEN 'E'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) = 100 THEN 'AA'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 90 THEN 'A'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 80 THEN 'BB'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 70 THEN 'B'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 60 THEN 'CC'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) >= 50 THEN 'C'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) > 0 THEN 'D'
+			WHEN ((avg(c.bobot2*NULLIF(f.jawaban1, ''))/c.bobot2)) = 0 THEN 'E'
 			ELSE ''
 			END) as jawabanantara_unit,
 			(CASE 
