@@ -114,6 +114,38 @@
               </form>
             </div>
           </div>
+
+          <!-- Form Reset Data PM -->
+          <div class="card card-danger card-outline">
+            <div class="card-header">
+              <h3 class="card-title"><i class="fas fa-trash-restore mr-1"></i> Reset Data PM Khusus</h3>
+            </div>
+            <div class="card-body">
+              <form action="<?php echo base_url('dokumen/reset_data') ?>" method="post" onsubmit="return confirm('PERINGATAN! Anda yakin akan mereset form? Semua isian dan Laporan untuk Unit/Tahun terpilih akan DIBERSIHKAN PERMANEN.');">
+                <div class="form-group">
+                  <label>Unit Kerja</label>
+                  <select name="id_unit" class="form-control select2" style="width:100%" required>
+                    <option value="">-- Pilih Unit Kerja --</option>
+                    <?php foreach ($unit_list as $u): ?>
+                      <option value="<?php echo $u['id_unit'] ?>"><?php echo htmlspecialchars($u['nm_unit']) ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Tahun Acuan</label>
+                  <input type="number" name="tahun" class="form-control"
+                    value="<?php echo $this->session->userdata('tahun') ?>" required>
+                </div>
+                <div class="alert alert-warning p-2 text-sm mt-2 mb-3">
+                  Tindakan ini akan menghapus semua isian Unit ini sehingga lembar penilaiannya dikosongkan.
+                </div>
+                <button type="submit" class="btn btn-danger btn-block">
+                  <i class="fas fa-exclamation-triangle mr-1"></i> Eksekusi Reset
+                </button>
+              </form>
+            </div>
+          </div>
+
         </div>
 
         <!-- Tabel Daftar User -->

@@ -77,7 +77,32 @@ class Dokumen extends MY_Controller {
 
 
 
-public function update_data (){
+	public function reset_data() {
+		$id_unit = $this->input->post('id_unit');
+		$tahun = $this->input->post('tahun');
+
+		// Hanya Admin (4 atau 9) yang bisa melakukan Reset Manual
+		$role = (int) $this->session->userdata('id_role');
+		if (in_array($role, [4, 9]) && !empty($id_unit) && !empty($tahun)) {
+			// Hard reset: Hapus dokumen form beserta rincian dan pelacakannya
+			$this->db->delete('ta_pm', array('id_unit' => $id_unit, 'tahun' => $tahun));
+			$this->db->delete('ta_pm0', array('id_unit' => $id_unit, 'tahun' => $tahun));
+			$this->db->delete('ta_dok_ev', array('id_unit' => $id_unit, 'tahun' => $tahun));
+			$this->db->delete('ta_dokumen', array('id_unit' => $id_unit, 'tahun' => $tahun));
+
+			$this->session->set_flashdata('success', 'Data Penilaian Mandiri unit terpilih tahun ' . $tahun . ' berhasil direset secara bersih.');
+		} else {
+			$this->session->set_flashdata('error', 'Anda tidak memiliki otoritas, atau form tidak lengkap.');
+		}
+
+		if ($role == 9) {
+			redirect('/users/index');
+		} else {
+			redirect('/dokumen/index');
+		}
+	}
+
+	public function update_data (){
 
 		$id_unit 				= $this->input->post('id_unit');
 		$tahun 					= $this->input->post('tahun');

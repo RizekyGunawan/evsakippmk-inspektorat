@@ -69,6 +69,10 @@
                         <a class="btn btn-success" href="<?php echo base_url('dokumen/excelkriteria') ?>"><i
                             class="fas fa-file-excel"></i> Kriteria</a>
                       <?php endif; ?>
+
+                      <?php if (($this->session->userdata('id_role') == 4 || $this->session->userdata('id_role') == 9)): ?>
+                        <a href="#" class="btn btn-danger ml-2" data-toggle="modal" data-target="#ResetDataModal" title="Reset Tabel Penilaian Mandiri"><i class="fas fa-trash-restore"></i> Reset Data PM Khusus</a>
+                      <?php endif; ?>
                     </li>
                   </ul>
                 </div>
@@ -351,6 +355,50 @@
         return true;
       }
     </script>
+
+    </script>
+
+    <!-- Modal Reset Data PM -->
+    <div class="modal fade" id="ResetDataModal" tabindex="-1" role="dialog" aria-labelledby="ResetDataModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header bg-danger">
+            <h5 class="modal-title" id="ResetDataModalLabel"><i class="fas fa-exclamation-triangle"></i> Reset Data Penilaian Mandiri</h5>
+            <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <?php echo form_open('dokumen/reset_data', 'onsubmit="return confirm(\'PERINGATAN! Anda yakin akan mereset form? Semua isian dan dokumen Laporan untuk Unit/Tahun terpilih akan DIBERSIHKAN PERMANEN.\');"'); ?>
+            <div class="form-group">
+              <label for="id_unit">Pilih Unit Kerja</label>
+              <select name="id_unit" class="form-control" required>
+                <option value="">-- Pilih Unit Kerja --</option>
+                <?php foreach ($unit2 as $u): ?>
+                  <option value="<?php echo $u['id_unit']; ?>"><?php echo $u['nm_unit']; ?></option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="tahun">Tahun Evaluasi</label>
+              <input type="number" name="tahun" class="form-control" value="<?php echo $this->session->userdata('tahun'); ?>" min="2020" max="2099" required>
+              <small class="form-text text-muted">Akan membongkar data khusus di tahun yang ditentukan ini.</small>
+            </div>
+
+            <div class="alert alert-warning text-sm">
+              Tindakan ini akan <b>mengahapus</b> seluruh tabel (`ta_pm`, `ta_pm0`, `ta_dokumen`) untuk Unit Kerja ini agar mereka mendapat form kosong seperti baru masuk pertama kali.
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-danger">Ya, Reset Sekarang</button>
+          </div>
+          <?php echo form_close(); ?>
+        </div>
+      </div>
+    </div>
 
 </body>
 

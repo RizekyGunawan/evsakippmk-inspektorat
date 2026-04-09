@@ -943,6 +943,16 @@ class M_pm extends CI_Model
 		$id_unit = intval($id_unit);
 		$created_by = $this->session->userdata('username');
 		$modified_by = $this->session->userdata('username');
+		// Auto-generate ta_dokumen if it doesn't exist
+		$check_dok = $this->db->query("SELECT id_dokumen FROM ta_dokumen WHERE tahun = $tahun AND id_unit = $id_unit");
+		if ($check_dok->num_rows() == 0) {
+			$this->db->query("INSERT INTO ta_dokumen (tahun, id_unit, created_by, modified_by, status_data) VALUES ($tahun, $id_unit, '$created_by', '$modified_by', 0)");
+			$this->db->query("INSERT INTO ta_dok_ev (tahun, id_unit, id_dok_ev, id_dokumen, created_by, modified_by)
+				SELECT a.tahun, a.id_unit, a.id_dokumen, a.id_dokumen, '$created_by', '$modified_by' 
+				FROM ta_dokumen a 
+				WHERE a.tahun = $tahun AND a.id_unit = $id_unit");
+		}
+
 		$query = $this->db->query("INSERT INTO ta_pm0 (tahun, id_unit, id_dokumen, id_komponen, id_subkomponen, created_by, modified_by)
         SELECT
         b.tahun,
