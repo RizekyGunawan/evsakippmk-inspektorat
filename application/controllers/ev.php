@@ -25,9 +25,14 @@ class Ev extends MY_Controller
 		$data['user'] = $this->m_auth2->get_datauser();
 		$data['unit2'] = $this->m_home->get_data2();
 		$id_unit = $this->session->userdata('id_unit');
-		$tahun = $this->session->userdata('tahun');
-		$id_ev = $this->session->userdata('id_ev');
-		$id_ev0 = $this->session->userdata('id_ev0');
+		$tahun   = (int) $this->session->userdata('tahun');  // cast lebih awal
+		$id_ev   = $this->session->userdata('id_ev');
+		$id_ev0  = $this->session->userdata('id_ev0');
+
+		// Deklarasikan id_role dan id_user lebih awal
+		// agar tersedia saat filtering dan get_assigned_units()
+		$id_role = (int) $this->session->userdata('id_role');
+		$id_user = (int) $this->session->userdata('id_user');
 
 		// Auto-generate form evaluasi menggunakan idempotent insert
 		if (!empty($tahun) && !empty($id_unit)) {
@@ -81,12 +86,6 @@ class Ev extends MY_Controller
 		$data['loadk0'] = $this->m_ev->get_loadk0($tahun, $id_unit, $id_ev0);
 		$data['konfirmasi0notif'] = $this->m_ev->get_konfirmasi0notif($tahun, $id_unit);
 		$data['konfirmasi0notif2'] = $this->m_ev->get_konfirmasi0notif2($tahun, $id_unit);
-
-		// ---------------------------------------------------------------
-		// Ambil id_role sekarang agar bisa dipakai di blok berikutnya
-		// ---------------------------------------------------------------
-		$id_role = (int) $this->session->userdata('id_role');
-		$id_user = (int) $this->session->userdata('id_user');
 
 		// ---------------------------------------------------------------
 		// UNIT SWITCHER: Supervisor (10, 11, 12) bisa lihat semua unit.
@@ -193,6 +192,392 @@ class Ev extends MY_Controller
 		$this->load->view('v_ev_rekap_unit', $data);
 		$this->load->view('templates/sidebar');
 		$this->load->view('templates/footer', $data);
+	}
+
+
+	/**
+	 * Export Excel — Rekapitulasi Unit Kerja
+	 * Menghasilkan file .xlsx yang mereplikasi tabel rekapitulasi lintas unit kerja.
+	 * Struktur: Header judul → Header kolom → Komponen (biru) → Sub-Komponen (peach)
+	 *           → Aspek/Kriteria (putih) → Total Akumulasi (abu-abu) → Predikat (hitam)
+	 * Hak akses sama dengan rekap_unit().
+	 */
+	public function excel_rekap_unit()
+	{
+		date_default_timezone_set('Asia/Jakarta');
+		ini_set('memory_limit', '256M');
+
+		// --- Guard: hak akses sama dengan rekap_unit() ---
+		$id_role = (int) $this->session->userdata('id_role');
+		$roles_rekap = [2, 3, 4, 5, 6, 7, 10, 11, 12, 13];
+		if (!in_array($id_role, $roles_rekap)) {
+			show_404();
+			return;
+		}
+
+		$this->load->model('m_ev');
+		$tahun = (int) $this->session->userdata('tahun');
+		$rekap_units = $this->m_ev->get_rekap_all_units($tahun);
+		$rekap_detail = $this->m_ev->get_rekap_detail_all_units($tahun);
+
+		// ----------------------------------------------------------------
+		// Bangun struktur data (sama dengan logika di v_ev_rekap_unit.php)
+		// ----------------------------------------------------------------
+		$units = [];   // [id_unit => nm_unit]
+		$unit_totals = [];   // [id_unit => total_nilai]
+		$unit_predicates = [];  // [id_unit => predikat]
+		$structure = [];   // hierarki komponen → sub → aspek
+
+		if (is_array($rekap_units)) {
+			foreach ($rekap_units as $unit) {
+				$units[$unit['id_unit']] = $unit['nm_unit'];
+				$total = isset($unit['total_nilai']) ? floatval($unit['total_nilai']) : 0;
+				$unit_totals[$unit['id_unit']] = $total;
+
+				if ($total > 90)
+					$predikat = 'AA';
+				elseif ($total > 80)
+					$predikat = 'A';
+				elseif ($total > 70)
+					$predikat = 'BB';
+				elseif ($total > 60)
+					$predikat = 'B';
+				elseif ($total > 50)
+					$predikat = 'CC';
+				elseif ($total > 30)
+					$predikat = 'C';
+				elseif ($total > 0)
+					$predikat = 'D';
+				else
+					$predikat = 'E';
+				$unit_predicates[$unit['id_unit']] = $predikat;
+			}
+		}
+
+		if (is_array($rekap_detail)) {
+			foreach ($rekap_detail as $row) {
+				$kid = $row['id_komponen'];
+				$sid = $row['id_subkomponen'];
+				$aid = $row['id_aspek'];
+				$uid = $row['id_unit'];
+
+				if (!isset($structure[$kid])) {
+					$structure[$kid] = [
+						'uraian' => $row['uraian_komponen'],
+						'bobot' => $row['bobot_komponen'],
+						'subs' => [],
+						'scores' => [],
+					];
+				}
+				if (!isset($structure[$kid]['subs'][$sid])) {
+					$structure[$kid]['subs'][$sid] = [
+						'uraian' => $row['uraian_subkomponen'],
+						'bobot' => $row['bobot_subkomponen'],
+						'aspeks' => [],
+						'scores' => [],
+					];
+				}
+				$structure[$kid]['subs'][$sid]['scores'][$uid] = $row['nilai_subkomp'];
+
+				if (!isset($structure[$kid]['subs'][$sid]['aspeks'][$aid])) {
+					$structure[$kid]['subs'][$sid]['aspeks'][$aid] = [
+						'uraian' => $row['uraian_aspek'],
+						'answers' => [],
+					];
+				}
+				$structure[$kid]['subs'][$sid]['aspeks'][$aid]['answers'][$uid] = $row['jawaban2'];
+			}
+		}
+
+		// Masukkan nilai per komponen dari $rekap_units ke $structure
+		if (is_array($rekap_units)) {
+			foreach ($rekap_units as $unit) {
+				if (isset($structure[1]))
+					$structure[1]['scores'][$unit['id_unit']] = $unit['komp1'];
+				if (isset($structure[2]))
+					$structure[2]['scores'][$unit['id_unit']] = $unit['komp2'];
+				if (isset($structure[3]))
+					$structure[3]['scores'][$unit['id_unit']] = $unit['komp3'];
+				if (isset($structure[4]))
+					$structure[4]['scores'][$unit['id_unit']] = $unit['komp4'];
+			}
+		}
+
+		// ----------------------------------------------------------------
+		// PHPExcel
+		// ----------------------------------------------------------------
+		require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel.php');
+		require(APPPATH . 'PHPExcel-1.8/Classes/PHPExcel/Writer/Excel2007.php');
+
+		$objPHPExcel = new PHPExcel();
+		$objPHPExcel->getProperties()
+			->setCreator('Aplikasi EvSAKIP — Inspektorat')
+			->setLastModifiedBy('Aplikasi EvSAKIP — Inspektorat')
+			->setTitle('Rekapitulasi Unit Kerja EV SAKIP ' . $tahun)
+			->setSubject('Nilai Gabungan Evaluasi SAKIP Seluruh Unit Kerja')
+			->setDescription('Diekspor dari Aplikasi EvSAKIP pada ' . date('d-m-Y H:i'));
+
+		$sheet = $objPHPExcel->setActiveSheetIndex(0);
+		$sheet->setTitle('Rekap Unit Kerja');
+
+		// ----------------------------------------------------------------
+		// Hitung total kolom agar bisa membuat range dinamis
+		// col A=0, B=1, C=2, D=3 ... D+N_unit-1
+		// ----------------------------------------------------------------
+		$col_bobot = 2;   // C  — Bobot
+		$col_unit_start = 3;   // D  — Kolom pertama unit
+		$total_units = count($units);
+		$col_unit_last = $col_unit_start + $total_units - 1;  // indeks kolom unit terakhir
+		$last_col_letter = PHPExcel_Cell::stringFromColumnIndex($col_unit_last);
+		$full_range = 'A1:' . $last_col_letter;   // dipakai untuk range keseluruhan
+
+		// ----------------------------------------------------------------
+		// WARNA TEMA
+		// ----------------------------------------------------------------
+		$C_HEADER = '1F4E78';  // Biru tua — header
+		$C_COMP = '87CEEB';  // Biru langit — Komponen
+		$C_SUB = 'FFE4C4';  // Peach — Sub-Komponen
+		$C_TOTAL = '6C757D';  // Abu-abu — Total Akumulasi
+		$C_PRED = '343A40';  // Hitam — Predikat
+		$C_WHITE = 'FFFFFF';
+		$C_BLACK = '000000';
+
+		// ----------------------------------------------------------------
+		// BARIS 1 — Judul Utama (merge seluruh kolom)
+		// ----------------------------------------------------------------
+		$judul_text = 'REKAPITULASI NILAI GABUNGAN EVALUASI SAKIP SELURUH UNIT KERJA — TAHUN ' . $tahun;
+		$sheet->mergeCells('A1:' . $last_col_letter . '1');
+		$sheet->setCellValue('A1', $judul_text);
+		$style_judul = $sheet->getStyle('A1');
+		$style_judul->getFont()->setBold(true)->setSize(12)
+			->setColor(new PHPExcel_Style_Color($C_WHITE));
+		$style_judul->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+			->getStartColor()->setRGB($C_HEADER);
+		$style_judul->getAlignment()
+			->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+			->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER)
+			->setWrapText(true);
+		$sheet->getRowDimension(1)->setRowHeight(30);
+
+		// ----------------------------------------------------------------
+		// BARIS 2 — Header Kolom
+		// ----------------------------------------------------------------
+		$sheet->setCellValue('A2', 'No');
+		$sheet->setCellValue('B2', 'Komponen / Sub-Komponen / Indikator');
+		$sheet->setCellValue('C2', 'Bobot');
+
+		$col_idx = $col_unit_start;
+		foreach ($units as $uid => $nm_unit) {
+			$col = PHPExcel_Cell::stringFromColumnIndex($col_idx++);
+			$sheet->setCellValue($col . '2', $nm_unit);
+			$sheet->getColumnDimension($col)->setWidth(16);
+		}
+
+		$header_range = 'A2:' . $last_col_letter . '2';
+		$style_header = $sheet->getStyle($header_range);
+		$style_header->getFont()->setBold(true)->setColor(new PHPExcel_Style_Color($C_WHITE));
+		$style_header->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+			->getStartColor()->setRGB($C_HEADER);
+		$style_header->getAlignment()
+			->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+			->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER)
+			->setWrapText(true);
+		$sheet->getRowDimension(2)->setRowHeight(40);
+
+		// Lebar kolom tetap
+		$sheet->getColumnDimension('A')->setWidth(8);
+		$sheet->getColumnDimension('B')->setWidth(45);
+		$sheet->getColumnDimension('C')->setWidth(10);
+
+		// ----------------------------------------------------------------
+		// BARIS DATA — Iterasi hierarki
+		// ----------------------------------------------------------------
+		$baris = 3;
+		$no_comp = 1;
+
+		foreach ($structure as $comp_id => $comp) {
+
+			// --- Baris Komponen (biru) ---
+			$row_range = 'A' . $baris . ':' . $last_col_letter . $baris;
+			$sheet->setCellValue('A' . $baris, $no_comp);
+			$sheet->setCellValue('B' . $baris, strtoupper($comp['uraian']));
+			$sheet->setCellValue('C' . $baris, number_format(floatval($comp['bobot']), 2));
+
+			$col_idx = $col_unit_start;
+			foreach ($units as $uid => $nm) {
+				$col = PHPExcel_Cell::stringFromColumnIndex($col_idx++);
+				$score = isset($comp['scores'][$uid]) ? floatval($comp['scores'][$uid]) : 0;
+				$sheet->setCellValue($col . $baris, number_format($score, 2));
+				$sheet->getStyle($col . $baris)->getAlignment()
+					->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			}
+
+			$style_comp = $sheet->getStyle($row_range);
+			$style_comp->getFont()->setBold(true)->setColor(new PHPExcel_Style_Color($C_BLACK));
+			$style_comp->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+				->getStartColor()->setRGB($C_COMP);
+			$sheet->getStyle('A' . $baris)->getAlignment()
+				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+			$sheet->getStyle('C' . $baris)->getAlignment()
+				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+			$no_comp++;
+			$baris++;
+
+			// --- Iterasi Sub-Komponen (peach) ---
+			$char_sub = 'a';
+			foreach ($comp['subs'] as $sub_id => $sub) {
+
+				$row_range = 'A' . $baris . ':' . $last_col_letter . $baris;
+				$no_sub = ($no_comp - 1) . '.' . $char_sub;
+				$sheet->setCellValue('A' . $baris, $no_sub);
+				$sheet->setCellValue('B' . $baris, $sub['uraian']);
+				$sheet->setCellValue('C' . $baris, number_format(floatval($sub['bobot']), 2));
+
+				$col_idx = $col_unit_start;
+				foreach ($units as $uid => $nm) {
+					$col = PHPExcel_Cell::stringFromColumnIndex($col_idx++);
+					$score = isset($sub['scores'][$uid]) ? floatval($sub['scores'][$uid]) : 0;
+					$sheet->setCellValue($col . $baris, number_format($score, 2));
+					$sheet->getStyle($col . $baris)->getAlignment()
+						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				}
+
+				$style_sub = $sheet->getStyle($row_range);
+				$style_sub->getFont()->setBold(true)->setColor(new PHPExcel_Style_Color($C_BLACK));
+				$style_sub->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+					->getStartColor()->setRGB($C_SUB);
+				$sheet->getStyle('A' . $baris)->getAlignment()
+					->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+				$sheet->getStyle('C' . $baris)->getAlignment()
+					->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+				$char_sub++;
+				$baris++;
+
+				// --- Iterasi Aspek/Kriteria (putih) ---
+				$no_asp = 1;
+				foreach ($sub['aspeks'] as $asp_id => $asp) {
+
+					$row_range = 'A' . $baris . ':' . $last_col_letter . $baris;
+					$sheet->setCellValue('A' . $baris, $no_asp);
+					$sheet->setCellValue('B' . $baris, $asp['uraian']);
+					$sheet->setCellValue('C' . $baris, '-');
+
+					$col_idx = $col_unit_start;
+					foreach ($units as $uid => $nm) {
+						$col = PHPExcel_Cell::stringFromColumnIndex($col_idx++);
+						$val = isset($asp['answers'][$uid]) ? $asp['answers'][$uid] : '';
+						$sheet->setCellValue($col . $baris, ($val !== '') ? $val : '-');
+						$sheet->getStyle($col . $baris)->getAlignment()
+							->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					}
+
+					$sheet->getStyle($row_range)->getFill()
+						->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+						->getStartColor()->setRGB($C_WHITE);
+					$sheet->getStyle($row_range)->getFont()
+						->setColor(new PHPExcel_Style_Color($C_BLACK));
+					$sheet->getStyle('A' . $baris)->getAlignment()
+						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+					$sheet->getStyle('C' . $baris)->getAlignment()
+						->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+
+					$no_asp++;
+					$baris++;
+				}
+			}
+		}
+
+		// ----------------------------------------------------------------
+		// BARIS TOTAL AKUMULASI (abu-abu gelap)
+		// ----------------------------------------------------------------
+		$row_range = 'A' . $baris . ':' . $last_col_letter . $baris;
+		$sheet->mergeCells('A' . $baris . ':B' . $baris);
+		$sheet->setCellValue('A' . $baris, 'TOTAL AKUMULASI NILAI');
+		$sheet->setCellValue('C' . $baris, '100.00');
+
+		$col_idx = $col_unit_start;
+		foreach ($units as $uid => $nm) {
+			$col = PHPExcel_Cell::stringFromColumnIndex($col_idx++);
+			$total = isset($unit_totals[$uid]) ? floatval($unit_totals[$uid]) : 0;
+			$sheet->setCellValue($col . $baris, number_format($total, 2));
+			$sheet->getStyle($col . $baris)->getAlignment()
+				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+				->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		}
+
+		$style_total = $sheet->getStyle($row_range);
+		$style_total->getFont()->setBold(true)->setColor(new PHPExcel_Style_Color($C_WHITE));
+		$style_total->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+			->getStartColor()->setRGB($C_TOTAL);
+		$style_total->getAlignment()
+			->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+			->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+		$baris++;
+
+		// ----------------------------------------------------------------
+		// BARIS PREDIKAT (hitam)
+		// ----------------------------------------------------------------
+		$row_range = 'A' . $baris . ':' . $last_col_letter . $baris;
+		$sheet->mergeCells('A' . $baris . ':C' . $baris);
+		$sheet->setCellValue('A' . $baris, 'NILAI / PREDIKAT');
+
+		$col_idx = $col_unit_start;
+		foreach ($units as $uid => $nm) {
+			$col = PHPExcel_Cell::stringFromColumnIndex($col_idx++);
+			$pred = isset($unit_predicates[$uid]) ? $unit_predicates[$uid] : 'E';
+			$sheet->setCellValue($col . $baris, $pred);
+			$sheet->getStyle($col . $baris)->getAlignment()
+				->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+				->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+		}
+
+		$style_pred = $sheet->getStyle($row_range);
+		$style_pred->getFont()->setBold(true)->setColor(new PHPExcel_Style_Color($C_WHITE));
+		$style_pred->getFill()->setFillType(PHPExcel_Style_Fill::FILL_SOLID)
+			->getStartColor()->setRGB($C_PRED);
+		$style_pred->getAlignment()
+			->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER)
+			->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+		// ----------------------------------------------------------------
+		// Border keseluruhan tabel
+		// ----------------------------------------------------------------
+		$last_data_row = $baris;
+		$table_range = 'A1:' . $last_col_letter . $last_data_row;
+		$sheet->getStyle($table_range)->applyFromArray([
+			'borders' => [
+				'allborders' => [
+					'style' => PHPExcel_Style_Border::BORDER_THIN,
+				],
+			],
+		]);
+
+		// Wrap text kolom B (uraian)
+		$sheet->getStyle('B3:B' . $last_data_row)->getAlignment()
+			->setWrapText(true)->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
+
+		// Freeze baris header + 3 kolom pertama
+		$sheet->freezePane('D3');
+
+		// ----------------------------------------------------------------
+		// Nama file yang deskriptif
+		// ----------------------------------------------------------------
+		$tgl_ekspor = date('d-m-Y');
+		$nama_file = 'Rekapitulasi_Unit_Kerja_EV_SAKIP_' . $tahun . '_' . $tgl_ekspor . '.xlsx';
+
+		// ----------------------------------------------------------------
+		// Output ke browser
+		// ----------------------------------------------------------------
+		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+		header('Content-Disposition: attachment; filename="' . $nama_file . '"');
+		header('Cache-Control: max-age=0');
+
+		$objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+		$objWriter->save('php://output');
+		exit;
 	}
 
 
@@ -468,7 +853,7 @@ class Ev extends MY_Controller
 
 		if ($pengirim_role == 'subkomponen') {
 			$this->db->select('id_user, id_role');
-			$this->db->where_in('id_role', [3,4,6,7,10,11,12,13]);
+			$this->db->where_in('id_role', [3, 4, 6, 7, 10, 11, 12, 13]);
 			$evaluators = $this->db->get('ta_user')->result();
 			foreach ($evaluators as $ev) {
 				if ($ev->id_role == 13) {

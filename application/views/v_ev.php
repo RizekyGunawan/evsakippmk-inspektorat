@@ -126,29 +126,9 @@
             <div class="card">
               <div class="card-header">
 
-  
-              <?php
-              $id_role_switcher = (int) $this->session->userdata('id_role');
-              if (in_array($id_role_switcher, [10, 11, 12])): ?>
-              <!-- Unit Switcher untuk Supervisor (Ketua Tim / Pengendali Teknis / Pengendali Mutu) -->
-              <div class="col-12 mb-2 d-flex align-items-center" style="gap: 8px;">
-                <label class="mb-0 font-weight-bold text-secondary" style="white-space:nowrap; font-size:13px;">
-                  <i class="fas fa-building mr-1"></i>Unit Kerja:
-                </label>
-                <form method="post" action="<?php echo base_url('ev/set_unit_session_supervisor'); ?>" style="margin:0; display:flex; align-items:center; gap:6px;">
-                  <select name="id_unit" class="form-control form-control-sm" style="min-width:220px;" onchange="this.form.submit()">
-                    <?php foreach ($all_units as $u): ?>
-                      <option value="<?php echo $u['id_unit']; ?>"
-                        <?php echo ($u['id_unit'] == $this->session->userdata('id_unit')) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($u['nm_unit'], ENT_QUOTES, 'UTF-8'); ?>
-                      </option>
-                    <?php endforeach; ?>
-                  </select>
-                </form>
-              </div>
-              <?php endif; ?>
 
-              <div <?php if ($this->session->userdata('id_unit') == "") {
+
+                <div <?php if ($this->session->userdata('id_unit') == "") {
                   echo "hidden";
                 } else {
                   echo "";
@@ -238,7 +218,7 @@
                                               <tr>
                                                 <th class="text-center align-middle" style="width: 50px">Kode</th>
                                                 <th class="text-center align-middle" style="width: 950px">Subkomponen</th>
-                                                <th class="text-center align-middle" style="width: 50px">Nilai Akhir Unit
+                                                <th class="text-center align-middle" style="width: 50px">Nilai Unit
                                                 </th>
                                                 <th class="text-center align-middle" style="width: 50px">Penjelasan
                                                   Jawaban</th>
@@ -247,9 +227,11 @@
                                                 <th class="text-center align-middle" style="width: 50px">Bobot</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">
                                                   Keberadaan, Kualitas dan Pemanfaatan</th>
-                                                <th class="text-center align-middle" style="width: 50px">Jawaban Antara
+                                                <th class="text-center align-middle" style="width: 50px" hidden>Jawaban
+                                                  Antara
                                                 </th>
-                                                <th class="text-center align-middle" style="width: 50px">Nilai Akhir</th>
+                                                <th class="text-center align-middle" style="width: 50px">Nilai Evaluasi
+                                                </th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">Nilai
                                                   Akuntabilitas Kinerja</th>
                                                 <th class="text-center align-middle" style="width: 50px">Catatan Evaluasi
@@ -376,7 +358,8 @@
                                                      *           Keduanya adalah field berbeda di tabel yang berbeda.
                                                      */
                                                     ?>
-                                                    <td class="text-center align-middle"><?php echo $subk['jawabanantara']; ?>
+                                                    <td class="text-center align-middle" hidden>
+                                                      <?php echo $subk['jawabanantara']; ?>
                                                     </td>
                                                     <td class="text-center align-middle">
                                                       <?php
@@ -491,6 +474,7 @@
                                                               <th class="text-center align-middle" style="width: 20px"
                                                                 colspan="2">Bukti Unit (Link/File)</th>
                                                               <th class="text-center align-middle" style="width: 50px">Jawaban
+                                                                Evaluator
                                                               </th>
                                                               <th class="text-center align-middle" style="width: 200px">
                                                                 Catatan Evaluasi</th>
@@ -579,7 +563,7 @@
                                                                       ?>
                                                                       <a href="<?php echo $url; ?>" target=" _blank">
                                                                         <?php echo htmlspecialchars($krit['link_bukti'], ENT_QUOTES, 'UTF-8'); ?>
-                                                                        </a>
+                                                                      </a>
                                                                     </div>
                                                                     <div class="text-truncate">
                                                                       <?php
@@ -592,7 +576,7 @@
                                                                       ?>
                                                                       <a href="<?php echo $url; ?>" target=" _blank">
                                                                         <?php echo htmlspecialchars($krit['link_bukti3'], ENT_QUOTES, 'UTF-8'); ?>
-                                                                        </a>
+                                                                      </a>
                                                                     </div>
                                                                   </td>
                                                                   <td class="text-center align-middle" style="width: 30px">
@@ -728,12 +712,16 @@
                                         </td>
                                         <td class="text-center align-middle"><?php echo $sumk['sumbobot']; ?></td>
                                         <td class="text-center align-middle">
-                                          <?php $format = number_format((float) $sumk['sumnilaik'], 2, ",", ".");
-                                          echo $format; ?>
+                                          <?php $format_unit = number_format((float) $sumk['sumnilaiunit'], 2, ",", ".");
+                                          echo "{$format_unit} Jawaban Unit<br>";
+                                          $format = number_format((float) $sumk['sumnilaik'], 2, ",", ".");
+                                          echo "{$format} Jawaban Evaluator"; ?>
                                         </td>
                                         <td class="text-center align-middle">
-                                          <?php $format = number_format((float) $sumk['sumnilaikpersen'], 2, ",", ".");
-                                          echo $format; ?>%
+                                          <?php $format_unitp = number_format((float) $sumk['sumnilaiunitpersen'], 2, ",", ".");
+                                          echo "{$format_unitp}% Jawaban Unit<br>";
+                                          $format_p = number_format((float) $sumk['sumnilaikpersen'], 2, ",", ".");
+                                          echo "{$format_p}% Jawaban Evaluator"; ?>
                                         </td>
                                       </tr>
                                     <?php endforeach; ?>
@@ -751,35 +739,51 @@
                                         echo "";
                                       }
                                       ; ?> class="text-center align-middle">
-                                        <?php $format = floatval(str_replace(',', '.', $sumk['sumnilaik']));
-                                        if ($format == 0) {
-                                          echo "E";
-                                        } elseif ($format > 0.01 && $format <= 30.00) {
-                                          echo "D";
-                                        } elseif ($format > 30.01 && $format <= 50.00) {
-                                          echo "C";
-                                        } elseif ($format >= 50.01 && $format <= 60.00) {
-                                          echo "CC";
-                                        } elseif ($format >= 60.01 && $format <= 70.00) {
-                                          echo "B";
-                                        } elseif ($format >= 70.01 && $format <= 80.00) {
-                                          echo "BB";
-                                        } elseif ($format >= 80.01 && $format <= 90.00) {
-                                          echo "A";
-                                        } elseif ($format >= 90.01 && $format <= 100) {
-                                          echo "AA";
+                                        <?php $format_unit = floatval(str_replace(',', '.', $sumk['sumnilaiunit']));
+                                        if ($format_unit == 0) {
+                                          echo "E Jawaban Unit";
+                                        } elseif ($format_unit > 0.01 && $format_unit <= 30.00) {
+                                          echo "D Jawaban Unit";
+                                        } elseif ($format_unit > 30.01 && $format_unit <= 50.00) {
+                                          echo "C Jawaban Unit";
+                                        } elseif ($format_unit >= 50.01 && $format_unit <= 60.00) {
+                                          echo "CC Jawaban Unit";
+                                        } elseif ($format_unit >= 60.01 && $format_unit <= 70.00) {
+                                          echo "B Jawaban Unit";
+                                        } elseif ($format_unit >= 70.01 && $format_unit <= 80.00) {
+                                          echo "BB Jawaban Unit";
+                                        } elseif ($format_unit >= 80.01 && $format_unit <= 90.00) {
+                                          echo "A Jawaban Unit";
+                                        } elseif ($format_unit >= 90.01 && $format_unit <= 100) {
+                                          echo "AA Jawaban Unit";
                                         } else {
-                                          echo "";
+                                          echo "-";
                                         }
                                         ; ?>
                                       </td>
-                                      <td <?php if ($this->session->userdata('id_unit') != "") {
-                                        echo "hidden";
-                                      } else {
-                                        echo "";
-                                      }
-                                      ; ?> class="text-center align-middle"></td>
-                                      <td class="text-center align-middle"></td>
+                                      <td class="text-center align-middle">
+                                        <?php $format = floatval(str_replace(',', '.', $sumk['sumnilaik']));
+                                        if ($format == 0) {
+                                          echo "E Jawaban Evaluator";
+                                        } elseif ($format > 0.01 && $format <= 30.00) {
+                                          echo "D Jawaban Evaluator";
+                                        } elseif ($format > 30.01 && $format <= 50.00) {
+                                          echo "C Jawaban Evaluator";
+                                        } elseif ($format >= 50.01 && $format <= 60.00) {
+                                          echo "CC Jawaban Evaluator";
+                                        } elseif ($format >= 60.01 && $format <= 70.00) {
+                                          echo "B Jawaban Evaluator";
+                                        } elseif ($format >= 70.01 && $format <= 80.00) {
+                                          echo "BB Jawaban Evaluator";
+                                        } elseif ($format >= 80.01 && $format <= 90.00) {
+                                          echo "A Jawaban Evaluator";
+                                        } elseif ($format >= 90.01 && $format <= 100) {
+                                          echo "AA Jawaban Evaluator";
+                                        } else {
+                                          echo "-";
+                                        }
+                                        ; ?>
+                                      </td>
 
                                     </tr>
                                   <?php endforeach; ?>
@@ -821,35 +825,6 @@
             <?php
             $id_role_v = (int) $this->session->userdata('id_role');
             ?>
-
-            <?php
-            /* =========================================================
-             * UNIT SWITCHER — hanya tampil untuk Tim Evaluator (role 13)
-             * jika ditugaskan ke lebih dari 1 unit
-             * ========================================================= */
-            if ($id_role_v === 13 && !empty($assigned_units) && count($assigned_units) > 1):
-              ?>
-              <div class="card card-info card-outline mt-3">
-                <div class="card-header">
-                  <h3 class="card-title"><i class="fas fa-exchange-alt mr-1"></i>Ganti Unit Kerja</h3>
-                </div>
-                <div class="card-body">
-                  <form action="<?php echo base_url('ev/set_unit_session') ?>" method="post" class="form-inline">
-                    <label class="mr-2">Unit yang Ditugaskan:</label>
-                    <select name="id_unit" class="form-control mr-2">
-                      <?php foreach ($assigned_units as $au): ?>
-                        <option value="<?php echo $au['id_unit'] ?>" <?php echo ($this->session->userdata('id_unit') == $au['id_unit']) ? 'selected' : '' ?>>
-                          <?php echo htmlspecialchars($au['nm_unit']) ?>
-                        </option>
-                      <?php endforeach; ?>
-                    </select>
-                    <button type="submit" class="btn btn-info">
-                      <i class="fas fa-arrow-right mr-1"></i>Pindah Unit
-                    </button>
-                  </form>
-                </div>
-              </div>
-            <?php endif; ?>
 
             <?php
             /* =========================================================
@@ -1008,7 +983,7 @@
               </div>
 
               <div class="form-group col-md-2">
-                <label>Jawaban</label>
+                <label>Jawaban Evaluator</label>
                 <select id="jawaban2" name="jawaban2" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?>
                     readonly disabled <?php endif; ?>>
                   <option hidden value="">Pilih Jawaban</option>
@@ -1178,18 +1153,18 @@
             <div class="row">
 
 
-              <div class="form-group col-md-3">
-                <label>Jawaban Akhir Unit</label>
+              <div class="form-group col-md-4">
+                <label>Jawaban Unit</label>
                 <input readonly type="text" id="jawaban0" class="form-control">
               </div>
 
-              <div class="form-group col-md-3">
+              <div class="form-group col-md-3" style="display:none">
                 <label>Jawaban Antara</label>
                 <input readonly type="text" name="jawabanantara" id="jawabanantara" class="form-control">
               </div>
 
-              <div class="form-group col-md-3">
-                <label>Jawaban Akhir</label>
+              <div class="form-group col-md-4">
+                <label>Jawaban Evaluator</label>
                 <select id="jawaban0ev" name="jawaban0ev" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
                   <option value="" hidden>Pilih Jawaban</option>
                   <option value="100">AA</option>
@@ -1204,7 +1179,7 @@
               </div>
 
 
-              <div class="form-group col-md-3">
+              <div class="form-group col-md-4">
                 <label>Perlu Konfirmasi?</label>
                 <select id="perbaikan0" name="perbaikan0" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
                   <option value="0">Tidak</option>

@@ -103,7 +103,12 @@
                             <h3 class="card-title">Nilai Gabungan Unit Kerja - Tahun
                                 <?php echo $this->session->userdata('tahun'); ?>
                             </h3>
-                            <div class="card-tools">
+                            <div class="card-tools d-flex align-items-center gap-2">
+                                <a href="<?php echo base_url('ev/excel_rekap_unit') ?>"
+                                   class="btn btn-success btn-sm mr-2"
+                                   title="Unduh rekap seluruh unit kerja dalam format Excel">
+                                    <i class="fas fa-file-excel mr-1"></i> Export Excel
+                                </a>
                                 <button type="button" class="btn btn-tool" data-card-widget="maximize">
                                     <i class="fas fa-expand"></i>
                                 </button>

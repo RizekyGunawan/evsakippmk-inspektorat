@@ -899,9 +899,31 @@ class M_ev extends CI_Model
 			WHEN b.jawaban0ev='30' THEN ('0.3'*c.bobot2)
 			WHEN b.jawaban0ev='0' THEN ('0'*c.bobot2)
 			ELSE ''
-			END))/100)*100) as sumnilaikpersen 
-			 from ref_komponen a inner join ta_ev0 b on a.id_komponen=b.id_komponen inner join ref_subkomponen c on b.id_subkomponen=c.id_subkomponen where b.tahun = '$tahun' and b.id_unit = '$id_unit' ");
-		return $query->result_array();
+			END))/100)*100) as sumnilaikpersen,
+			sum((CASE 
+			WHEN d.jawaban0='100' THEN ('1'*c.bobot2)
+			WHEN d.jawaban0='90' THEN ('0.9'*c.bobot2)
+			WHEN d.jawaban0='80' THEN ('0.8'*c.bobot2)
+			WHEN d.jawaban0='70' THEN ('0.7'*c.bobot2)
+			WHEN d.jawaban0='60' THEN ('0.6'*c.bobot2)
+			WHEN d.jawaban0='50' THEN ('0.5'*c.bobot2)
+			WHEN d.jawaban0='30' THEN ('0.3'*c.bobot2)
+			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
+			ELSE ''
+			END)) as sumnilaiunit, 
+			((sum((CASE 
+			WHEN d.jawaban0='100' THEN ('1'*c.bobot2)
+			WHEN d.jawaban0='90' THEN ('0.9'*c.bobot2)
+			WHEN d.jawaban0='80' THEN ('0.8'*c.bobot2)
+			WHEN d.jawaban0='70' THEN ('0.7'*c.bobot2)
+			WHEN d.jawaban0='60' THEN ('0.6'*c.bobot2)
+			WHEN d.jawaban0='50' THEN ('0.5'*c.bobot2)
+			WHEN d.jawaban0='30' THEN ('0.3'*c.bobot2)
+			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
+			ELSE ''
+			END))/100)*100) as sumnilaiunitpersen 
+			 from ref_komponen a inner join ta_ev0 b on a.id_komponen=b.id_komponen inner join ref_subkomponen c on b.id_subkomponen=c.id_subkomponen left join ta_pm0 d on b.id_pm0=d.id_pm0 where b.tahun = '$tahun' and b.id_unit = '$id_unit' ");
+		return $query->result_array();
 	}
 
 
@@ -1276,16 +1298,18 @@ class M_ev extends CI_Model
 	/**
 	 * Ambil daftar unit kerja yang ditugaskan kepada seorang evaluator (id_user).
 	 * Digunakan untuk membatasi akses Tim Evaluator (role 13).
+	 * DISTINCT digunakan untuk mencegah duplikat jika ada data anomali.
 	 */
 	public function get_assigned_units($id_user, $tahun)
 	{
 		$id_user = intval($id_user);
-		$tahun = intval($tahun);
+		$tahun   = intval($tahun);
 		$query = $this->db->query(
-			"SELECT eu.id_unit, u.nm_unit
+			"SELECT DISTINCT eu.id_unit, u.nm_unit
 			 FROM ta_evaluator_unit eu
 			 JOIN ref_unit u ON eu.id_unit = u.id_unit
-			 WHERE eu.id_user = $id_user AND eu.tahun = $tahun"
+			 WHERE eu.id_user = $id_user AND eu.tahun = $tahun
+			 ORDER BY u.nm_unit ASC"
 		);
 		return $query->result_array();
 	}

@@ -132,9 +132,9 @@
                                                 <th class="text-center align-middle" style="width: 50px">Bobot</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">
                                                   Keberadaan, Kualitas dan Pemanfaatan</th>
-                                                <th class="text-center align-middle" style="width: 50px">Jawaban Antara
+                                                <th class="text-center align-middle" style="width: 50px" hidden>Jawaban Antara
                                                 </th>
-                                                <th class="text-center align-middle" style="width: 50px">Nilai Akhir</th>
+                                                <th class="text-center align-middle" style="width: 50px">Nilai Unit</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">Nilai
                                                   Akuntabilitas Kinerja</th>
                                                 <th class="text-center align-middle" style="width: 50px">Penjelasan
@@ -175,7 +175,7 @@
                                                      * Isi     : Rata-rata tertimbang jawaban UNIT per indikator (otomatis).
                                                      */
                                                     ?>
-                                                    <td class="text-center align-middle"><?php echo $subk['jawabanantara']; ?>
+                                                    <td class="text-center align-middle" hidden><?php echo $subk['jawabanantara']; ?>
                                                     </td>
                                                     <?php
                                                     /**
@@ -655,7 +655,7 @@
             </div>
             <div class="row">
               <div class="form-group col-md-2">
-                <label>Jawaban1</label>
+                <label>Jawaban Unit</label>
                 <select name="jawaban1" id="jawaban1" class="form-control" <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?> <?php endif; ?>>
                   <option hidden value="">Pilih Jawaban 1</option>
                   <option value="100">AA</option>
@@ -816,7 +816,7 @@
             <div class="row">
 
 
-              <div class="form-group col-md-2">
+              <div class="form-group col-md-2" style="display:none">
                 <label>Jawaban Antara</label>
                 <input readonly type="text" name="jawabanantara" id="jawabanantara" class="form-control">
               </div>
@@ -838,9 +838,9 @@
               </div>
 
 
-              <!-- Jawaban Akhir: tampil sebagai input readonly, terisi otomatis = Jawaban Antara -->
+              <!-- Jawaban Unit: tampil sebagai input readonly, terisi otomatis = Jawaban Antara -->
               <div class="form-group col-md-2">
-                <label>Jawaban Akhir</label>
+                <label>Jawaban Unit</label>
                 <input readonly type="text" id="jawaban0display" class="form-control">
               </div>
 

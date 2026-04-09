@@ -16,13 +16,53 @@
 
                 
 
-               <?php 
-                $id_role = $this->session->userdata('id_role');
-                $id_unit = $this->session->userdata('id_unit_es1');
+               <?php
+                $id_role     = $this->session->userdata('id_role');
+                $id_unit_es1 = $this->session->userdata('id_unit_es1');
                 $allowed_roles = [2, 3, 4, 6, 7];
                 $allowed_units = [1, 2, 3, 4, 5, 6, 7];
 
-                if (in_array($id_role, $allowed_roles) || (($id_role == 1 || $id_role == 5) && in_array($id_unit, $allowed_units))): ?>
+                // ——— Tim Evaluator (role 13): tampilkan unit yang ditugaskan ———
+                if ((int) $id_role === 13):
+                    $id_user_ev  = (int) $this->session->userdata('id_user');
+                    $tahun_ev    = (int) $this->session->userdata('tahun');
+                    $this->load->model('m_ev');
+                    $ev_assigned = $this->m_ev->get_assigned_units($id_user_ev, $tahun_ev);
+                ?>
+                <?php if (count($ev_assigned) > 1): ?>
+                <select name="id_unit" id="ev_unit_switcher" class="form-control">
+                  <?php foreach ($ev_assigned as $ea): ?>
+                    <option value="<?php echo $ea['id_unit']; ?>"
+                      <?php echo ($ea['id_unit'] == $this->session->userdata('id_unit')) ? 'selected' : ''; ?>>
+                      <?php echo htmlspecialchars($ea['nm_unit'], ENT_QUOTES, 'UTF-8'); ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <script>
+                document.getElementById('ev_unit_switcher').addEventListener('change', function () {
+                    var f = document.createElement('form');
+                    f.method = 'post';
+                    f.action = '<?php echo base_url('ev/set_unit_session'); ?>';
+                    var inp = document.createElement('input');
+                    inp.type = 'hidden'; inp.name = 'id_unit'; inp.value = this.value;
+                    f.appendChild(inp);
+                    document.body.appendChild(f);
+                    f.submit();
+                });
+                </script>
+                <?php else: ?>
+                <select class="form-control" disabled>
+                  <?php foreach ($ev_assigned as $ea): ?>
+                    <option selected>
+                      <?php echo htmlspecialchars($ea['nm_unit'], ENT_QUOTES, 'UTF-8'); ?>
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+                <?php endif; ?>
+
+                <?php
+                // ——— Role lain dengan akses pilih unit: dropdown lengkap ———
+                elseif (in_array($id_role, $allowed_roles) || (($id_role == 1 || $id_role == 5) && in_array($id_unit_es1, $allowed_units))): ?>
                 <!-- Kolom input pencarian -->
                 <input type="text" id="searchInput" class="form-control mb-2" placeholder="Cari unit kerja...">
                 <select id="id_unit" name="id_unit" class="form-control" value="">
@@ -35,12 +75,13 @@
                     <?php endforeach; ?>
                 </select>
                 <?php else: ?>
-                <select name="id_unit" class="form-control" value="">  
+                <select name="id_unit" class="form-control" value="">
                     <?php foreach ($unit4 as $unt4) : ?>
                     <option hidden="true" value="<?php echo $this->session->userdata('id_unit'); ?>"><?php echo $unt4['search_unit']; ?></option>
-                    <?php endforeach; ?> 
+                    <?php endforeach; ?>
                 </select>
                 <?php endif; ?>
+
 
 
 

@@ -18,7 +18,7 @@ class M_dokumen extends CI_Model {
 
 	public function get_data3monev ($tahun)
 	{
-		$query = $this->db->query("SELECT * from ta_dokumen a  inner join ref_unit b on a.id_unit=b.id_unit where a.tahun = '$tahun' ");
+		$query = $this->db->query("SELECT * from ta_dokumen a  inner join ref_unit b on a.id_unit=b.id_unit where a.tahun = '$tahun' ORDER BY a.id_unit ASC ");
 	 return $query->result_array();
 	}
 
@@ -26,7 +26,7 @@ class M_dokumen extends CI_Model {
 	{
 		$tahun = $this->db->escape($tahun);
 		$query = $this->db->query("SELECT a.*,b.persen FROM
-		(SELECT a.*,b.nm_unit, b.kd_unit, ROUND(sum((CASE 
+		(SELECT a.*,b.nm_unit, b.kd_unit, b.id_unit as sort_id_unit, ROUND(sum((CASE 
 			WHEN c.jawaban0='100' THEN ('1'*d.bobot2)
 			WHEN c.jawaban0='90' THEN ('0.9'*d.bobot2)
 			WHEN c.jawaban0='80' THEN ('0.8'*d.bobot2)
@@ -38,7 +38,7 @@ class M_dokumen extends CI_Model {
 			ELSE ''
 			END)), 2) as totalnilai FROM ta_dokumen a  inner join ref_unit b on a.id_unit=b.id_unit left join ta_pm0 c on a.id_unit=c.id_unit left join ref_subkomponen d on c.id_subkomponen=d.id_subkomponen where a.tahun = $tahun and c.tahun = $tahun GROUP BY a.id_dokumen) a LEFT JOIN 
 			
-			(SELECT id_dokumen, SUM(CASE WHEN jawaban1 IS NOT NULL AND jawaban1 <> '' THEN 1 ELSE 0 END) / COUNT(*) * 100 AS persen from ta_pm where tahun = $tahun GROUP BY id_dokumen) b on a.id_dokumen=b.id_dokumen ");
+			(SELECT id_dokumen, SUM(CASE WHEN jawaban1 IS NOT NULL AND jawaban1 <> '' THEN 1 ELSE 0 END) / COUNT(*) * 100 AS persen from ta_pm where tahun = $tahun GROUP BY id_dokumen) b on a.id_dokumen=b.id_dokumen ORDER BY a.sort_id_unit ASC ");
 	 return $query->result_array();
 	}
 

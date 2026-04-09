@@ -85,43 +85,57 @@ public function update_data (){
 
 
 	public function update_data2() {
-    $id_dok_ev = $this->input->post('id_dok_ev');
-    $modified_by = $this->session->userdata('username');
-    $lap_ev = $_FILES['lap_ev'];
+		// Guard: hanya Pengendali Teknis (role 11) yang boleh upload laporan
+		if ((int) $this->session->userdata('id_role') !== 11) {
+			show_error('Akses ditolak. Fitur ini hanya untuk Pengendali Teknis.', 403);
+			return;
+		}
 
-    if ($lap_ev['name'] == '') {
-        // File tidak diunggah
-        echo "No file uploaded"; die();
-    } else {
-        // Konfigurasi upload
-        $config['upload_path'] = './assets/dok_ev';
-        $config['allowed_types'] = 'pdf';
-        $config['max_size'] = 15360; // Ukuran file maksimal dalam kilobytes (15MB = 15 * 1024KB)
+		$id_dok_ev   = $this->input->post('id_dok_ev');
+		$modified_by = $this->session->userdata('username');
 
-        $this->load->library('upload', $config);
+		// Guard: hanya bisa upload jika status_data1 = 1 (Final)
+		$this->load->model('m_dok_ev');
+		$row = $this->db->where('id_dok_ev', (int) $id_dok_ev)
+		                ->get('ta_dok_ev')
+		                ->row_array();
 
-        if (!$this->upload->do_upload('lap_ev')) {
-            // Gagal upload, tampilkan pesan error
-            $error = $this->upload->display_errors();
-            echo "Upload Gagal: " . $error; die();
-        } else {
-            // Sukses upload
-            $lap_ev = $this->upload->data('file_name');
-        }
-    }
+		if (!$row || $row['status_data1'] != '1') {
+			$this->session->set_flashdata('error', 'Upload laporan hanya diizinkan jika Status Evaluasi sudah <strong>Final</strong>.');
+			redirect('/dok_ev/index');
+			return;
+		}
 
-    $data = array(
-        'lap_ev' => $lap_ev,
-        'modified_by' => $modified_by,
-    );
+		$lap_ev = $_FILES['lap_ev'];
+		if ($lap_ev['name'] == '') {
+			$this->session->set_flashdata('error', 'Tidak ada file yang dipilih.');
+			redirect('/dok_ev/index');
+			return;
+		}
 
-    $where = array(
-        'id_dok_ev' => $id_dok_ev,
-    );
+		$config['upload_path']   = './assets/dok_ev';
+		$config['allowed_types'] = 'pdf';
+		$config['max_size']      = 15360; // 15MB
 
-    $this->m_dok_ev->update_data($where, $data, 'ta_dok_ev');
-    redirect('/dok_ev/index');
-}
+		$this->load->library('upload', $config);
+
+		if (!$this->upload->do_upload('lap_ev')) {
+			$this->session->set_flashdata('error', 'Upload gagal: ' . strip_tags($this->upload->display_errors()));
+			redirect('/dok_ev/index');
+			return;
+		}
+
+		$data  = [
+			'lap_ev'      => $this->upload->data('file_name'),
+			'modified_by' => $modified_by,
+		];
+		$where = ['id_dok_ev' => $id_dok_ev];
+		$this->m_dok_ev->update_data($where, $data, 'ta_dok_ev');
+
+		$this->session->set_flashdata('success', 'Laporan Evaluasi berhasil diunggah.');
+		redirect('/dok_ev/index');
+	}
+
 
 
 
