@@ -230,7 +230,7 @@
                                                 <th class="text-center align-middle" style="width: 50px" hidden>Jawaban
                                                   Antara
                                                 </th>
-                                                <th class="text-center align-middle" style="width: 50px">Nilai Evaluasi
+                                                <th class="text-center align-middle" style="width: 50px">Nilai Evaluator
                                                 </th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">Nilai
                                                   Akuntabilitas Kinerja</th>
@@ -703,88 +703,102 @@
                                   <?php endforeach; ?>
 
 
-                                  <thead class="table-dark">
+                                  <thead class="bg-light">
                                     <?php foreach ($sumkom as $sumk): ?>
-                                      <tr class="table" data-widget="expandable-table" aria-expanded="false">
-                                        <td colspan="2">
-                                          <i class="expandable-table-caret "></i>
-                                          NILAI AKUNTABILITAS KINERJA
+                                      <!-- BARIS 1: NILAI UNIT -->
+                                      <tr style="background-color: #343a40; color: #ffffff;">
+                                        <td colspan="2" class="text-left align-middle" style="color: #ffffff;">
+                                          NILAI AKUNTABILITAS KINERJA (JAWABAN UNIT)
                                         </td>
-                                        <td class="text-center align-middle"><?php echo $sumk['sumbobot']; ?></td>
-                                        <td class="text-center align-middle">
-                                          <?php $format_unit = number_format((float) $sumk['sumnilaiunit'], 2, ",", ".");
-                                          echo "{$format_unit} Jawaban Unit<br>";
-                                          $format = number_format((float) $sumk['sumnilaik'], 2, ",", ".");
-                                          echo "{$format} Jawaban Evaluator"; ?>
+                                        <td class="text-center align-middle" style="color: #ffffff;">
+                                          <?php echo $sumk['sumbobot']; ?>
                                         </td>
-                                        <td class="text-center align-middle">
-                                          <?php $format_unitp = number_format((float) $sumk['sumnilaiunitpersen'], 2, ",", ".");
-                                          echo "{$format_unitp}% Jawaban Unit<br>";
-                                          $format_p = number_format((float) $sumk['sumnilaikpersen'], 2, ",", ".");
-                                          echo "{$format_p}% Jawaban Evaluator"; ?>
+                                        <td class="text-center align-middle" style="color: #ffffff;">
+                                          <?php echo number_format((float) $sumk['sumnilaiunit'], 2, ",", "."); ?>
+                                        </td>
+                                        <td class="text-center align-middle" style="color: #ffffff;">
+                                          <?php echo number_format((float) $sumk['sumnilaiunitpersen'], 2, ",", "."); ?>%
+                                        </td>
+                                      </tr>
+
+                                      <!-- BARIS 2: NILAI EVALUATOR -->
+                                      <tr style="background-color: #343a40; color: #ffffff;">
+                                        <td colspan="2" class="text-left align-middle" style="color: #ffffff;">
+                                          NILAI AKUNTABILITAS KINERJA (JAWABAN EVALUATOR)
+                                        </td>
+                                        <td class="text-center align-middle" style="color: #ffffff;">
+                                          <?php echo $sumk['sumbobot']; ?>
+                                        </td>
+                                        <td class="text-center align-middle" style="color: #ffffff;">
+                                          <?php echo number_format((float) $sumk['sumnilaik'], 2, ",", "."); ?>
+                                        </td>
+                                        <td class="text-center align-middle" style="color: #ffffff;">
+                                          <?php echo number_format((float) $sumk['sumnilaikpersen'], 2, ",", "."); ?>%
                                         </td>
                                       </tr>
                                     <?php endforeach; ?>
                                   </thead>
                                   <?php foreach ($sumkom as $sumk): ?>
-                                    <tr class="table" data-widget="expandable-table" aria-expanded="false">
-                                      <td colspan="3">
-                                        <i class="expandable-table-caret "></i>
-                                        PREDIKAT
+                                    <!-- BARIS 3: PREDIKAT UNIT -->
+                                    <tr style="background-color: #ffffff;">
+                                      <td colspan="3" class="text-left align-middle">
+                                        PREDIKAT (UNIT)
                                       </td>
-
-                                      <td <?php if ($this->session->userdata('id_unit') == "") {
-                                        echo "hidden";
-                                      } else {
-                                        echo "";
-                                      }
-                                      ; ?> class="text-center align-middle">
-                                        <?php $format_unit = floatval(str_replace(',', '.', $sumk['sumnilaiunit']));
+                                      <td colspan="2" class="text-center align-middle">
+                                        <?php
+                                        $format_unit = floatval(str_replace(',', '.', $sumk['sumnilaiunit']));
                                         if ($format_unit == 0) {
-                                          echo "E Jawaban Unit";
+                                          echo "E";
                                         } elseif ($format_unit > 0.01 && $format_unit <= 30.00) {
-                                          echo "D Jawaban Unit";
+                                          echo "D";
                                         } elseif ($format_unit > 30.01 && $format_unit <= 50.00) {
-                                          echo "C Jawaban Unit";
+                                          echo "C";
                                         } elseif ($format_unit >= 50.01 && $format_unit <= 60.00) {
-                                          echo "CC Jawaban Unit";
+                                          echo "CC";
                                         } elseif ($format_unit >= 60.01 && $format_unit <= 70.00) {
-                                          echo "B Jawaban Unit";
+                                          echo "B";
                                         } elseif ($format_unit >= 70.01 && $format_unit <= 80.00) {
-                                          echo "BB Jawaban Unit";
+                                          echo "BB";
                                         } elseif ($format_unit >= 80.01 && $format_unit <= 90.00) {
-                                          echo "A Jawaban Unit";
+                                          echo "A";
                                         } elseif ($format_unit >= 90.01 && $format_unit <= 100) {
-                                          echo "AA Jawaban Unit";
+                                          echo "AA";
                                         } else {
                                           echo "-";
                                         }
-                                        ; ?>
+                                        ?>
                                       </td>
-                                      <td class="text-center align-middle">
-                                        <?php $format = floatval(str_replace(',', '.', $sumk['sumnilaik']));
-                                        if ($format == 0) {
-                                          echo "E Jawaban Evaluator";
-                                        } elseif ($format > 0.01 && $format <= 30.00) {
-                                          echo "D Jawaban Evaluator";
-                                        } elseif ($format > 30.01 && $format <= 50.00) {
-                                          echo "C Jawaban Evaluator";
-                                        } elseif ($format >= 50.01 && $format <= 60.00) {
-                                          echo "CC Jawaban Evaluator";
-                                        } elseif ($format >= 60.01 && $format <= 70.00) {
-                                          echo "B Jawaban Evaluator";
-                                        } elseif ($format >= 70.01 && $format <= 80.00) {
-                                          echo "BB Jawaban Evaluator";
-                                        } elseif ($format >= 80.01 && $format <= 90.00) {
-                                          echo "A Jawaban Evaluator";
-                                        } elseif ($format >= 90.01 && $format <= 100) {
-                                          echo "AA Jawaban Evaluator";
-                                        } else {
-                                          echo "-";
-                                        }
-                                        ; ?>
-                                      </td>
+                                    </tr>
 
+                                    <!-- BARIS 4: PREDIKAT EVALUATOR -->
+                                    <tr style="background-color: #ffffff;">
+                                      <td colspan="3" class="text-left align-middle">
+                                        PREDIKAT (EVALUATOR)
+                                      </td>
+                                      <td colspan="2" class="text-center align-middle">
+                                        <?php
+                                        $format = floatval(str_replace(',', '.', $sumk['sumnilaik']));
+                                        if ($format == 0) {
+                                          echo "E";
+                                        } elseif ($format > 0.01 && $format <= 30.00) {
+                                          echo "D";
+                                        } elseif ($format > 30.01 && $format <= 50.00) {
+                                          echo "C";
+                                        } elseif ($format >= 50.01 && $format <= 60.00) {
+                                          echo "CC";
+                                        } elseif ($format >= 60.01 && $format <= 70.00) {
+                                          echo "B";
+                                        } elseif ($format >= 70.01 && $format <= 80.00) {
+                                          echo "BB";
+                                        } elseif ($format >= 80.01 && $format <= 90.00) {
+                                          echo "A";
+                                        } elseif ($format >= 90.01 && $format <= 100) {
+                                          echo "AA";
+                                        } else {
+                                          echo "-";
+                                        }
+                                        ?>
+                                      </td>
                                     </tr>
                                   <?php endforeach; ?>
 
@@ -965,9 +979,9 @@
               </div>
 
             </div>
-            <div class="row">
+            <div class="row align-items-end">
 
-              <div class="form-group col-md-2">
+              <div class="form-group col-md-3">
                 <label>Jawaban Unit</label>
                 <select readonly disabled name="jawaban1" id="jawaban1" class="form-control">
                   <option hidden value="">Pilih Jawaban</option>
@@ -982,7 +996,7 @@
                 </select>
               </div>
 
-              <div class="form-group col-md-2">
+              <div class="form-group col-md-3">
                 <label>Jawaban Evaluator</label>
                 <select id="jawaban2" name="jawaban2" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?>
                     readonly disabled <?php endif; ?>>
@@ -998,7 +1012,7 @@
                 </select>
               </div>
 
-              <div class="form-group col-md-2">
+              <div class="form-group col-md-3">
                 <label>Konfirmasi?</label>
                 <select id="perbaikan" name="perbaikan" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?>
                     readonly disabled <?php endif; ?>>

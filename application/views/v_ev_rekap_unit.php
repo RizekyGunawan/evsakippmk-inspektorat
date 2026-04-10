@@ -105,8 +105,8 @@
                             </h3>
                             <div class="card-tools d-flex align-items-center gap-2">
                                 <a href="<?php echo base_url('ev/excel_rekap_unit') ?>"
-                                   class="btn btn-success btn-sm mr-2"
-                                   title="Unduh rekap seluruh unit kerja dalam format Excel">
+                                    class="btn btn-success btn-sm mr-2"
+                                    title="Unduh rekap seluruh unit kerja dalam format Excel">
                                     <i class="fas fa-file-excel mr-1"></i> Export Excel
                                 </a>
                                 <button type="button" class="btn btn-tool" data-card-widget="maximize">
@@ -227,7 +227,10 @@
                                                 <td class="desc-col sticky-col-2"><?php echo strtoupper($comp['uraian']); ?>
                                                 </td>
                                                 <td class="text-center sticky-col-3">
-                                                    <?php echo number_format($comp['bobot'], 2); ?>
+                                                    <?php
+                                                    $bobot_comp = isset($comp['bobot']) ? floatval($comp['bobot']) : 0;
+                                                    echo ($bobot_comp > 0) ? (strpos((string) $bobot_comp, '.') !== false ? number_format($bobot_comp, 2) : $bobot_comp) : '-';
+                                                    ?>
                                                 </td>
                                                 <?php foreach ($units as $uid => $nm):
                                                     $score = isset($comp['scores'][$uid]) ? $comp['scores'][$uid] : 0;
@@ -247,7 +250,10 @@
                                                     </td>
                                                     <td class="desc-col sticky-col-2"><?php echo $sub['uraian']; ?></td>
                                                     <td class="text-center sticky-col-3">
-                                                        <?php echo number_format($sub['bobot'], 2); ?>
+                                                        <?php
+                                                        $bobot_sub = isset($sub['bobot']) ? floatval($sub['bobot']) : 0;
+                                                        echo ($bobot_sub > 0) ? (strpos((string) $bobot_sub, '.') !== false ? number_format($bobot_sub, 2) : $bobot_sub) : '-';
+                                                        ?>
                                                     </td>
                                                     <?php foreach ($units as $uid => $nm):
                                                         $score = isset($sub['scores'][$uid]) ? $sub['scores'][$uid] : 0;

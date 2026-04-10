@@ -168,3 +168,36 @@ ERROR - 2026-04-09 09:17:07 --> 404 Page Not Found: Assets/plugins
 ERROR - 2026-04-09 09:20:56 --> 404 Page Not Found: Assets/plugins
 ERROR - 2026-04-09 09:20:56 --> 404 Page Not Found: Assets/plugins
 ERROR - 2026-04-09 09:21:38 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-09 14:23:34 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-09 14:23:34 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-09 14:24:17 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-09 14:28:22 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-09 14:28:23 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-09 14:29:16 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-09 14:29:16 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-09 14:30:20 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-09 14:34:27 --> Query error: MySQL server has gone away - Invalid query: SELECT `data`
+FROM `ci_sessions`
+WHERE `id` = 'ft49d31v9jmk1k96rjo1m8bm1o'
+ERROR - 2026-04-09 14:34:27 --> Severity: Warning --> session_write_close(): Cannot call session save handler in a recursive manner Unknown 0
+ERROR - 2026-04-09 14:34:27 --> Severity: Warning --> session_write_close(): Failed to write session data using user defined save handler. (session.save_path: C:/laragon/tmp) Unknown 0
+ERROR - 2026-04-09 14:34:27 --> Query error: MySQL server has gone away - Invalid query: SELECT RELEASE_LOCK('ft49d31v9jmk1k96rjo1m8bm1o') AS ci_session_lock
+ERROR - 2026-04-09 14:34:27 --> Severity: Warning --> Unknown: Failed to write session data (user). Please verify that the current setting of session.save_path is correct (C:/laragon/tmp) Unknown 0
+ERROR - 2026-04-09 14:34:27 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-04-09 14:34:46 --> Severity: Warning --> mysqli::real_connect(): (HY000/2002): A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond.
+ C:\laragon\www\evsakippmk-inspektorat\system\database\drivers\mysqli\mysqli_driver.php 135
+ERROR - 2026-04-09 14:34:46 --> Unable to connect to the database
+ERROR - 2026-04-09 14:34:46 --> 404 Page Not Found: Faviconico/index
+ERROR - 2026-04-09 14:35:08 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-09 14:35:08 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-09 14:35:53 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-09 14:36:53 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-09 14:50:10 --> Severity: Compile Error --> Unparenthesized `a ? b : c ? d : e` is not supported. Use either `(a ? b : c) ? d : e` or `a ? b : (c ? d : e)` C:\laragon\www\evsakippmk-inspektorat\system\helpers\url_helper.php 162
+ERROR - 2026-04-09 14:58:53 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-09 14:58:53 --> 404 Page Not Found: Dist/img
+ERROR - 2026-04-09 14:58:58 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-09 14:58:58 --> 404 Page Not Found: Assets/plugins
+ERROR - 2026-04-09 14:59:22 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-04-09 14:59:22 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 69
+ERROR - 2026-04-09 15:00:35 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\header.php 153
+ERROR - 2026-04-09 15:00:35 --> Severity: Warning --> Invalid argument supplied for foreach() C:\laragon\www\evsakippmk-inspektorat\application\views\templates\footer.php 69
