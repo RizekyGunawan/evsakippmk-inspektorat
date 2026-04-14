@@ -36,6 +36,10 @@ class Ev extends MY_Controller
 
 		// Auto-generate form evaluasi menggunakan idempotent insert
 		if (!empty($tahun) && !empty($id_unit)) {
+			// By-pass dependency: Automatically initialize Unit Kerja's PM records if they haven't opened it, 
+			// so Evaluators can immediately assess without waiting for PM module finalization.
+			$this->load->model('m_pm');
+			$this->m_pm->insert_pm($tahun, $id_unit);
 			$this->m_ev->insert_ev($tahun, $id_unit);
 		}
 
