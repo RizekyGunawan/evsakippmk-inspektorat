@@ -1,0 +1,86 @@
+.datetimepicker-input {
+    font-size: 8px;
+    /* Atur ukuran font sesuai keinginan */
+}
+
+/* Ganti angka 300px sesuai dengan lebar yang diinginkan */
+.input-group.col-sm-12 .form-control {
+    width: 150px;
+    height: 10px;
+    font-size: 8px;
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+.blinking {
+    animation: blink 1s infinite;
+}
+
+@keyframes flash {
+    0% {
+        background-color: #fff3cd;
+    }
+
+    100% {
+        background-color: transparent;
+    }
+}
+
+.highlight {
+    animation: flash 2s ease-in-out;
+    background-color: #fff3cd !important;
+}
+
+@keyframes blinkSub {
+    0% {
+        box-shadow: inset 0 0 0 rgba(255, 193, 7, 0);
+    }
+
+    50% {
+        box-shadow: inset 0 0 0 9999px rgba(255, 193, 7, 0.2);
+    }
+
+    100% {
+        box-shadow: inset 0 0 0 rgba(255, 193, 7, 0);
+    }
+}
+
+@keyframes blinkRow {
+    0% {
+        box-shadow: inset 0 0 0 rgba(255, 193, 7, 0);
+    }
+
+    50% {
+        box-shadow: inset 0 0 0 9999px rgba(255, 193, 7, 0.25);
+    }
+
+    100% {
+        box-shadow: inset 0 0 0 rgba(255, 193, 7, 0);
+    }
+}
+
+.blink-soft {
+    animation: blinkSub 1s ease-in-out 2;
+}
+
+.revision-notice {
+    background: #fff3cd;
+    border-left: 5px solid #ffc107;
+    padding: 10px;
+    margin-bottom: 15px;
+    font-weight: bold;
+    display: none;
+    color: #856404;
+}
