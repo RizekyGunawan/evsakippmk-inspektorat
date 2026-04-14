@@ -457,18 +457,28 @@ class Ev extends MY_Controller
 
 				// --- Iterasi Aspek/Kriteria (putih) ---
 				$no_asp = 1;
+				$jml_kriteria = count($sub['aspeks']);
+				$bobot_sub_val = isset($sub['bobot']) ? floatval($sub['bobot']) : 0;
+				$bobot_kriteria = ($jml_kriteria > 0) ? ($bobot_sub_val / $jml_kriteria) : 0;
+
 				foreach ($sub['aspeks'] as $asp_id => $asp) {
 
 					$row_range = 'A' . $baris . ':' . $last_col_letter . $baris;
 					$sheet->setCellValue('A' . $baris, $no_asp);
 					$sheet->setCellValue('B' . $baris, $asp['uraian']);
-					$sheet->setCellValue('C' . $baris, '-');
+					$sheet->setCellValue('C' . $baris, ($bobot_kriteria > 0) ? number_format($bobot_kriteria, 2) : '-');
 
 					$col_idx = $col_unit_start;
 					foreach ($units as $uid => $nm) {
 						$col = PHPExcel_Cell::stringFromColumnIndex($col_idx++);
-						$val = isset($asp['answers'][$uid]) ? $asp['answers'][$uid] : '';
-						$sheet->setCellValue($col . $baris, ($val !== '') ? $val : '-');
+						$val = isset($asp['answers'][$uid]) && $asp['answers'][$uid] !== '' ? floatval($asp['answers'][$uid]) : '';
+						if ($val !== '') {
+							$score_proporsional = ($val / 100) * $bobot_kriteria;
+							$display = number_format($score_proporsional, 2);
+						} else {
+							$display = '-';
+						}
+						$sheet->setCellValue($col . $baris, $display);
 						$sheet->getStyle($col . $baris)->getAlignment()
 							->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 					}
@@ -650,8 +660,39 @@ class Ev extends MY_Controller
 	}
 
 
+	/**
+	 * Reset Data Evaluasi Inspektorat
+	 * Menghapus ta_ev, ta_ev0, ta_dok_ev untuk unit & tahun terpilih.
+	 * Hanya dapat diakses oleh Admin (role 9).
+	 */
+	public function reset_data_ev()
+	{
+		$id_unit = $this->input->post('id_unit');
+		$tahun   = $this->input->post('tahun');
+		$role    = (int) $this->session->userdata('id_role');
+
+		if ($role === 9 && !empty($id_unit) && !empty($tahun)) {
+			$this->load->model('m_ev');
+			$this->db->delete('ta_ev',     ['id_unit' => $id_unit, 'tahun' => $tahun]);
+			$this->db->delete('ta_ev0',    ['id_unit' => $id_unit, 'tahun' => $tahun]);
+			$this->db->delete('ta_dok_ev', ['id_unit' => $id_unit, 'tahun' => $tahun]);
+
+			$this->session->set_flashdata('success', 'Data Evaluasi Inspektorat unit terpilih tahun ' . $tahun . ' berhasil direset secara bersih.');
+		} else {
+			$this->session->set_flashdata('error', 'Anda tidak memiliki otoritas, atau form tidak lengkap.');
+		}
+
+		redirect('/users/index');
+	}
+
+
 	public function update_data()
 	{
+		$id_role_check = (int) $this->session->userdata('id_role');
+		if (!in_array($id_role_check, self::ROLES_CAN_EDIT_EV)) {
+			show_error('Akses Ditolak: Anda tidak memiliki izin untuk mengedit Evaluasi Inspektorat.', 403);
+			return;
+		}
 
 		$id_ev = $this->input->post('id_ev');
 		$jawaban2 = $this->input->post('jawaban2');
@@ -704,6 +745,11 @@ class Ev extends MY_Controller
 
 	public function update_data2()
 	{
+		$id_role_check = (int) $this->session->userdata('id_role');
+		if (!in_array($id_role_check, self::ROLES_CAN_EDIT_EV)) {
+			show_error('Akses Ditolak: Anda tidak memiliki izin untuk mengedit Evaluasi Inspektorat.', 403);
+			return;
+		}
 
 		$id_ev0 = $this->input->post('id_ev0');
 		$jawaban0ev = $this->input->post('jawaban0ev');
@@ -851,39 +897,63 @@ class Ev extends MY_Controller
 		$id_unit = $this->session->userdata('id_unit');
 		$tahun = $this->session->userdata('tahun');
 
+		// 1. Dapatkan semua ID User yang pernah nimbrung di percakapan (Thread) tersebut
+		$indikator_id_val = $this->input->post('indikator');
+		$subkomponen_id_val = $this->input->post('subkomponen');
+		$thread_participants = $this->Komentar_model->get_thread($indikator_id_val, $subkomponen_id_val);
+		foreach ($thread_participants as $t) {
+			if (!empty($t->evaluator_id)) {
+				$target_users[] = $t->evaluator_id;
+			}
+		}
+
+		// 2. Jika pengirim membalas, kirimkan juga default ke pihak seberang (agar percakapan pertama dinotif)
 		if ($pengirim_role == 'subkomponen') {
-			$this->db->select('id_user, id_role');
-			$this->db->where_in('id_role', [3, 4, 6, 7, 10, 11, 12, 13]);
-			$evaluators = $this->db->get('ta_user')->result();
-			foreach ($evaluators as $ev) {
-				if ($ev->id_role == 13) {
-					$this->db->where('id_user', $ev->id_user);
-					$this->db->where('id_unit', $id_unit);
-					$this->db->where('tahun', $tahun);
-					$assigned = $this->db->get('ta_evaluator_unit')->row();
-					if ($assigned) {
-						$target_users[] = $ev->id_user;
-					}
-				} else {
-					$target_users[] = $ev->id_user;
-				}
+			$non_tim_ev = $this->db
+				->select('id_user')
+				->where_in('id_role', [2, 3, 4, 6, 7, 10, 11, 12])
+				->get('ta_user')
+				->result();
+			foreach ($non_tim_ev as $u) {
+				$target_users[] = $u->id_user;
+			}
+
+			$tim_ev = $this->db
+				->select('ta_user.id_user')
+				->from('ta_user')
+				->join('ta_evaluator_unit teu', 'ta_user.id_user = teu.id_user')
+				->where('ta_user.id_role', 13)
+				->where('teu.id_unit', $id_unit)
+				->where('teu.tahun', $tahun)
+				->get()
+				->result();
+			foreach ($tim_ev as $u) {
+				$target_users[] = $u->id_user;
 			}
 		} else {
-			$this->db->select('id_user');
-			$this->db->where('id_unit', $id_unit);
-			$this->db->where_in('id_role', [1, 5, 14]);
-			$units = $this->db->get('ta_user')->result();
+			$units = $this->db
+				->select('id_user')
+				->where('id_unit', $id_unit)
+				->where_in('id_role', [1, 5, 14])
+				->get('ta_user')
+				->result();
 			foreach ($units as $u) {
 				$target_users[] = $u->id_user;
 			}
 		}
 
-		if (empty($target_users)) {
-			// Fallback jika tidak ditemukan
-			$target_users[] = $this->input->post('target_user');
+		// 3. TARGET USER ASLI HARUS DIHUKUM MASUK KOTAK NOTIFIKASI SECARA ABSOLUT
+		$target_user_input = $this->input->post('target_user');
+		if (!empty($target_user_input)) {
+			$target_users[] = $target_user_input;
 		}
 
-		foreach (array_unique($target_users) as $uid) {
+		// 4. Pastikan pengikut tidak mendapat notifikasi mengenai komentarnya sendiri
+		$current_uid = $this->session->userdata('id_user');
+		$final_targets = array_unique($target_users);
+		$final_targets = array_diff($final_targets, [$current_uid]);
+
+		foreach ($final_targets as $uid) {
 			if ($uid) {
 				$this->Notifikasi_model->create([
 					'user_id' => $uid,

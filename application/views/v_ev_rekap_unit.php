@@ -264,19 +264,26 @@
 
                                                 <?php
                                                 $no_asp = 1;
+                                                $jml_kriteria = count($sub['aspeks']);
+                                                $bobot_sub_val = isset($sub['bobot']) ? floatval($sub['bobot']) : 0;
+                                                $bobot_kriteria = ($jml_kriteria > 0) ? ($bobot_sub_val / $jml_kriteria) : 0;
+
                                                 foreach ($sub['aspeks'] as $asp_id => $asp):
                                                     ?>
                                                     <!-- Aspect/Criteria Row (White) -->
                                                     <tr class="row-criteria">
                                                         <td class="text-center sticky-col-1"><?php echo $no_asp++; ?></td>
                                                         <td class="desc-col sticky-col-2"><?php echo $asp['uraian']; ?></td>
-                                                        <td class="text-center sticky-col-3">-</td>
+                                                        <td class="text-center sticky-col-3">
+                                                            <?php echo ($bobot_kriteria > 0) ? number_format($bobot_kriteria, 2) : '-'; ?>
+                                                        </td>
                                                         <?php foreach ($units as $uid => $nm):
-                                                            // Value Logic: DIRECT DISPLAY (User Request: Use Numbers)
-                                                            $val = isset($asp['answers'][$uid]) ? $asp['answers'][$uid] : '';
+                                                            $val = isset($asp['answers'][$uid]) && $asp['answers'][$uid] !== '' ? floatval($asp['answers'][$uid]) : '';
                                                             $display = '<span class="text-muted">-</span>';
-                                                            if ($val !== '')
-                                                                $display = $val;
+                                                            if ($val !== '') {
+                                                                $score_proporsional = ($val / 100) * $bobot_kriteria;
+                                                                $display = number_format($score_proporsional, 2);
+                                                            }
                                                             ?>
                                                             <td class="text-center"><?php echo $display; ?></td>
                                                         <?php endforeach; ?>

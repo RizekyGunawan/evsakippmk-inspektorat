@@ -380,7 +380,7 @@
                                                       } elseif ($subk['jawaban0ev'] == "0") {
                                                         echo "E";
                                                       } else {
-                                                        echo "";
+                                                        echo "-";
                                                       }
                                                       ; ?>
                                                     </td>
@@ -425,7 +425,7 @@
 
 
                                                     <td class="text-center align-middle" style="width: 30px">
-                                                      <?php if ($can_edit_ev && $subk['status_data'] == "1" && $subk['status_data1'] == "0"): ?>
+                                                      <?php if ($can_edit_ev && $subk['status_data1'] == "0"): ?>
                                                         <div <?php if ($subk['ev_modified_by'] != ""): ?>
                                                             title="last modified by: <?php echo $subk['ev_modified_by']; ?>" <?php endif; ?> class="btn btn-info btn-xs open-modal0"
                                                           data-id_ev0="<?php echo $subk['id_ev0']; ?>"><i
@@ -531,7 +531,7 @@
                                                                     } elseif ($krit['jawaban1'] === "0" || $krit['jawaban1'] === 0) {
                                                                       echo "E";
                                                                     } else {
-                                                                      echo "";
+                                                                      echo "-";
                                                                     }
                                                                     ?>
                                                                   </td>
@@ -620,7 +620,7 @@
                                                                     } elseif ($krit['jawaban2'] === "0" || $krit['jawaban2'] === 0) {
                                                                       echo "E";
                                                                     } else {
-                                                                      echo "";
+                                                                      echo "-";
                                                                     }
                                                                     ; ?>
                                                                   </td>
@@ -652,7 +652,7 @@
                                                                     <?php endif; ?>
                                                                   </td>
                                                                   <td class="text-center align-middle" style="width: 30px">
-                                                                    <?php if ($can_edit_ev && $krit['status_data'] == "1" && $krit['status_data1'] == "0"): ?>
+                                                                    <?php if ($can_edit_ev && $krit['status_data1'] == "0"): ?>
                                                                       <div <?php if ($krit['ev_modified_by'] != ""): ?>
                                                                           title="last modified by: <?php echo $krit['ev_modified_by']; ?>"
                                                                         <?php endif; ?> class="btn btn-success btn-xs open-modal"
@@ -708,7 +708,7 @@
                                       <!-- BARIS 1: NILAI UNIT -->
                                       <tr style="background-color: #343a40; color: #ffffff;">
                                         <td colspan="2" class="text-left align-middle" style="color: #ffffff;">
-                                          NILAI AKUNTABILITAS KINERJA (JAWABAN UNIT)
+                                          NILAI AKUNTABILITAS KINERJA - NILAI UNIT
                                         </td>
                                         <td class="text-center align-middle" style="color: #ffffff;">
                                           <?php echo $sumk['sumbobot']; ?>
@@ -724,7 +724,7 @@
                                       <!-- BARIS 2: NILAI EVALUATOR -->
                                       <tr style="background-color: #343a40; color: #ffffff;">
                                         <td colspan="2" class="text-left align-middle" style="color: #ffffff;">
-                                          NILAI AKUNTABILITAS KINERJA (JAWABAN EVALUATOR)
+                                          NILAI AKUNTABILITAS KINERJA - NILAI EVALUATOR
                                         </td>
                                         <td class="text-center align-middle" style="color: #ffffff;">
                                           <?php echo $sumk['sumbobot']; ?>
@@ -742,7 +742,7 @@
                                     <!-- BARIS 3: PREDIKAT UNIT -->
                                     <tr style="background-color: #ffffff;">
                                       <td colspan="3" class="text-left align-middle">
-                                        PREDIKAT (UNIT)
+                                        PREDIKAT - UNIT
                                       </td>
                                       <td colspan="2" class="text-center align-middle">
                                         <?php
@@ -773,7 +773,7 @@
                                     <!-- BARIS 4: PREDIKAT EVALUATOR -->
                                     <tr style="background-color: #ffffff;">
                                       <td colspan="3" class="text-left align-middle">
-                                        PREDIKAT (EVALUATOR)
+                                        PREDIKAT - EVALUATOR
                                       </td>
                                       <td colspan="2" class="text-center align-middle">
                                         <?php

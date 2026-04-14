@@ -166,38 +166,50 @@ $notifications = $CI->Notifikasi_model->get_unread($CI->session->userdata('id_us
 
         <!-- Notifications Dropdown Menu -->
         <li class="nav-item dropdown">
-          <a class="nav-link" data-toggle="dropdown" href="#">
+          <a class="nav-link" data-toggle="dropdown" href="#" id="notif-bell-btn">
             <i class="far fa-bell"></i>
-            <span class="badge badge-warning navbar-badge" id="notif-count"><?php echo $unread_count; ?></span>
+            <span class="badge badge-warning navbar-badge" id="notif-count"
+                  style="<?php echo $unread_count == 0 ? 'display:none' : ''; ?>">
+              <?php echo $unread_count; ?>
+            </span>
           </a>
           <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <span class="dropdown-item dropdown-header"><?php echo $unread_count; ?> Notifikasi</span>
+            <span class="dropdown-item dropdown-header">
+              <span id="notif-header-count"><?php echo $unread_count; ?></span> Notifikasi Baru
+            </span>
             <div class="dropdown-divider"></div>
             <div class="notif-list" style="max-height: 300px; overflow-y: auto;">
               <?php if (empty($notifications)): ?>
-                <a href="#" class="dropdown-item text-center">Tidak ada notifikasi baru</a>
+                <div class="dropdown-item text-center text-muted">
+                  <i class="fas fa-bell-slash mr-1"></i> Tidak ada notifikasi baru
+                </div>
               <?php else: ?>
                 <?php foreach ($notifications as $n): ?>
-                  <a href="<?php echo base_url('notification/buka_notifikasi/' . $n->id); ?>" class="dropdown-item">
+                  <a href="<?php echo base_url('notification/buka_notifikasi/' . $n->id); ?>"
+                     class="dropdown-item <?php echo !$n->is_read ? 'notif-unread' : ''; ?>"
+                     style="<?php echo !$n->is_read ? 'background-color:#fffde7;' : ''; ?>">
                     <div class="media">
                       <div class="media-body">
                         <h3 class="dropdown-item-title">
-                          <?php if (isset($n->sender_name)): ?>
-                            <strong><?php echo $n->sender_name; ?></strong>
+                          <?php if (isset($n->sender_name) && $n->sender_name): ?>
+                            <strong><?php echo htmlspecialchars($n->sender_name); ?></strong>
                           <?php else: ?>
-                            <?php echo $n->judul; ?>
+                            <?php echo htmlspecialchars($n->judul); ?>
                           <?php endif; ?>
-                          <span class="float-right text-sm text-warning"><i class="fas fa-comment"></i></span>
+                          <span class="float-right text-sm text-warning">
+                            <i class="fas fa-<?php echo !$n->is_read ? 'star' : 'comment'; ?>"></i>
+                          </span>
                         </h3>
                         <p class="text-sm">
-                          <?php if (isset($n->isi_komentar)): ?>
-                            <?php echo (strlen($n->isi_komentar) > 50) ? substr($n->isi_komentar, 0, 47) . '...' : $n->isi_komentar; ?>
-                          <?php else: ?>
-                            <?php echo $n->pesan; ?>
-                          <?php endif; ?>
+                          <?php
+                          $txt = isset($n->isi_komentar) ? $n->isi_komentar : $n->pesan;
+                          echo htmlspecialchars(strlen($txt) > 55 ? substr($txt, 0, 52) . '...' : $txt);
+                          ?>
                         </p>
-                        <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i>
-                          <?php echo date('d M H:i', strtotime($n->created_at)); ?></p>
+                        <p class="text-sm text-muted">
+                          <i class="far fa-clock mr-1"></i>
+                          <?php echo date('d M, H:i', strtotime($n->created_at)); ?>
+                        </p>
                       </div>
                     </div>
                   </a>
@@ -206,10 +218,67 @@ $notifications = $CI->Notifikasi_model->get_unread($CI->session->userdata('id_us
               <?php endif; ?>
             </div>
             <div class="dropdown-divider"></div>
-            <a href="<?php echo base_url('notification'); ?>" class="dropdown-item dropdown-footer">Lihat Semua
-              Notifikasi</a>
+            <a href="#" class="dropdown-item dropdown-footer text-warning" id="notif-mark-all-btn">
+              <i class="fas fa-check-double mr-1"></i> Tandai Semua Terbaca
+            </a>
+            <a href="<?php echo base_url('notification'); ?>" class="dropdown-item dropdown-footer">
+              <i class="fas fa-list mr-1"></i> Lihat Semua Notifikasi
+            </a>
           </div>
         </li>
+
+        <script>
+        // ── Polling badge count setiap 30 detik ───────────────────────────────
+        setInterval(function () {
+            // Hanya polling jika dropdown TIDAK sedang terbuka
+            if (!document.querySelector('#notif-bell-btn').closest('.dropdown').classList.contains('show')) {
+                fetch('<?php echo base_url('notification/unreadCount'); ?>', {
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    var badge = document.getElementById('notif-count');
+                    var count = data.count || 0;
+                    if (badge) {
+                        badge.textContent = count;
+                        badge.style.display = count > 0 ? 'inline' : 'none';
+                    }
+                    var hdr = document.getElementById('notif-header-count');
+                    if (hdr) hdr.textContent = count;
+                })
+                .catch(function () {}); // diam jika gagal
+            }
+        }, 30000);
+
+        // ── Tandai semua terbaca via AJAX ─────────────────────────────────────
+        var markAllBtn = document.getElementById('notif-mark-all-btn');
+        if (markAllBtn) {
+            markAllBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                fetch('<?php echo base_url('notification/markAsRead'); ?>', {
+                    method: 'POST',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(function (res) { return res.json(); })
+                .then(function (data) {
+                    if (data.status === 'success') {
+                        // Reset badge
+                        var badge = document.getElementById('notif-count');
+                        if (badge) { badge.textContent = '0'; badge.style.display = 'none'; }
+                        var hdr = document.getElementById('notif-header-count');
+                        if (hdr) hdr.textContent = '0';
+                        // Hilangkan highlight baris belum baca
+                        document.querySelectorAll('.notif-unread').forEach(function (el) {
+                            el.classList.remove('notif-unread');
+                            el.style.backgroundColor = '';
+                        });
+                    }
+                })
+                .catch(function () {});
+            });
+        }
+        </script>
+
 
 
         <li class="nav-item dropdown">

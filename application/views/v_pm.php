@@ -251,41 +251,11 @@
                                                       </div>
                                                     </td>
                                                     <td class="text-center align-middle" style="width: 30px">
-                                                      <?php if (
-                                                        ($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
-                                                          $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && $subk['status_data'] == "0"
-                                                      ): ?>
-                                                        <div class="btn btn-primary btn-xs open-modal02" data-toggle="modal"
-                                                          data-id_pm0="<?php echo $subk['id_pm0']; ?>">
-                                                          <i class="fas fa-upload"></i>
-                                                        </div>
-                                                      <?php endif; ?>
-                                                      <?php if ($subk['link_bukti02'] != ""): ?>
-                                                        <button class="btn btn-secondary btn-xs view-files-btn-pm0"
-                                                          data-files="<?php echo $subk['link_bukti02']; ?>"
-                                                          data-id_pm0="<?php echo $subk['id_pm0']; ?>"><i
-                                                            class="fas fa-search"></i></button>
-                                                      <?php endif; ?>
+                                                      <!-- Tombol Upload Bukti Subkomponen dihilangkan secara logis -->
                                                     </td>
 
                                                     <td class="text-center align-middle" style="width: 30px">
-                                                      <?php if (
-                                                        ($this->session->userdata('id_role') == 4 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && ($this->session->userdata('id_unit') == $this->session->userdata('id_unit2') ||
-                                                          $this->session->userdata('id_unit') == $this->session->userdata('id_unit_es1')))) && $subk['status_data'] == "0"
-                                                      ): ?>
-                                                        <div <?php if ($subk['pm_modified_by'] != ""): ?>
-                                                            title="last modified by: <?php echo $subk['pm_modified_by']; ?>" <?php endif; ?> class="btn btn-info btn-xs open-modal0"
-                                                          data-id_pm0="<?php echo $subk['id_pm0']; ?>">
-                                                          <i class="fas fa-edit"></i>
-                                                        </div>
-                                                      <?php endif; ?>
-                                                      <?php if ($subk['status_data'] == "1" || (($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7)))) && $subk['status_data'] == "0")): ?>
-                                                        <div <?php if ($subk['pm_modified_by'] != ""): ?>
-                                                            title="last modified by: <?php echo $subk['pm_modified_by']; ?>" <?php endif; ?> class="btn btn-info btn-xs open-modal0"
-                                                          data-id_pm0="<?php echo $subk['id_pm0']; ?>">
-                                                          <i class="fas fa-search"></i>
-                                                        </div>
-                                                      <?php endif; ?>
+                                                      <!-- Tombol Aksi (Edit/Search) Subkomponen dihilangkan secara logis -->
                                                     </td>
 
 
@@ -360,7 +330,7 @@
                                                                        } elseif ($krit['jawaban1'] === "0" || $krit['jawaban1'] === 0) {
                                                                          echo "E";
                                                                        } else {
-                                                                         echo "kosong";
+                                                                         echo "-";
                                                                        } ?> </td>
                                                                   <td class="text-justify" style="width: 600px">
                                                                     <i class="expandable-table-caret"></i>
@@ -1457,11 +1427,11 @@
             range: [0, 100],  // Diperbarui untuk menerima nilai 0-100
             noLeadingZero: true
           },
+          link_bukti: {
+            required: true
+          },
           uraian_jawaban1: {
-            required: function () {
-              // Tetap wajib diisi jika jawaban dipilih (bukan kosong)
-              return $('#jawaban1').val() !== '';
-            }
+            required: true
           }
         },
         messages: {
@@ -1470,6 +1440,9 @@
             digits: "Jawaban hanya boleh berupa angka",
             range: "Nilai jawaban tidak valid",
             noLeadingZero: "Angka tidak boleh memiliki 0 di depannya."
+          },
+          link_bukti: {
+            required: "Bukti Dokumen wajib diisi"
           },
           uraian_jawaban1: {
             required: "Penjelasan Jawaban harus diisi"
@@ -1610,6 +1583,31 @@
 
 
 
-</body>
+  <script>
+    $(document).ready(function () {
+      // Fungsi untuk mengecek isian secara real-time pada Form Kriteria
+      function checkRequiredFieldsKriteria() {
+        let jwb = $('#jawaban1').val();
+        let link = $('#link_bukti').val() || "";
+        let penjelasan = $('#uraian_jawaban1').val() || "";
 
+        // Jika salah satu kolom wajib ini masih kosong, disable tombol
+        if (!jwb || link.trim() === "" || penjelasan.trim() === "") {
+          $('#submitkrit').prop('disabled', true);
+        } else {
+          $('#submitkrit').prop('disabled', false);
+        }
+      }
+
+      // Check setiap kali ada event input, keyup, atau change di field terkait
+      $('#jawaban1, #link_bukti, #uraian_jawaban1').on('input keyup change', checkRequiredFieldsKriteria);
+
+      // Panggil juga ketika modal Form Kriteria dibuka agar mengecek data eksisting
+      // Delay sedikit agar data AJAX selesai terisi di DOM
+      $('#EditData').on('shown.bs.modal', function () {
+        setTimeout(checkRequiredFieldsKriteria, 100); 
+      });
+    });
+  </script>
+</body>
 </html>

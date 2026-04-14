@@ -121,7 +121,7 @@
               <h3 class="card-title"><i class="fas fa-trash-restore mr-1"></i> Reset Data PM Khusus</h3>
             </div>
             <div class="card-body">
-              <form action="<?php echo base_url('dokumen/reset_data') ?>" method="post" onsubmit="return confirm('PERINGATAN! Anda yakin akan mereset form? Semua isian dan Laporan untuk Unit/Tahun terpilih akan DIBERSIHKAN PERMANEN.');">
+              <form id="formResetPM" action="<?php echo base_url('dokumen/reset_data') ?>" method="post">
                 <div class="form-group">
                   <label>Unit Kerja</label>
                   <select name="id_unit" class="form-control select2" style="width:100%" required>
@@ -137,10 +137,41 @@
                     value="<?php echo $this->session->userdata('tahun') ?>" required>
                 </div>
                 <div class="alert alert-warning p-2 text-sm mt-2 mb-3">
-                  Tindakan ini akan menghapus semua isian Unit ini sehingga lembar penilaiannya dikosongkan.
+                  Akan menghapus <b>ta_pm, ta_pm0, ta_dokumen</b> unit ini sehingga lembar PM dikosongkan.
                 </div>
-                <button type="submit" class="btn btn-danger btn-block">
-                  <i class="fas fa-exclamation-triangle mr-1"></i> Eksekusi Reset
+                <button type="button" id="btnResetPM" class="btn btn-danger btn-block">
+                  <i class="fas fa-exclamation-triangle mr-1"></i> Eksekusi Reset PM
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <!-- Form Reset Data EV -->
+          <div class="card card-danger card-outline">
+            <div class="card-header">
+              <h3 class="card-title"><i class="fas fa-trash-restore mr-1"></i> Reset Data EV Khusus</h3>
+            </div>
+            <div class="card-body">
+              <form id="formResetEV" action="<?php echo base_url('ev/reset_data_ev') ?>" method="post">
+                <div class="form-group">
+                  <label>Unit Kerja</label>
+                  <select name="id_unit" class="form-control select2" style="width:100%" required>
+                    <option value="">-- Pilih Unit Kerja --</option>
+                    <?php foreach ($unit_list as $u): ?>
+                      <option value="<?php echo $u['id_unit'] ?>"><?php echo htmlspecialchars($u['nm_unit']) ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label>Tahun Acuan</label>
+                  <input type="number" name="tahun" class="form-control"
+                    value="<?php echo $this->session->userdata('tahun') ?>" required>
+                </div>
+                <div class="alert alert-warning p-2 text-sm mt-2 mb-3">
+                  Akan menghapus <b>ta_ev, ta_ev0, ta_dok_ev</b> unit ini sehingga lembar EV dikosongkan.
+                </div>
+                <button type="button" id="btnResetEV" class="btn btn-danger btn-block">
+                  <i class="fas fa-exclamation-triangle mr-1"></i> Eksekusi Reset EV
                 </button>
               </form>
             </div>
@@ -405,6 +436,70 @@
           unitGroup.style.display = 'none';
           if (selectUnit) selectUnit.required = false;
         }
+      });
+    }
+
+    // === Tombol Reset PM — SweetAlert2 konfirmasi ===
+    var btnResetPM = document.getElementById('btnResetPM');
+    if (btnResetPM) {
+      btnResetPM.addEventListener('click', function () {
+        var form = document.getElementById('formResetPM');
+        var unit = form.querySelector('[name="id_unit"]');
+        var tahun = form.querySelector('[name="tahun"]');
+        if (!unit.value || !tahun.value) {
+          Swal.fire('Perhatian', 'Pilih Unit Kerja dan isi Tahun terlebih dahulu.', 'warning');
+          return;
+        }
+        var unitText = unit.options[unit.selectedIndex].text;
+        Swal.fire({
+          title: '⚠️ Reset Data PM?',
+          html: 'Anda akan mereset data <b>Penilaian Mandiri</b> untuk:<br><br>' +
+                '<b>Unit:</b> ' + unitText + '<br><b>Tahun:</b> ' + tahun.value +
+                '<br><br><span class="text-danger">Seluruh isian akan dihapus permanen dan tidak bisa dikembalikan!</span>',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#e3342f',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: '<i class="fas fa-trash"></i> Ya, Reset PM!',
+          cancelButtonText: 'Batal',
+          reverseButtons: true
+        }).then(function (result) {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
+      });
+    }
+
+    // === Tombol Reset EV — SweetAlert2 konfirmasi ===
+    var btnResetEV = document.getElementById('btnResetEV');
+    if (btnResetEV) {
+      btnResetEV.addEventListener('click', function () {
+        var form = document.getElementById('formResetEV');
+        var unit = form.querySelector('[name="id_unit"]');
+        var tahun = form.querySelector('[name="tahun"]');
+        if (!unit.value || !tahun.value) {
+          Swal.fire('Perhatian', 'Pilih Unit Kerja dan isi Tahun terlebih dahulu.', 'warning');
+          return;
+        }
+        var unitText = unit.options[unit.selectedIndex].text;
+        Swal.fire({
+          title: '⚠️ Reset Data EV?',
+          html: 'Anda akan mereset data <b>Evaluasi Inspektorat</b> untuk:<br><br>' +
+                '<b>Unit:</b> ' + unitText + '<br><b>Tahun:</b> ' + tahun.value +
+                '<br><br><span class="text-danger">Seluruh jawaban evaluator akan dihapus permanen dan tidak bisa dikembalikan!</span>',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#e3342f',
+          cancelButtonColor: '#6c757d',
+          confirmButtonText: '<i class="fas fa-trash"></i> Ya, Reset EV!',
+          cancelButtonText: 'Batal',
+          reverseButtons: true
+        }).then(function (result) {
+          if (result.isConfirmed) {
+            form.submit();
+          }
+        });
       });
     }
 
