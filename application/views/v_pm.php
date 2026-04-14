@@ -177,25 +177,6 @@
                                                     ?>
                                                     <td class="text-center align-middle" hidden><?php echo $subk['jawabanantara']; ?>
                                                     </td>
-                                                    <?php
-                                                    /**
-                                                     * [KOLOM: Nilai Akhir]
-                                                     * Sumber  : $subk['jawabanantara'] (saat ini — setelah perbaikan 2026-04-01)
-                                                     *
-                                                     * [CATATAN UNTUK PROGRAMMER — Fix #1 Pending]
-                                                     * Masalah : Kolom ini sebelumnya menggunakan $subk['jawaban0']
-                                                     *           (ta_pm0.jawaban0) yang merupakan nilai manual unit.
-                                                     *           Diubah sementara ke jawabanantara agar konsisten.
-                                                     *
-                                                     * Keputusan desain diperlukan:
-                                                     *   A) Kembalikan ke $subk['jawaban0'] jika "Nilai Akhir" dimaksudkan
-                                                     *      sebagai nilai konfirmasi manual yang bisa berbeda dari rata-rata.
-                                                     *   B) Hapus kolom ini jika dianggap duplikat dari "Jawaban Antara".
-                                                     *   C) Pertahankan jawabanantara dan hapus kolom "Jawaban Antara".
-                                                     *
-                                                     * Lihat juga: Fix #2 — sinkronisasi ta_pm0.jawaban0 dengan jawabanantara.
-                                                     */
-                                                    ?>
                                                     <td class="text-center align-middle">
                                                       <?php echo $subk['jawabanantara']; ?>
                                                     </td>

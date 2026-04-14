@@ -261,28 +261,6 @@
                                                       <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
                                                       <?php echo $subk['uraian_subkomponen']; ?>
                                                     </td>
-                                                    <?php
-                                                    /**
-                                                     * [KOLOM: Nilai Akhir Unit]
-                                                     * Sumber  : $subk['jawaban0'] → ta_pm0.jawaban0
-                                                     * Isi     : Nilai sub-komponen yang disimpan oleh unit secara manual.
-                                                     *
-                                                     * [CATATAN UNTUK PROGRAMMER — Fix #4 Pending]
-                                                     * Masalah : Nilai ini bisa stale (tidak sinkron) jika unit
-                                                     *           hanya mengisi indikator (jawaban1 di ta_pm) tanpa
-                                                     *           menyimpan ulang nilai sub-komponen nya.
-                                                     *
-                                                     * Solusi  : Tambahkan alias 'jawabanantara_unit' pada query
-                                                     *           get_datasub() di m_ev.php yang menghitung:
-                                                     *           AVG(ta_pm.jawaban1) — rata-rata jawaban UNIT per indikator.
-                                                     *           Lalu ganti $subk['jawaban0'] di bawah ini
-                                                     *           dengan $subk['jawabanantara_unit'].
-                                                     *
-                                                     * PERHATIAN: Jangan ganti dengan $subk['jawabanantara'] karena
-                                                     *            di konteks v_ev.php, jawabanantara = AVG(ta_ev.jawaban2)
-                                                     *            yaitu rata-rata jawaban EVALUATOR, bukan unit.
-                                                     */
-                                                    ?>
                                                     <td class="text-center align-middle">
                                                       <?php echo $subk['jawabanantara_unit']; ?>
                                                     </td>

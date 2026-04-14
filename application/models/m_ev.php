@@ -17,25 +17,25 @@ class M_ev extends CI_Model
 
 	public function get_konfirmasi($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_ev a left join ta_konfirmasi b on a.id_ev=b.id_ev where a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_ev a left join ta_konfirmasi b on a.id_ev=b.id_ev where a.tahun = ?  and a.id_unit = ? ", array($tahun, $id_unit));
 		return $query->result_array();
 	}
 
 	public function get_history_konfirmasi($tahun, $id_unit, $id_ev)
 	{
-		$query = $this->db->query("SELECT * from ta_konfirmasi where tahun = '$tahun'  and id_unit = '$id_unit' and id_ev = '$id_ev' ");
+		$query = $this->db->query("SELECT * from ta_konfirmasi where tahun = ?  and id_unit = ? and id_ev = ? ", array($tahun, $id_unit, $id_ev));
 		return $query->result_array();
 	}
 
 	public function get_konfirmasi0($tahun, $id_unit)
 	{
-		$query = $this->db->query("SELECT * from ta_ev0 a left join ta_konfirmasi b on a.id_ev0=b.id_ev0 where a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ta_ev0 a left join ta_konfirmasi b on a.id_ev0=b.id_ev0 where a.tahun = ?  and a.id_unit = ? ", array($tahun, $id_unit));
 		return $query->result_array();
 	}
 
 	public function get_history_konfirmasi0($tahun, $id_unit, $id_ev0)
 	{
-		$query = $this->db->query("SELECT * from ta_konfirmasi where tahun = '$tahun'  and id_unit = '$id_unit' and id_ev0 = '$id_ev0' ");
+		$query = $this->db->query("SELECT * from ta_konfirmasi where tahun = ?  and id_unit = ? and id_ev0 = ? ", array($tahun, $id_unit, $id_ev0));
 		return $query->result_array();
 	}
 
@@ -56,13 +56,13 @@ class M_ev extends CI_Model
 		$id_unit = intval($id_unit);
 		// Determine which table to join based on the year
 		$ref_aspek_table = ($tahun >= 2024) ? 'ref_aspek2' : 'ref_aspek';
-		$query = $this->db->query("SELECT * from ta_ev a  left join $ref_aspek_table b on a.id_aspek=b.id_aspek left join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen left join ta_ev0 d on a.id_ev0=d.id_ev0 left join ta_pm e on a.id_pm=e.id_pm left join ta_pm0 f on d.id_pm0=f.id_pm0 left join ref_komponen g on a.id_komponen=g.id_komponen where a.tahun = '$tahun'  and a.id_unit = '$id_unit' and a.id_ev = '$id_ev' ");
+		$query = $this->db->query("SELECT * from ta_ev a  left join $ref_aspek_table b on a.id_aspek=b.id_aspek left join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen left join ta_ev0 d on a.id_ev0=d.id_ev0 left join ta_pm e on a.id_pm=e.id_pm left join ta_pm0 f on d.id_pm0=f.id_pm0 left join ref_komponen g on a.id_komponen=g.id_komponen where a.tahun = ?  and a.id_unit = ? and a.id_ev = ? ", array($tahun, $id_unit, $id_ev));
 		return $query->result_array();
 	}
 
 	public function get_data30form($tahun, $id_unit, $id_ev0)
 	{
-		$query = $this->db->query("SELECT * from ta_ev0 a  left join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen left join ref_komponen b on a.id_komponen=b.id_komponen where a.tahun = '$tahun'  and a.id_unit = '$id_unit' and a.id_ev0 = '$id_ev0' ");
+		$query = $this->db->query("SELECT * from ta_ev0 a  left join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen left join ref_komponen b on a.id_komponen=b.id_komponen where a.tahun = ?  and a.id_unit = ? and a.id_ev0 = ? ", array($tahun, $id_unit, $id_ev0));
 		return $query->result_array();
 	}
 
@@ -90,6 +90,8 @@ class M_ev extends CI_Model
 
 	public function get_data300($tahun, $id_unit)
 	{
+		$tahun = intval($tahun);
+		$id_unit = intval($id_unit);
 		$query = $this->db->query("SELECT *, sum((CASE 
 			WHEN b.jawaban0ev='100' THEN ('1'*c.bobot2)
 			WHEN b.jawaban0ev='90' THEN ('0.9'*c.bobot2)
@@ -117,548 +119,13 @@ class M_ev extends CI_Model
 	}
 
 
-	public function get_datasub1ai($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 1 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
 
-
-
-	public function get_datasub1a($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 1 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-
-	public function get_datasub1bi($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 2 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub1b($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 2 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-
-	public function get_datasub1ci($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 3 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub1c($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 3 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-
-	public function get_datasub2ai($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 4 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub2a($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 4 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-
-	public function get_datasub2bi($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 5 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub2b($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 5 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-
-	public function get_datasub2ci($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 6 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub2c($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 6 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-
-	public function get_datasub3ai($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 7 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub3a($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 7 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-
-	public function get_datasub3bi($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 8 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub3b($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 8 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-
-	public function get_datasub3ci($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0  inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 9 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub3c($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 9 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-
-	public function get_datasub4ai($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 10 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub4a($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 10 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub4bi($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 11 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub4b($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 11 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub4ci($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT *,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
-			(CASE 
-			WHEN '100'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'BB'
-			WHEN '75'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='99' THEN 'B' 
-			WHEN '50'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='75' THEN 'CC'
-			WHEN '25'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='50' THEN 'C'  
-			WHEN '0'<((avg(c.bobot2*a.jawaban2)/c.bobot2)) && ((avg(c.bobot2*a.jawaban2)/c.bobot2)) <='25' THEN 'D'
-			WHEN '0'=((avg(c.bobot2*a.jawaban2)/c.bobot2)) THEN 'E'
-			ELSE ''
-			END) as jawabanantara, 
-			(CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END) as nilai,
-			((CASE 
-			WHEN d.jawaban0ev='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0ev='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0ev='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0ev='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0ev='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0ev='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0ev='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0ev='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END/c.bobot2)*100) as nilaipersen
-			from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 12 and a.tahun = '$tahun' and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
-
-	public function get_datasub4c($tahun, $id_unit)
-	{
-		$query = $this->db->query("SELECT * from ta_ev a  inner join ref_aspek b on a.id_aspek=b.id_aspek inner join ref_subkomponen c on a.id_subkomponen=c.id_subkomponen inner join ta_ev0 d on a.id_ev0=d.id_ev0 inner join ta_dokumen e on a.id_dok_ev=e.id_dokumen inner join ta_pm f on a.id_pm=f.id_pm inner join ta_pm0 g on d.id_pm0=g.id_pm0 inner join ta_dok_ev h on a.id_dok_ev=h.id_dok_ev where a.id_subkomponen = 12 and a.tahun = '$tahun'  and a.id_unit = '$id_unit' ");
-		return $query->result_array();
-	}
 
 
 	public function get_datasub($tahun, $id_unit)
 	{
+		$tahun = intval($tahun);
+		$id_unit = intval($id_unit);
 		$query = $this->db->query("SELECT *, a.modified_by AS ev_modified_by,  (avg(c.bobot2*a.jawaban2)/c.bobot2) as skorpersen, (avg(c.bobot2*a.jawaban2)/100) as skor,
 			(CASE 
 			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) = 100 THEN 'AA'
@@ -733,6 +200,8 @@ class M_ev extends CI_Model
 
 	public function get_datakom($tahun, $id_unit)
 	{
+		$tahun = intval($tahun);
+		$id_unit = intval($id_unit);
 		$query = $this->db->query("SELECT *, sum((CASE 
 			WHEN b.jawaban0ev='100' THEN ('1'*c.bobot2)
 			WHEN b.jawaban0ev='90' THEN ('0.9'*c.bobot2)
@@ -763,6 +232,8 @@ class M_ev extends CI_Model
 
 	public function get_datakom1($tahun, $id_unit)
 	{
+		$tahun = intval($tahun);
+		$id_unit = intval($id_unit);
 		$query = $this->db->query("SELECT *, sum((CASE 
 			WHEN b.jawaban0ev='100' THEN ('1'*c.bobot2)
 			WHEN b.jawaban0ev='90' THEN ('0.9'*c.bobot2)
@@ -792,6 +263,8 @@ class M_ev extends CI_Model
 
 	public function get_datakom2($tahun, $id_unit)
 	{
+		$tahun = intval($tahun);
+		$id_unit = intval($id_unit);
 		$query = $this->db->query("SELECT *, sum((CASE 
 			WHEN b.jawaban0ev='100' THEN ('1'*c.bobot2)
 			WHEN b.jawaban0ev='90' THEN ('0.9'*c.bobot2)
@@ -820,6 +293,8 @@ class M_ev extends CI_Model
 
 	public function get_datakom3($tahun, $id_unit)
 	{
+		$tahun = intval($tahun);
+		$id_unit = intval($id_unit);
 		$query = $this->db->query("SELECT *, sum((CASE 
 			WHEN b.jawaban0ev='100' THEN ('1'*c.bobot2)
 			WHEN b.jawaban0ev='90' THEN ('0.9'*c.bobot2)
@@ -849,6 +324,8 @@ class M_ev extends CI_Model
 
 	public function get_datakom4($tahun, $id_unit)
 	{
+		$tahun = intval($tahun);
+		$id_unit = intval($id_unit);
 		$query = $this->db->query("SELECT *, sum((CASE 
 			WHEN b.jawaban0ev='100' THEN ('1'*c.bobot2)
 			WHEN b.jawaban0ev='90' THEN ('0.9'*c.bobot2)
@@ -878,6 +355,8 @@ class M_ev extends CI_Model
 
 	public function get_datasumkom($tahun, $id_unit)
 	{
+		$tahun = intval($tahun);
+		$id_unit = intval($id_unit);
 		$query = $this->db->query("SELECT a.id_komponen, 100 as sumbobot, sum((CASE 
 			WHEN b.jawaban0ev='100' THEN ('1'*c.bobot2)
 			WHEN b.jawaban0ev='90' THEN ('0.9'*c.bobot2)
@@ -929,7 +408,7 @@ class M_ev extends CI_Model
 
 	public function get_data4($id_unit)
 	{
-		$query = $this->db->query("SELECT * from ref_unit where id_unit = '$id_unit' ");
+		$query = $this->db->query("SELECT * from ref_unit where id_unit = ? ", array($id_unit));
 		return $query->result_array();
 	}
 
