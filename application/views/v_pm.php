@@ -132,7 +132,8 @@
                                                 <th class="text-center align-middle" style="width: 50px">Bobot</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">
                                                   Keberadaan, Kualitas dan Pemanfaatan</th>
-                                                <th class="text-center align-middle" style="width: 50px" hidden>Jawaban Antara
+                                                <th class="text-center align-middle" style="width: 50px" hidden>Jawaban
+                                                  Antara
                                                 </th>
                                                 <th class="text-center align-middle" style="width: 50px">Nilai Unit</th>
                                                 <th class="text-center align-middle" style="width: 50px" colspan="2">Nilai
@@ -175,7 +176,8 @@
                                                      * Isi     : Rata-rata tertimbang jawaban UNIT per indikator (otomatis).
                                                      */
                                                     ?>
-                                                    <td class="text-center align-middle" hidden><?php echo $subk['jawabanantara']; ?>
+                                                    <td class="text-center align-middle" hidden>
+                                                      <?php echo $subk['jawabanantara']; ?>
                                                     </td>
                                                     <td class="text-center align-middle">
                                                       <?php echo $subk['jawabanantara']; ?>
@@ -605,10 +607,10 @@
               </div>
             </div>
             <div class="row">
-              <div class="form-group col-md-2">
+              <div class="form-group col-md-3">
                 <label>Jawaban Unit</label>
                 <select name="jawaban1" id="jawaban1" class="form-control" <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?> <?php endif; ?>>
-                  <option hidden value="">Pilih Jawaban 1</option>
+                  <option hidden value="">Pilih Jawaban</option>
                   <option value="100">AA</option>
                   <option value="90">A</option>
                   <option value="80">BB</option>
@@ -624,7 +626,7 @@
                 <input type="text" name="link_bukti" id="link_bukti" class="form-control"
                   placeholder="Jawaban Ya Wajib isi Link/Upload Bukti" <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?> readonly <?php endif; ?>>
               </div>
-              <div class="form-group col-md-5">
+              <div class="form-group col-md-4">
                 <label>Bukti Dokumen Tambahan (Link)</label>
                 <input type="text" name="link_bukti3" id="link_bukti3" class="form-control" <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?> readonly <?php endif; ?>>
               </div>
@@ -653,7 +655,8 @@
               <div class="form-group col-md-12">
                 <label>Penjelasan Jawaban</label>
                 <textarea type="text" rows="7" name="uraian_jawaban1" id="uraian_jawaban1"
-                  class="form-control text-justify" <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?> readonly <?php endif; ?>></textarea>
+                  class="form-control text-justify" placeholder="Penjelasan Jawaban wajib diisi untuk setiap kriteria"
+                  <?php if (($krit['status_data'] == "0" && ($this->session->userdata('id_role') == 2 || $this->session->userdata('id_role') == 3 || $this->session->userdata('id_role') == 6 || $this->session->userdata('id_role') == 7 || (($this->session->userdata('id_role') == 1 || $this->session->userdata('id_role') == 5 || $this->session->userdata('id_role') == 14) && $this->session->userdata('id_unit') != $this->session->userdata('id_unit2') && !in_array($this->session->userdata('id_unit'), array(1, 2, 3, 4, 5, 6, 7))))) || $krit['status_data'] == "1"): ?> readonly <?php endif; ?>></textarea>
               </div>
             </div>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -1586,9 +1589,10 @@
       // Panggil juga ketika modal Form Kriteria dibuka agar mengecek data eksisting
       // Delay sedikit agar data AJAX selesai terisi di DOM
       $('#EditData').on('shown.bs.modal', function () {
-        setTimeout(checkRequiredFieldsKriteria, 100); 
+        setTimeout(checkRequiredFieldsKriteria, 100);
       });
     });
   </script>
 </body>
+
 </html>

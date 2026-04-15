@@ -8,24 +8,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class MY_Controller extends CI_Controller
 {
     // Konstanta role baru (9-14)
-    const ROLE_ADMIN              = 9;
-    const ROLE_KETUA_TIM          = 10;
-    const ROLE_PENGENDALI_TEKNIS  = 11;
-    const ROLE_PENGENDALI_MUTU    = 12;
-    const ROLE_TIM_EVALUATOR      = 13;
-    const ROLE_UNIT_KERJA         = 14;
+    const ROLE_ADMIN = 9;
+    const ROLE_KETUA_TIM = 10;
+    const ROLE_PENGENDALI_TEKNIS = 11;
+    const ROLE_PENGENDALI_MUTU = 12;
+    const ROLE_TIM_EVALUATOR = 13;
+    const ROLE_UNIT_KERJA = 14;
 
     // Grup role untuk kemudahan cek
     const ROLES_SUPERVISOR = [10, 11, 12]; // Ketua Tim, P.Teknis, P.Mutu
-    const ROLES_EVALUATOR  = [13];
-    const ROLES_UK         = [14];
-    const ROLES_ADMIN      = [9];
+    const ROLES_EVALUATOR = [13];
+    const ROLES_UK = [14];
+    const ROLES_ADMIN = [9];
     // Semua role baru
-    const ROLES_ALL_NEW    = [9, 10, 11, 12, 13, 14];
+    const ROLES_ALL_NEW = [9, 10, 11, 12, 13, 14];
     // Role lama yang masih aktif
-    const ROLES_ALL_OLD    = [1, 2, 3, 4, 5, 6, 7];
+    const ROLES_ALL_OLD = [1, 2, 3, 4, 5, 6, 7];
     // Semua role gabungan
-    const ROLES_ALL        = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14];
+    const ROLES_ALL = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14];
 
     // ─── Permission Groups per Modul ────────────────────────────────────────
     // Memusatkan definisi akses sehingga perubahan role cukup di satu tempat.

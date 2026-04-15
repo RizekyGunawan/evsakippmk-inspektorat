@@ -25,9 +25,9 @@ class Ev extends MY_Controller
 		$data['user'] = $this->m_auth2->get_datauser();
 		$data['unit2'] = $this->m_home->get_data2();
 		$id_unit = $this->session->userdata('id_unit');
-		$tahun   = (int) $this->session->userdata('tahun');  // cast lebih awal
-		$id_ev   = $this->session->userdata('id_ev');
-		$id_ev0  = $this->session->userdata('id_ev0');
+		$tahun = (int) $this->session->userdata('tahun');  // cast lebih awal
+		$id_ev = $this->session->userdata('id_ev');
+		$id_ev0 = $this->session->userdata('id_ev0');
 
 		// Deklarasikan id_role dan id_user lebih awal
 		// agar tersedia saat filtering dan get_assigned_units()
@@ -648,13 +648,13 @@ class Ev extends MY_Controller
 	public function reset_data_ev()
 	{
 		$id_unit = $this->input->post('id_unit');
-		$tahun   = $this->input->post('tahun');
-		$role    = (int) $this->session->userdata('id_role');
+		$tahun = $this->input->post('tahun');
+		$role = (int) $this->session->userdata('id_role');
 
 		if ($role === 9 && !empty($id_unit) && !empty($tahun)) {
 			$this->load->model('m_ev');
-			$this->db->delete('ta_ev',     ['id_unit' => $id_unit, 'tahun' => $tahun]);
-			$this->db->delete('ta_ev0',    ['id_unit' => $id_unit, 'tahun' => $tahun]);
+			$this->db->delete('ta_ev', ['id_unit' => $id_unit, 'tahun' => $tahun]);
+			$this->db->delete('ta_ev0', ['id_unit' => $id_unit, 'tahun' => $tahun]);
 			$this->db->delete('ta_dok_ev', ['id_unit' => $id_unit, 'tahun' => $tahun]);
 
 			$this->session->set_flashdata('success', 'Data Evaluasi Inspektorat unit terpilih tahun ' . $tahun . ' berhasil direset secara bersih.');
