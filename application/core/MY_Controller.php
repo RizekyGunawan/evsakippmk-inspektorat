@@ -33,8 +33,9 @@ class MY_Controller extends CI_Controller
     // Siapa yang boleh MELIHAT halaman Evaluasi Inspektorat (/ev)
     const ROLES_CAN_VIEW_EV = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13, 14];
 
-    // Siapa yang boleh MENGEDIT data di /ev (Role 14 = hanya baca)
-    const ROLES_CAN_EDIT_EV = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 13];
+    // Siapa yang boleh MENGEDIT data di /ev
+    // Role 1 & 5 (Unit Kerja lama) dan 14 (Unit Kerja baru) hanya boleh MELIHAT dan KOMENTAR
+    const ROLES_CAN_EDIT_EV = [2, 3, 4, 6, 7, 10, 11, 12, 13];
 
     // Siapa yang boleh akses /rekomendasi
     const ROLES_CAN_REKOMENDASI = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12, 14];
