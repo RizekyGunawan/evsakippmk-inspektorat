@@ -108,7 +108,7 @@
                     <thead class="thead-dark">
                       <tr>
                         <th class="text-center align-middle" style="width: 10px">No</th>
-                        <th class="text-center align-middle" colspan="7">Unit</th>
+                        <th class="text-center align-middle" colspan="6">Unit</th>
                         <!-- <th class="text-center align-middle" colspan="2" style="width: 120px">Laporan SA Final <?php //echo $this->session->userdata('tahun'); ?></th> -->
                         <th class="text-center align-middle" style="width: 120px">Status SA</th>
                         <th class="text-center align-middle">Aksi</th>
@@ -121,7 +121,6 @@
                       foreach ($unit3 as $unt): ?>
                         <tr>
                           <td class="text-center"><?php echo $no++ ?> </td>
-                          <td class="text-center" style="width: 120px"><?php echo $unt['kd_unit']; ?></td>
                           <td style="width: 120px" colspan="6"><?php echo $unt['nm_unit']; ?></td>
 
                           <!-- <td class="text-center align-middle" style="width: 30px"> 

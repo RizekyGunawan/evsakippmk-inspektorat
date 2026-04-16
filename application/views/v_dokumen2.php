@@ -82,7 +82,6 @@
                     <thead class="thead-dark">
                       <tr>
                         <th class="text-center align-middle" style="width: 10px">No</th>
-                        <th class="text-center align-middle">Kode Unit</th>
                         <th class="text-center align-middle" colspan="6">Nama Unit</th>
                         <th class="text-center align-middle">Progres Kriteria</th>
                         <th class="text-center align-middle">Nilai SA</th>
@@ -98,9 +97,6 @@
                         <tr>
                           <td class="text-center">
                             <?php echo $no++ ?>
-                          </td>
-                          <td class="text-center" style="width: 120px">
-                            <?php echo $unt['kd_unit']; ?>
                           </td>
                           <td style="width: 120px" colspan="6">
                             <?php echo $unt['nm_unit']; ?>

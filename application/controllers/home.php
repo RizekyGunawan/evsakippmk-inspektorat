@@ -27,21 +27,13 @@ class Home extends CI_Controller {
 
 		
 
-		if ($this->session->userdata('id_role')==4)  {
-		$this->load->view('v_home');}
-		elseif ($this->session->userdata('id_role')==5)  {
-		$this->load->view('v_home');}
-		elseif ($this->session->userdata('id_role')==6)  {
-		$this->load->view('v_home');}
-		elseif ($this->session->userdata('id_role')==7)  {
-		$this->load->view('v_home');}
-		elseif ($this->session->userdata('id_role')==1)  {
-		$this->load->view('v_home');}
-		elseif ($this->session->userdata('id_role')==2)  {
-		$this->load->view('v_home');}
-		elseif ($this->session->userdata('id_role')==3)  {
-		$this->load->view('v_home');}else {
-		$this->load->view('404');}
+		// Role lama (1-7) dan role baru (9-14) semua diarahkan ke v_home
+		$valid_roles = [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14];
+		if (in_array($this->session->userdata('id_role'), $valid_roles)) {
+			$this->load->view('v_home');
+		} else {
+			$this->load->view('404');
+		}
 
 		$this->load->view('templates/sidebar');
 		$this->load->view('templates/footer', $data);
