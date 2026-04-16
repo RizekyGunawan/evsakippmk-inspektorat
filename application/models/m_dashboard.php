@@ -17,24 +17,27 @@ class M_dashboard extends CI_Model {
 	 return $this->db->get('ref_unit')->result_array(); 
 	}
 
+	// Unit yang dikecualikan dari chart: UK6 (id=7), UK8 (id=9), UK9/Simulasi (id=10)
+	const EXCLUDED_UNITS = '(7, 9, 10)';
+
 	public function get_status ($tahun)
 	{
 		$tahun = $this->db->escape($tahun);
-	 $query = $this->db->query("SELECT * from ta_dokumen where tahun = $tahun ");
+	 $query = $this->db->query("SELECT * from ta_dokumen where tahun = $tahun AND id_unit NOT IN ".self::EXCLUDED_UNITS);
 	 return $query->result_array();
 	}
 
 	public function get_statusev ($tahun)
 	{
 		$tahun = $this->db->escape($tahun);
-	 $query = $this->db->query("SELECT * from ta_dok_ev where tahun = $tahun ");
+	 $query = $this->db->query("SELECT * from ta_dok_ev where tahun = $tahun AND id_unit NOT IN ".self::EXCLUDED_UNITS);
 	 return $query->result_array();
 	}
 
 	public function get_blminputev ($tahun)
 	{
 		$tahun = $this->db->escape($tahun);
-	 $query = $this->db->query("SELECT * FROM ta_ev0 where tahun = $tahun GROUP BY id_unit ");
+	 $query = $this->db->query("SELECT * FROM ta_ev0 where tahun = $tahun AND id_unit NOT IN ".self::EXCLUDED_UNITS." GROUP BY id_unit ");
 	 return $query->result_array();
 	}
 
@@ -155,7 +158,7 @@ class M_dashboard extends CI_Model {
 
 	public function get_total_unit ()
 	{
-	 $query = $this->db->query("SELECT COUNT(*) as total FROM ref_unit");
+	 $query = $this->db->query("SELECT COUNT(*) as total FROM ref_unit WHERE id_unit NOT IN ".self::EXCLUDED_UNITS);
 	 $result = $query->row_array();
 	 return (int) $result['total'];
 	}
