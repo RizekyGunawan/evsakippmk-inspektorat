@@ -293,21 +293,6 @@
                                                       ?>
                                                     </td>
                                                     <td class="text-center align-middle" style="width: 30px">
-                                                      <?php if ($subk['status_data'] == "1" && $subk['perbaikan0'] == "1"): ?>
-                                                        <div class="btn btn-xs open-modal02"
-                                                          data-id_ev0="<?php echo $subk['id_ev0']; ?>"
-                                                          onclick="setSessionIdEv0('<?php echo $subk['id_ev0']; ?>')"><i
-                                                            class="fas fa-comments text-danger"></i>
-                                                          <?php foreach ($konfirmasi0notif as $k0n): ?>
-                                                            <?php if ($is_evaluator && $k0n['id_ev0'] == $subk['id_ev0'] && in_array($k0n['id_role'], $unit_roles)): ?>
-                                                              <span class="badge badge-danger blinking">!</span>
-                                                            <?php endif; ?>
-                                                            <?php if ($is_unit && $k0n['id_ev0'] == $subk['id_ev0'] && in_array($k0n['id_role'], $evaluator_roles)): ?>
-                                                              <span class="badge badge-danger blinking">!</span>
-                                                            <?php endif; ?>
-                                                          <?php endforeach; ?>
-                                                        </div>
-                                                      <?php endif; ?>
                                                     </td>
 
 
@@ -522,21 +507,6 @@
                                                                     }
                                                                     ?>
                                                                   <td class="text-center align-middle" style="width: 30px">
-                                                                    <?php if ($krit['status_data'] == "1" && $krit['perbaikan'] == "1"): ?>
-                                                                      <div class="btn btn-xs open-modal2"
-                                                                        data-id_ev="<?php echo $krit['id_ev']; ?>"
-                                                                        onclick="setSessionIdEv('<?php echo $krit['id_ev']; ?>')"><i
-                                                                          class="fas fa-comments text-danger"></i>
-                                                                        <?php foreach ($konfirmasinotif as $kn): ?>
-                                                                          <?php if ($is_evaluator && $kn['id_ev'] == $krit['id_ev'] && in_array($kn['id_role'], $unit_roles)): ?>
-                                                                            <span class="badge badge-danger blinking">!</span>
-                                                                          <?php endif; ?>
-                                                                          <?php if ($is_unit && $kn['id_ev'] == $krit['id_ev'] && in_array($kn['id_role'], $evaluator_roles)): ?>
-                                                                            <span class="badge badge-danger blinking">!</span>
-                                                                          <?php endif; ?>
-                                                                        <?php endforeach; ?>
-                                                                      </div>
-                                                                    <?php endif; ?>
                                                                   </td>
                                                                   <td class="text-center align-middle" style="width: 30px">
                                                                     <?php if ($can_edit_ev && $krit['status_data1'] == "0"): ?>
@@ -2193,6 +2163,8 @@
             <input type="hidden" name="section" id="section_name">
             <input type="hidden" name="label_lokasi" id="label_lokasi_val">
             <input type="hidden" name="parent_id" id="parent_id_val">
+            <input type="hidden" name="id_unit_lke" id="id_unit_lke_val"
+              value="<?php echo isset($id_unit) ? $id_unit : $this->session->userdata('id_unit'); ?>">
 
             <div class="form-group">
               <label for="isi_komentar">Tulis Komentar:</label>
@@ -2266,14 +2238,49 @@
         $('#modalKomentar').modal('show');
       });
 
+      // ============================================================
+      // AUTO-OPEN MODAL DARI NOTIFIKASI
+      // Jika halaman dibuka dari klik notifikasi, baca URL params
+      // dan otomatis buka modal komentar pada kriteria yang tepat.
+      // ============================================================
+      (function autoOpenFromNotifikasi() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const indikatorId = urlParams.get('indikator');
+        const subkomponenId = urlParams.get('subkomponen');
+        const commentId = urlParams.get('comment_id');
+        const kode = urlParams.get('kode');
+
+        // Hanya jalankan jika ada parameter dari notifikasi
+        if (!indikatorId && !subkomponenId) return;
+
+        // Isi form hidden untuk keperluan kirim komentar balik
+        $('#subkom_id').val(subkomponenId || '');
+        $('#ind_id').val(indikatorId || '');
+        $('#subkom_kode').val(kode || '');
+        $('#section_name').val(indikatorId && indikatorId != '0' ? 'Indikator Kinerja' : 'Subkomponen');
+
+        // Tampilkan breadcrumb sementara sambil data dimuat
+        let breadcrumbText = 'Evaluasi Inspektorat > Pelaporan Kinerja';
+        if (kode) breadcrumbText += ' > ' + kode;
+        $('#breadcrumb-komentar').html('<strong>Komentar pada:</strong> ' + breadcrumbText);
+        $('#revision-notice-box').hide();
+
+        // Muat komentar dan buka modal
+        loadKomentar(indikatorId, subkomponenId);
+        $('#modalKomentar').modal('show');
+      })();
+
+
       // Fungsi untuk memuat history komentar
       function loadKomentar(indikator_id, subkomponen_id = null) {
+        let lke_unit_id = $('#id_unit_lke_val').val();
         $.ajax({
           url: '<?php echo base_url("ev/get_komentar"); ?>',
           type: 'GET',
           data: {
             indikator_id: indikator_id,
-            subkomponen_id: subkomponen_id
+            subkomponen_id: subkomponen_id,
+            id_unit_lke: lke_unit_id
           },
           dataType: 'json',
           success: function (data) {
@@ -2343,6 +2350,10 @@
                 }, 300);
               }
             }
+          },
+          error: function (xhr, status, error) {
+            let html = '<p class="text-center text-danger mt-3"><i class="fas fa-exclamation-triangle"></i> Gagal terhubung ke database peladen.<br><small>Mohon muat ulang halaman atau periksa koneksi intranet/server Anda.</small></p>';
+            $('#komentar-history').html(html);
           }
         });
       }

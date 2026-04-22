@@ -19,7 +19,7 @@
                <?php
                 $id_role     = $this->session->userdata('id_role');
                 $id_unit_es1 = $this->session->userdata('id_unit_es1');
-                $allowed_roles = [2, 3, 4, 6, 7];
+                $allowed_roles = [2, 3, 4, 6, 7, 10, 11, 12];
                 $allowed_units = [1, 2, 3, 4, 5, 6, 7];
 
                 // ——— Tim Evaluator (role 13): tampilkan unit yang ditugaskan ———

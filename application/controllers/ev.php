@@ -858,6 +858,8 @@ class Ev extends MY_Controller
 			'pengirim_role' => $pengirim_role,
 			'evaluator_id' => $this->session->userdata('id_user'),
 			'target_user_id' => $this->input->post('target_user'),
+			'id_unit' => $this->input->post('id_unit_lke') ? $this->input->post('id_unit_lke') : $this->session->userdata('id_unit'),
+			'tahun' => $this->session->userdata('tahun'),
 			'menu' => 'Evaluasi Inspektorat',
 			'sub_menu' => 'Pelaporan Kinerja',
 			'komponen_id' => $this->input->post('komponen'),
@@ -956,7 +958,8 @@ class Ev extends MY_Controller
 	{
 		$indikator_id = $this->input->get('indikator_id');
 		$subkomponen_id = $this->input->get('subkomponen_id');
-		$komentar = $this->Komentar_model->get_thread($indikator_id, $subkomponen_id);
+		$id_unit_lke = $this->input->get('id_unit_lke'); // Tangkap parameter dari LKE yang sedang dilihat
+		$komentar = $this->Komentar_model->get_thread($indikator_id, $subkomponen_id, $id_unit_lke);
 		echo json_encode($komentar);
 	}
 

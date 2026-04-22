@@ -1,8 +1,6 @@
 <?php
-$f = 'c:\laragon\www\evsakippmk-inspektorat\application\models\m_pm.php';
-$c = file_get_contents($f);
-$count = substr_count($c, 'inner join ta_dokumen');
-echo "Found: " . $count . "\n";
-$c = str_replace('inner join ta_dokumen', 'left join ta_dokumen', $c);
-file_put_contents($f, $c);
-echo "Replaced inner join with left join.";
+$db = new mysqli('192.168.10.7', 'evsakippmk', 'Kemenkopmk03', 'evsakippmk');
+$res = $db->query('SELECT id, id_unit, target_user_id, evaluator_id, isi_komentar, indikator_id, subkomponen_id FROM komentar_evaluasi ORDER BY id DESC LIMIT 5');
+while($row = $res->fetch_assoc()) {
+    print_r($row);
+}
