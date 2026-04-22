@@ -529,6 +529,7 @@
                                                                       data-subkomponen-kode="<?php echo $subk['kd_subkomponen']; ?>"
                                                                       data-subkomponen-name="<?php echo htmlspecialchars($subk['uraian_subkomponen'], ENT_QUOTES); ?>"
                                                                       data-indikator="<?php echo $krit['id_aspek']; ?>"
+                                                                      data-indikator-kode="<?php echo $krit['kd_aspek']; ?>"
                                                                       data-indikator-name="<?php echo htmlspecialchars($krit['uraian_aspek'], ENT_QUOTES); ?>"
                                                                       data-section="Indikator Kinerja" title="Komentar">
                                                                       <i class="fas fa-comment-dots"></i>
@@ -2178,16 +2179,46 @@
   </div>
 
   <script>
+    function formatBreadcrumbLokasi(label) {
+      if (!label) return 'N/A';
+      const parts = label.split(' > ');
+      if (parts.length >= 4) {
+        let html = `<div class="mb-2 text-muted" style="font-size: 0.9rem;">${parts[0]} <i class="fas fa-angle-right mx-1"></i> ${parts[1]}</div>`;
+        html += `<div class="p-3 mb-3" style="border-left: 4px solid #17a2b8; background-color: #f8f9fa; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">`;
+        html += `<table style="width: 100%; color: #495057; font-size: 0.95rem;">`;
+        html += `<tr><td style="width: 120px; vertical-align: top; padding-bottom: 8px;"><strong class="text-info">Komponen</strong></td><td style="width: 15px; vertical-align: top;">:</td><td style="vertical-align: top; padding-bottom: 8px;">${parts[2]}</td></tr>`;
+        
+        // Helper to extract [code] and text
+        const formatTextWithCode = (text) => {
+            const match = text.match(/^\[(.*?)\]\s*(.+)$/);
+            if (match) {
+                return `<span class="badge badge-info mr-1" style="font-size: 0.85rem;">${match[1]}</span> ${match[2]}`;
+            }
+            return text;
+        };
+        
+        html += `<tr><td style="vertical-align: top; padding-bottom: 8px;"><strong class="text-info">Subkomponen</strong></td><td style="vertical-align: top;">:</td><td style="vertical-align: top; padding-bottom: 8px;">${formatTextWithCode(parts[3])}</td></tr>`;
+        
+        if (parts[4]) {
+          html += `<tr><td style="vertical-align: top;"><strong class="text-info">Kriteria</strong></td><td style="vertical-align: top;">:</td><td style="vertical-align: top;">${formatTextWithCode(parts[4])}</td></tr>`;
+        }
+        html += `</table></div>`;
+        return html;
+      }
+      return label;
+    }
+
     $(document).ready(function () {
       // Saat tombol komentar diklik
       $('.btn-komentar').on('click', function () {
         const komponen = $(this).data('komponen');
         const subkomponen = $(this).data('subkomponen');
-        const subkomKode = $(this).data('subkomponen-kode');
+        const subkomKode = $(this).data('subkomponen-kode') || '';
         const indikator = $(this).data('indikator');
         const section = $(this).data('section');
         const komName = $(this).data('komponen-name');
         const subkomName = $(this).data('subkomponen-name');
+        const indKode = $(this).data('indikator-kode') || '';
         const indName = $(this).data('indikator-name') || '';
 
         $('#kom_id').val(komponen);
@@ -2196,12 +2227,12 @@
         $('#ind_id').val(indikator);
         $('#section_name').val(section);
 
-        let breadcrumb = `Evaluasi Inspektorat > Pelaporan Kinerja > ${komName} > ${subkomName}`;
-        if (indName) breadcrumb += ` > ${indName}`;
+        let breadcrumb = `Evaluasi Inspektorat > Pelaporan Kinerja > ${komName} > [${subkomKode}] ${subkomName}`;
+        if (indName) breadcrumb += ` > [${indKode}] ${indName}`;
 
         $('#label_lokasi_val').val(breadcrumb);
         $('#parent_id_val').val(''); // Reset parent_id for new threads
-        $('#breadcrumb-komentar').html(`<strong>Komentar pada:</strong> ${breadcrumb}`);
+        $('#breadcrumb-komentar').html(`<div class="mb-2"><strong style="font-size: 1.1rem;">Komentar pada:</strong></div>` + formatBreadcrumbLokasi(breadcrumb));
         $('#revision-notice-box').hide();
 
         const currentUserRole = '<?php echo $this->session->userdata("id_role"); ?>';
@@ -2261,8 +2292,8 @@
 
         // Tampilkan breadcrumb sementara sambil data dimuat
         let breadcrumbText = 'Evaluasi Inspektorat > Pelaporan Kinerja';
-        if (kode) breadcrumbText += ' > ' + kode;
-        $('#breadcrumb-komentar').html('<strong>Komentar pada:</strong> ' + breadcrumbText);
+        if (kode) breadcrumbText += ' > Memuat Subkomponen ' + kode + '...';
+        $('#breadcrumb-komentar').html(`<div class="mb-2"><strong style="font-size: 1.1rem;">Komentar pada:</strong></div><div class="text-muted"><i class="fas fa-spinner fa-spin mr-1"></i> ${breadcrumbText}</div>`);
         $('#revision-notice-box').hide();
 
         // Muat komentar dan buka modal
@@ -2310,7 +2341,7 @@
                 const isTargeted = targetKomentarId == kom.id;
 
                 if (isTargeted) {
-                  $('#breadcrumb-komentar').html(`<strong>Komentar pada:</strong> ${kom.label_lokasi || 'N/A'}`);
+                  $('#breadcrumb-komentar').html(`<div class="mb-2"><strong style="font-size: 1.1rem;">Komentar pada:</strong></div>` + formatBreadcrumbLokasi(kom.label_lokasi));
                   $('#revision-notice-box').show();
                 }
 
@@ -2404,7 +2435,16 @@
 
         if (targetRow && targetRow.length) {
           // 1. Auto expand parents
-          const parentKomponenId = targetRow.data('komponen') || targetRow.closest('tr').prevAll('tr[id^="subkomponen-"]').first().data('komponen');
+          let parentKomponenId = targetRow.data('komponen');
+          let parentSubkomponenElementId = targetRow.data('subkomponen');
+
+          if (focusIndikator && focusIndikator !== '0' && parentSubkomponenElementId) {
+            const parentSubkomponen = $(`tr[elementId="${parentSubkomponenElementId}"]`);
+            parentKomponenId = parentSubkomponen.data('komponen');
+          } else if (!parentKomponenId) {
+            parentKomponenId = targetRow.closest('tr').prevAll('tr[id^="subkomponen-"]').first().data('komponen');
+          }
+
           if (parentKomponenId) {
             const parentKomponen = $(`tr[elementId="${parentKomponenId}"]`);
             if (parentKomponen.attr('aria-expanded') === 'false') {
@@ -2413,7 +2453,6 @@
           }
 
           if (focusIndikator && focusIndikator !== '0') {
-            const parentSubkomponenElementId = targetRow.data('subkomponen');
             const parentSubkomponen = $(`tr[elementId="${parentSubkomponenElementId}"]`);
             if (parentSubkomponen.length && parentSubkomponen.attr('aria-expanded') === 'false') {
               parentSubkomponen.trigger('click');
@@ -2427,7 +2466,12 @@
               block: 'center'
             });
 
-            targetRow.addClass('blink-soft');
+            // Make target row stand out
+            targetRow.css('background-color', '#fff3cd');
+            setTimeout(() => {
+              targetRow.css('transition', 'background-color 2s');
+              targetRow.css('background-color', '');
+            }, 3000);
 
             // 3. Automatically open comment modal
             if (targetKomentarId || focusIndikator || focusSub) {

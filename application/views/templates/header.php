@@ -180,8 +180,9 @@ $notifications = $CI->Notifikasi_model->get_unread($CI->session->userdata('id_us
             <div class="dropdown-divider"></div>
             <div class="notif-list" style="max-height: 300px; overflow-y: auto;">
               <?php if (empty($notifications)): ?>
-                <div class="dropdown-item text-center text-muted">
-                  <i class="fas fa-bell-slash mr-1"></i> Tidak ada notifikasi baru
+                <div class="p-4 text-center text-muted">
+                  <i class="fas fa-bell-slash fa-2x mb-2" style="opacity: 0.5;"></i><br>
+                  Tidak ada notifikasi baru
                 </div>
               <?php else: ?>
                 <?php foreach ($notifications as $n): ?>
@@ -218,11 +219,11 @@ $notifications = $CI->Notifikasi_model->get_unread($CI->session->userdata('id_us
               <?php endif; ?>
             </div>
             <div class="dropdown-divider"></div>
-            <a href="#" class="dropdown-item dropdown-footer text-warning" id="notif-mark-all-btn">
-              <i class="fas fa-check-double mr-1"></i> Tandai Semua Terbaca
+            <a href="#" class="dropdown-item text-warning py-2" id="notif-mark-all-btn">
+              <i class="fas fa-check-double fa-fw mr-2"></i> Tandai Semua Terbaca
             </a>
-            <a href="<?php echo base_url('notification'); ?>" class="dropdown-item dropdown-footer">
-              <i class="fas fa-list mr-1"></i> Lihat Semua Notifikasi
+            <a href="<?php echo base_url('notification'); ?>" class="dropdown-item py-2">
+              <i class="fas fa-list fa-fw mr-2"></i> Lihat Semua Notifikasi
             </a>
           </div>
         </li>

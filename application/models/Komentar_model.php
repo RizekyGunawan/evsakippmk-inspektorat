@@ -17,10 +17,10 @@ class Komentar_model extends CI_Model
         $tahun = $this->session->userdata('tahun');
 
         // 2. Modifikasi SELECT untuk meracik nama user dengan nama unitnya (khusus untuk role Unit)
-        $this->db->select('komentar_evaluasi.*, IF(ta_user.id_role IN (1,5,14), CONCAT(ta_user.nm_user, " - ", COALESCE(ta_unit.nm_unit, "Unit Kerja")), ta_user.nm_user) as sender_name', FALSE)
+        $this->db->select('komentar_evaluasi.*, IF(ta_user.id_role IN (1,5,14), CONCAT(ta_user.nm_user, " - ", COALESCE(ref_unit.nm_unit, "Unit Kerja")), ta_user.nm_user) as sender_name', FALSE)
             ->from('komentar_evaluasi')
             ->join('ta_user', 'komentar_evaluasi.evaluator_id = ta_user.id_user', 'left')
-            ->join('ta_unit', 'ta_user.id_unit = ta_unit.id_unit', 'left');
+            ->join('ref_unit', 'ta_user.id_unit = ref_unit.id_unit', 'left');
 
         if ($indikator_id && $indikator_id != '0') {
             $this->db->where('komentar_evaluasi.indikator_id', $indikator_id);

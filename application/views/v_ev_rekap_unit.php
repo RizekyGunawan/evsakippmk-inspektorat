@@ -201,6 +201,85 @@
                                         $structure[4]['scores'][$unit['id_unit']] = $unit['komp4'];
                                 }
                             }
+
+                            // AUTO CALCULATE LOGIC (Opsi 2: Sinkronisasi dengan Formula LKE Excel)
+                            // Jika nilai subkomponen 0 (Evaluator belum menyimpan nilai manual), sistem akan otomatis menghitung dari kriteria.
+                            foreach ($structure as $kid => &$comp) {
+                                // Reset nilai komponen, karena akan diakumulasi ulang dari nilai subkomponen terbaru
+                                $comp['scores'] = [];
+                                foreach ($units as $uid => $nm) {
+                                    $comp['scores'][$uid] = 0;
+                                }
+
+                                foreach ($comp['subs'] as $sid => &$sub) {
+                                    $bobot_sub = isset($sub['bobot']) ? floatval($sub['bobot']) : 0;
+                                    foreach ($units as $uid => $nm) {
+                                        $current_score = isset($sub['scores'][$uid]) ? floatval($sub['scores'][$uid]) : 0;
+                                        
+                                        // Auto-calculate jika score masih 0 dan kriteria tersedia
+                                        if ($current_score == 0 && isset($sub['aspeks']) && count($sub['aspeks']) > 0) {
+                                            $sum_kriteria = 0;
+                                            $count_kriteria = 0;
+                                            
+                                            foreach ($sub['aspeks'] as $asp) {
+                                                // Pastikan jawaban2 sudah diisi Evaluator
+                                                if (isset($asp['answers'][$uid]) && $asp['answers'][$uid] !== '') {
+                                                    $val = floatval($asp['answers'][$uid]);
+                                                    if ($val >= 0) {
+                                                        $sum_kriteria += $val;
+                                                        $count_kriteria++;
+                                                    }
+                                                }
+                                            }
+                                            
+                                            // Jika minimal ada 1 kriteria yang diisi, lakukan perhitungan
+                                            if ($count_kriteria > 0) {
+                                                $avg = $sum_kriteria / $count_kriteria;
+                                                $persentase = 0;
+                                                
+                                                // Pemetaan Rata-rata Kriteria -> Persentase Predikat SAKIP
+                                                if ($avg == 100) $persentase = 1.0;
+                                                elseif ($avg >= 90) $persentase = 0.9;
+                                                elseif ($avg >= 80) $persentase = 0.8;
+                                                elseif ($avg >= 70) $persentase = 0.7;
+                                                elseif ($avg >= 60) $persentase = 0.6;
+                                                elseif ($avg >= 50) $persentase = 0.5;
+                                                elseif ($avg >= 30) $persentase = 0.3;
+                                                else $persentase = 0;
+                                                
+                                                // Timpa nilai 0 dengan nilai terhitung otomatis
+                                                $sub['scores'][$uid] = $persentase * $bobot_sub;
+                                            }
+                                        }
+                                        
+                                        // Akumulasikan nilai Subkomponen (baik manual maupun otomatis) ke Komponen atasnya
+                                        $comp['scores'][$uid] += isset($sub['scores'][$uid]) ? $sub['scores'][$uid] : 0;
+                                    }
+                                }
+                            }
+                            unset($comp); // Break reference
+                            unset($sub);  // Break reference
+
+                            // Setelah seluruh komponen selesai, hitung ulang Total Unit & Predikat Akhir
+                            foreach ($units as $uid => $nm) {
+                                $total_unit = 0;
+                                foreach ($structure as $kid => $comp) {
+                                    $total_unit += isset($comp['scores'][$uid]) ? $comp['scores'][$uid] : 0;
+                                }
+                                $unit_totals[$uid] = $total_unit;
+                                
+                                // Kalkulasi Ulang Predikat SAKIP
+                                $predikat = 'E';
+                                if ($total_unit > 90) $predikat = "AA";
+                                elseif ($total_unit > 80) $predikat = "A";
+                                elseif ($total_unit > 70) $predikat = "BB";
+                                elseif ($total_unit > 60) $predikat = "B";
+                                elseif ($total_unit > 50) $predikat = "CC";
+                                elseif ($total_unit > 30) $predikat = "C";
+                                elseif ($total_unit > 0) $predikat = "D";
+                                
+                                $unit_predicates[$uid] = $predikat;
+                            }
                             ?>
 
                             <!-- Added .table-responsive for scroll safety on very small screens -->

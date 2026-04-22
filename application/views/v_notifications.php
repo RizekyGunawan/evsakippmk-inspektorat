@@ -1,5 +1,38 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
+
+if (!function_exists('format_notif_pesan')) {
+    function format_notif_pesan($pesan) {
+        if (strpos($pesan, 'Komentar pada: ') === 0) {
+            $breadcrumb = substr($pesan, 15);
+            $parts = explode(' > ', $breadcrumb);
+            if (count($parts) >= 4) {
+                $html = '<div class="mb-2 text-muted" style="font-size: 0.85rem;">' . htmlspecialchars($parts[0]) . ' <i class="fas fa-angle-right mx-1"></i> ' . htmlspecialchars($parts[1]) . '</div>';
+                $html .= '<div class="p-2 mb-1" style="border-left: 3px solid #17a2b8; background-color: #f8f9fa; border-radius: 4px; font-size: 0.9rem;">';
+                $html .= '<table style="width: 100%; color: #495057;">';
+                $html .= '<tr><td style="width: 95px; vertical-align: top; padding-bottom: 4px;"><strong class="text-info">Komponen</strong></td><td style="width: 10px; vertical-align: top;">:</td><td style="vertical-align: top; padding-bottom: 4px;">' . htmlspecialchars($parts[2]) . '</td></tr>';
+                
+                $subkomText = htmlspecialchars($parts[3]);
+                if (preg_match('/^\[(.*?)\]\s*(.+)$/', $parts[3], $matches)) {
+                    $subkomText = '<span class="badge badge-info mr-1" style="font-size: 0.75rem;">' . htmlspecialchars($matches[1]) . '</span> ' . htmlspecialchars($matches[2]);
+                }
+                $html .= '<tr><td style="vertical-align: top; padding-bottom: 4px;"><strong class="text-info">Subkomponen</strong></td><td style="vertical-align: top;">:</td><td style="vertical-align: top; padding-bottom: 4px;">' . $subkomText . '</td></tr>';
+                
+                if (isset($parts[4])) {
+                    $indText = htmlspecialchars($parts[4]);
+                    if (preg_match('/^\[(.*?)\]\s*(.+)$/', $parts[4], $matches)) {
+                        $indText = '<span class="badge badge-info mr-1" style="font-size: 0.75rem;">' . htmlspecialchars($matches[1]) . '</span> ' . htmlspecialchars($matches[2]);
+                    }
+                    $html .= '<tr><td style="vertical-align: top;"><strong class="text-info">Kriteria</strong></td><td style="vertical-align: top;">:</td><td style="vertical-align: top;">' . $indText . '</td></tr>';
+                }
+                
+                $html .= '</table></div>';
+                return $html;
+            }
+        }
+        return htmlspecialchars($pesan);
+    }
+}
 ?>
 
 <div class="content-wrapper">
@@ -78,13 +111,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <?php echo htmlspecialchars($notif->pesan); ?>
+                                            <?php echo format_notif_pesan($notif->pesan); ?>
                                             <?php if (!empty($notif->sender_name)): ?>
-                                                <br />
-                                                <small class="text-muted">
-                                                    <i class="fas fa-user mr-1"></i>
-                                                    <?php echo htmlspecialchars($notif->sender_name); ?>
-                                                </small>
+                                                <div class="mt-2">
+                                                    <small class="text-muted">
+                                                        <i class="fas fa-user mr-1"></i>
+                                                        Pengirim: <strong><?php echo htmlspecialchars($notif->sender_name); ?></strong>
+                                                    </small>
+                                                </div>
                                             <?php endif; ?>
                                         </td>
                                         <td>
