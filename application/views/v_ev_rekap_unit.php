@@ -177,7 +177,10 @@
                                             'scores' => []
                                         ];
                                     }
-                                    $structure[$kid]['subs'][$sid]['scores'][$uid] = $row['nilai_subkomp'];
+                                    // Cegah overwrite dari duplicate rows yang bernilai kosong/0 jika nilai sebelumnya sudah terisi (valid)
+                                    if (!isset($structure[$kid]['subs'][$sid]['scores'][$uid]) || (isset($row['nilai_subkomp']) && $row['nilai_subkomp'] !== '' && $row['nilai_subkomp'] !== null && floatval($row['nilai_subkomp']) > 0)) {
+                                        $structure[$kid]['subs'][$sid]['scores'][$uid] = $row['nilai_subkomp'];
+                                    }
 
                                     if (!isset($structure[$kid]['subs'][$sid]['aspeks'][$aid])) {
                                         $structure[$kid]['subs'][$sid]['aspeks'][$aid] = [
@@ -185,7 +188,11 @@
                                             'answers' => []
                                         ];
                                     }
-                                    $structure[$kid]['subs'][$sid]['aspeks'][$aid]['answers'][$uid] = $row['jawaban2'];
+
+                                    // Proteksi yang sama untuk data aspek/kriteria
+                                    if (!isset($structure[$kid]['subs'][$sid]['aspeks'][$aid]['answers'][$uid]) || (isset($row['jawaban2']) && $row['jawaban2'] !== '' && $row['jawaban2'] !== null)) {
+                                        $structure[$kid]['subs'][$sid]['aspeks'][$aid]['answers'][$uid] = $row['jawaban2'];
+                                    }
                                 }
                             }
 
@@ -215,12 +222,12 @@
                                     $bobot_sub = isset($sub['bobot']) ? floatval($sub['bobot']) : 0;
                                     foreach ($units as $uid => $nm) {
                                         $current_score = isset($sub['scores'][$uid]) ? floatval($sub['scores'][$uid]) : 0;
-                                        
+
                                         // Auto-calculate jika score masih 0 dan kriteria tersedia
                                         if ($current_score == 0 && isset($sub['aspeks']) && count($sub['aspeks']) > 0) {
                                             $sum_kriteria = 0;
                                             $count_kriteria = 0;
-                                            
+
                                             foreach ($sub['aspeks'] as $asp) {
                                                 // Pastikan jawaban2 sudah diisi Evaluator
                                                 if (isset($asp['answers'][$uid]) && $asp['answers'][$uid] !== '') {
@@ -231,27 +238,35 @@
                                                     }
                                                 }
                                             }
-                                            
+
                                             // Jika minimal ada 1 kriteria yang diisi, lakukan perhitungan
                                             if ($count_kriteria > 0) {
                                                 $avg = $sum_kriteria / $count_kriteria;
                                                 $persentase = 0;
-                                                
+
                                                 // Pemetaan Rata-rata Kriteria -> Persentase Predikat SAKIP
-                                                if ($avg == 100) $persentase = 1.0;
-                                                elseif ($avg >= 90) $persentase = 0.9;
-                                                elseif ($avg >= 80) $persentase = 0.8;
-                                                elseif ($avg >= 70) $persentase = 0.7;
-                                                elseif ($avg >= 60) $persentase = 0.6;
-                                                elseif ($avg >= 50) $persentase = 0.5;
-                                                elseif ($avg >= 30) $persentase = 0.3;
-                                                else $persentase = 0;
-                                                
+                                                if ($avg == 100)
+                                                    $persentase = 1.0;
+                                                elseif ($avg >= 90)
+                                                    $persentase = 0.9;
+                                                elseif ($avg >= 80)
+                                                    $persentase = 0.8;
+                                                elseif ($avg >= 70)
+                                                    $persentase = 0.7;
+                                                elseif ($avg >= 60)
+                                                    $persentase = 0.6;
+                                                elseif ($avg >= 50)
+                                                    $persentase = 0.5;
+                                                elseif ($avg >= 30)
+                                                    $persentase = 0.3;
+                                                else
+                                                    $persentase = 0;
+
                                                 // Timpa nilai 0 dengan nilai terhitung otomatis
                                                 $sub['scores'][$uid] = $persentase * $bobot_sub;
                                             }
                                         }
-                                        
+
                                         // Akumulasikan nilai Subkomponen (baik manual maupun otomatis) ke Komponen atasnya
                                         $comp['scores'][$uid] += isset($sub['scores'][$uid]) ? $sub['scores'][$uid] : 0;
                                     }
@@ -259,7 +274,7 @@
                             }
                             unset($comp); // Break reference
                             unset($sub);  // Break reference
-
+                            
                             // Setelah seluruh komponen selesai, hitung ulang Total Unit & Predikat Akhir
                             foreach ($units as $uid => $nm) {
                                 $total_unit = 0;
@@ -267,17 +282,24 @@
                                     $total_unit += isset($comp['scores'][$uid]) ? $comp['scores'][$uid] : 0;
                                 }
                                 $unit_totals[$uid] = $total_unit;
-                                
+
                                 // Kalkulasi Ulang Predikat SAKIP
                                 $predikat = 'E';
-                                if ($total_unit > 90) $predikat = "AA";
-                                elseif ($total_unit > 80) $predikat = "A";
-                                elseif ($total_unit > 70) $predikat = "BB";
-                                elseif ($total_unit > 60) $predikat = "B";
-                                elseif ($total_unit > 50) $predikat = "CC";
-                                elseif ($total_unit > 30) $predikat = "C";
-                                elseif ($total_unit > 0) $predikat = "D";
-                                
+                                if ($total_unit > 90)
+                                    $predikat = "AA";
+                                elseif ($total_unit > 80)
+                                    $predikat = "A";
+                                elseif ($total_unit > 70)
+                                    $predikat = "BB";
+                                elseif ($total_unit > 60)
+                                    $predikat = "B";
+                                elseif ($total_unit > 50)
+                                    $predikat = "CC";
+                                elseif ($total_unit > 30)
+                                    $predikat = "C";
+                                elseif ($total_unit > 0)
+                                    $predikat = "D";
+
                                 $unit_predicates[$uid] = $predikat;
                             }
                             ?>

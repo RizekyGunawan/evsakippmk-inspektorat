@@ -164,7 +164,21 @@ class Ev extends MY_Controller
 		$tahun = $this->session->userdata('tahun');
 
 		// Ambil data rekapitulasi dari model
-		$data['rekap_units'] = $this->m_ev->get_rekap_all_units($tahun);
+		// Ambil data rekapitulasi dari model
+		$rekap_units_raw = $this->m_ev->get_rekap_all_units($tahun);
+
+		// Filter unit kerja yang disembunyikan
+		$hidden_units = ['deputi 6', 'set. djsn', 'simulasi'];
+		$data['rekap_units'] = array_filter($rekap_units_raw, function ($u) use ($hidden_units) {
+			$nm = strtolower(trim($u['nm_unit']));
+			foreach ($hidden_units as $h) {
+				if (strpos($nm, $h) !== false) {
+					return false; // Hide this unit
+				}
+			}
+			return true; // Keep this unit
+		});
+
 		$data['rekap_detail'] = $this->m_ev->get_rekap_detail_all_units($tahun);
 
 		// Load view dengan template
@@ -197,7 +211,20 @@ class Ev extends MY_Controller
 
 		$this->load->model('m_ev');
 		$tahun = (int) $this->session->userdata('tahun');
-		$rekap_units = $this->m_ev->get_rekap_all_units($tahun);
+		$rekap_units_raw = $this->m_ev->get_rekap_all_units($tahun);
+
+		// Filter unit kerja yang disembunyikan
+		$hidden_units = ['deputi 6', 'set. djsn', 'simulasi'];
+		$rekap_units = array_filter($rekap_units_raw, function ($u) use ($hidden_units) {
+			$nm = strtolower(trim($u['nm_unit']));
+			foreach ($hidden_units as $h) {
+				if (strpos($nm, $h) !== false) {
+					return false; // Hide this unit
+				}
+			}
+			return true; // Keep this unit
+		});
+
 		$rekap_detail = $this->m_ev->get_rekap_detail_all_units($tahun);
 
 		// ----------------------------------------------------------------
@@ -257,7 +284,10 @@ class Ev extends MY_Controller
 						'scores' => [],
 					];
 				}
-				$structure[$kid]['subs'][$sid]['scores'][$uid] = $row['nilai_subkomp'];
+				// Cegah overwrite dari duplicate rows yang bernilai kosong/0 jika nilai sebelumnya sudah terisi (valid)
+				if (!isset($structure[$kid]['subs'][$sid]['scores'][$uid]) || (isset($row['nilai_subkomp']) && $row['nilai_subkomp'] !== '' && $row['nilai_subkomp'] !== null && floatval($row['nilai_subkomp']) > 0)) {
+					$structure[$kid]['subs'][$sid]['scores'][$uid] = $row['nilai_subkomp'];
+				}
 
 				if (!isset($structure[$kid]['subs'][$sid]['aspeks'][$aid])) {
 					$structure[$kid]['subs'][$sid]['aspeks'][$aid] = [
@@ -265,7 +295,11 @@ class Ev extends MY_Controller
 						'answers' => [],
 					];
 				}
-				$structure[$kid]['subs'][$sid]['aspeks'][$aid]['answers'][$uid] = $row['jawaban2'];
+
+				// Proteksi yang sama untuk data aspek/kriteria
+				if (!isset($structure[$kid]['subs'][$sid]['aspeks'][$aid]['answers'][$uid]) || (isset($row['jawaban2']) && $row['jawaban2'] !== '' && $row['jawaban2'] !== null)) {
+					$structure[$kid]['subs'][$sid]['aspeks'][$aid]['answers'][$uid] = $row['jawaban2'];
+				}
 			}
 		}
 
