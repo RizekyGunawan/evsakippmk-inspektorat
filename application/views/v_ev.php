@@ -1035,9 +1035,9 @@
                 <input readonly type="text" name="jawabanantara" id="jawabanantara" class="form-control">
               </div>
 
-              <div class="form-group col-md-4">
-                <label>Jawaban Evaluator</label>
-                <select id="jawaban0ev" name="jawaban0ev" class="form-control" <?php if ($can_edit_ev): ?> <?php else: ?> readonly disabled <?php endif; ?>>
+              <div class="form-group col-md-4" style="display:none;">
+                <label>Jawaban Evaluator Otomatis</label>
+                <select id="jawaban0ev" name="jawaban0ev" class="form-control" readonly disabled>
                   <option value="" hidden>Pilih Jawaban</option>
                   <option value="100">AA</option>
                   <option value="90">A</option>
@@ -1048,6 +1048,11 @@
                   <option value="30">D</option>
                   <option value="0">E</option>
                 </select>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label>Jawaban Evaluator</label>
+                <input readonly type="text" id="jawaban0ev_display" class="form-control">
               </div>
 
 
@@ -1765,6 +1770,8 @@
             // Menampilkan Jawaban Akhir Unit (dihitung dinamis dari indikator unit)
             $('#jawaban0').val(response.jawabanantara_unit || '');
             $('#jawaban0ev').val(response.jawaban0ev);
+            var displayVal = response.jawaban0ev == '100' ? 'AA' : (response.jawaban0ev == '90' ? 'A' : (response.jawaban0ev == '80' ? 'BB' : (response.jawaban0ev == '70' ? 'B' : (response.jawaban0ev == '60' ? 'CC' : (response.jawaban0ev == '50' ? 'C' : (response.jawaban0ev == '30' ? 'D' : (response.jawaban0ev == '0' ? 'E' : '')))))));
+            $('#jawaban0ev_display').val(displayVal);
             $('#uraian_jawaban0').val(response.uraian_jawaban0);
             $('#catatan_ev0').val(response.catatan_ev0);
             // Default Perlu Konfirmasi = Ya (1) jika jawaban evaluasi belum pernah diisi
@@ -1853,12 +1860,7 @@
 
       $('#formsub').validate({
         rules: {
-          jawaban0ev: {
-            required: true,
-            digits: true,
-            allowedValue: [0, 30, 50, 60, 70, 80, 90, 100],
-            noLeadingZero: true
-          }
+          
         },
         messages: {
           jawaban0ev: {
@@ -1888,62 +1890,7 @@
   </script>
 
 
-  <script>
-    // Menangani perubahan pada jawaban antara
-    $(document).ready(function () {
-      $('#EditDataSub').on('shown.bs.modal', function () {
-        $('#jawabanantara').on('change', function () {
-          var jawabanantara = $(this).val();
-          var jawaban0evDropdown = $('#jawaban0ev');
-          var selectedJawaban0ev = $('#jawaban0ev').val();
 
-          // Menghapus semua opsi jawaban akhir
-          jawaban0evDropdown.empty();
-
-          // Menambahkan semua opsi jawaban akhir
-          var options = {
-            '80': 'BB',
-            '90': 'A',
-            '100': 'AA',
-            '70': 'B',
-            '60': 'CC',
-            '50': 'C',
-            '30': 'D',
-            '0': 'E'
-          };
-
-          for (var value in options) {
-            var text = options[value];
-            jawaban0evDropdown.append($('<option>', { value: value, text: text }));
-          }
-
-          // Menambahkan opsi jawaban akhir yang sesuai berdasarkan jawaban antara
-          if (jawabanantara === 'AA') {
-            jawaban0evDropdown.find('option[value!="100"]').attr('hidden', true);
-          } else if (jawabanantara === 'A') {
-            jawaban0evDropdown.find('option[value!="90"][value!="100"]').attr('hidden', true);
-          } else if (jawabanantara === 'BB') {
-            jawaban0evDropdown.find('option[value!="80"][value!="90"][value!="100"]').attr('hidden', true);
-          } else if (jawabanantara === 'B') {
-            jawaban0evDropdown.find('option[value!="70"]').attr('hidden', true);
-          } else if (jawabanantara === 'CC') {
-            jawaban0evDropdown.find('option[value!="60"]').attr('hidden', true);
-          } else if (jawabanantara === 'C') {
-            jawaban0evDropdown.find('option[value!="50"]').attr('hidden', true);
-          } else if (jawabanantara === 'D') {
-            jawaban0evDropdown.find('option[value!="30"]').attr('hidden', true);
-          } else if (jawabanantara === 'E') {
-            jawaban0evDropdown.find('option[value!="0"]').attr('hidden', true);
-          }
-
-          // Menetapkan nilai jawaban akhir pertama sebagai nilai default
-          jawaban0evDropdown.val(selectedJawaban0ev);
-        });
-        // Memanggil perubahan acara saat halaman dimuat
-        $('#jawabanantara').trigger('change');
-      });
-    });
-  </script>
 
 
   <script>

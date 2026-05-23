@@ -753,6 +753,9 @@ class Ev extends MY_Controller
 		$where = array('id_ev' => $id_ev);
 
 		$this->m_ev->update_data($where, $data, 'ta_ev');
+
+		// Sinkronisasi otomatis nilai sub-komponen (jawaban0ev)
+		$this->m_ev->sync_jawaban0ev($id_ev);
 	}
 
 
@@ -766,7 +769,6 @@ class Ev extends MY_Controller
 		}
 
 		$id_ev0 = $this->input->post('id_ev0');
-		$jawaban0ev = $this->input->post('jawaban0ev');
 		$catatan_ev0 = $this->input->post('catatan_ev0');
 		$rekomendasi0 = $this->input->post('rekomendasi0');
 		$perbaikan0 = $this->input->post('perbaikan0');
@@ -777,7 +779,6 @@ class Ev extends MY_Controller
 		$old0 = $this->m_ev->get_single_ev0($id_ev0);
 		if ($old0) {
 			$fields_to_track0 = [
-				'jawaban0ev' => $jawaban0ev,
 				'catatan_ev0' => $catatan_ev0,
 				'rekomendasi0' => $rekomendasi0,
 				'perbaikan0' => $perbaikan0,
@@ -800,7 +801,6 @@ class Ev extends MY_Controller
 
 		$data = array(
 			'id_ev0' => $id_ev0,
-			'jawaban0ev' => $jawaban0ev,
 			'catatan_ev0' => $catatan_ev0,
 			'rekomendasi0' => $rekomendasi0,
 			'perbaikan0' => $perbaikan0,
@@ -1668,6 +1668,16 @@ class Ev extends MY_Controller
 	}
 
 
-}
+	public function sync_all() {
+		$query = $this->db->query("SELECT id_ev FROM ta_ev");
+		$rows = $query->result_array();
+		$count = 0;
+		foreach ($rows as $row) {
+			$this->m_ev->sync_jawaban0ev($row['id_ev']);
+			$count++;
+		}
+		echo "Berhasil sinkronisasi $count data kriteria.";
+	}
 
+}
 ?>

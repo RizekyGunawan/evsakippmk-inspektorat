@@ -378,31 +378,56 @@ class M_ev extends CI_Model
 			WHEN b.jawaban0ev='30' THEN ('0.3'*c.bobot2)
 			WHEN b.jawaban0ev='0' THEN ('0'*c.bobot2)
 			ELSE ''
-			END))/100)*100) as sumnilaikpersen,
-			sum((CASE 
-			WHEN d.jawaban0='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END)) as sumnilaiunit, 
-			((sum((CASE 
-			WHEN d.jawaban0='100' THEN ('1'*c.bobot2)
-			WHEN d.jawaban0='90' THEN ('0.9'*c.bobot2)
-			WHEN d.jawaban0='80' THEN ('0.8'*c.bobot2)
-			WHEN d.jawaban0='70' THEN ('0.7'*c.bobot2)
-			WHEN d.jawaban0='60' THEN ('0.6'*c.bobot2)
-			WHEN d.jawaban0='50' THEN ('0.5'*c.bobot2)
-			WHEN d.jawaban0='30' THEN ('0.3'*c.bobot2)
-			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
-			ELSE ''
-			END))/100)*100) as sumnilaiunitpersen 
-			 from ref_komponen a inner join ta_ev0 b on a.id_komponen=b.id_komponen inner join ref_subkomponen c on b.id_subkomponen=c.id_subkomponen left join ta_pm0 d on b.id_pm0=d.id_pm0 where b.tahun = '$tahun' and b.id_unit = '$id_unit' ");
-		return $query->result_array();
+			END))/100)*100) as sumnilaikpersen,
+
+			sum((CASE 
+
+			WHEN d.jawaban0='100' THEN ('1'*c.bobot2)
+
+			WHEN d.jawaban0='90' THEN ('0.9'*c.bobot2)
+
+			WHEN d.jawaban0='80' THEN ('0.8'*c.bobot2)
+
+			WHEN d.jawaban0='70' THEN ('0.7'*c.bobot2)
+
+			WHEN d.jawaban0='60' THEN ('0.6'*c.bobot2)
+
+			WHEN d.jawaban0='50' THEN ('0.5'*c.bobot2)
+
+			WHEN d.jawaban0='30' THEN ('0.3'*c.bobot2)
+
+			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
+
+			ELSE ''
+
+			END)) as sumnilaiunit, 
+
+			((sum((CASE 
+
+			WHEN d.jawaban0='100' THEN ('1'*c.bobot2)
+
+			WHEN d.jawaban0='90' THEN ('0.9'*c.bobot2)
+
+			WHEN d.jawaban0='80' THEN ('0.8'*c.bobot2)
+
+			WHEN d.jawaban0='70' THEN ('0.7'*c.bobot2)
+
+			WHEN d.jawaban0='60' THEN ('0.6'*c.bobot2)
+
+			WHEN d.jawaban0='50' THEN ('0.5'*c.bobot2)
+
+			WHEN d.jawaban0='30' THEN ('0.3'*c.bobot2)
+
+			WHEN d.jawaban0='0' THEN ('0'*c.bobot2)
+
+			ELSE ''
+
+			END))/100)*100) as sumnilaiunitpersen 
+
+			 from ref_komponen a inner join ta_ev0 b on a.id_komponen=b.id_komponen inner join ref_subkomponen c on b.id_subkomponen=c.id_subkomponen left join ta_pm0 d on b.id_pm0=d.id_pm0 where b.tahun = '$tahun' and b.id_unit = '$id_unit' ");
+
+		return $query->result_array();
+
 	}
 
 
@@ -818,6 +843,38 @@ class M_ev extends CI_Model
 			 LIMIT 100"
 		);
 		return $query->result_array();
+	}
+
+	public function sync_jawaban0ev($id_ev) {
+		$query = $this->db->query("SELECT id_ev0 FROM ta_ev WHERE id_ev = ?", array($id_ev));
+		$row = $query->row();
+		if (!$row) return;
+		$id_ev0 = $row->id_ev0;
+
+		$query_avg = $this->db->query("
+			SELECT 
+			(CASE 
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) = 100 THEN '100'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 90 THEN '90'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 80 THEN '80'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 70 THEN '70'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 60 THEN '60'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >= 50 THEN '50'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) >  0  THEN '30'
+			WHEN ((avg(c.bobot2*a.jawaban2)/c.bobot2)) =  0  THEN '0'
+			ELSE ''
+			END) as new_jawaban0ev
+			FROM ta_ev a
+			INNER JOIN ref_subkomponen c ON a.id_subkomponen = c.id_subkomponen
+			WHERE a.id_ev0 = ?
+		", array($id_ev0));
+
+		$row_avg = $query_avg->row();
+		if ($row_avg && $row_avg->new_jawaban0ev !== '') {
+			$new_jawaban0ev = $row_avg->new_jawaban0ev;
+			$this->db->where('id_ev0', $id_ev0);
+			$this->db->update('ta_ev0', array('jawaban0ev' => $new_jawaban0ev));
+		}
 	}
 
 }
