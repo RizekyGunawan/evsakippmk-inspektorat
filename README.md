@@ -1,6 +1,6 @@
 # EVSAKIP — Government Performance Accountability Evaluation System
 
-A web-based platform for evaluating organizational performance accountability (SAKIP) across multiple work units. Features self-assessment, inspectorate evaluation, cross-unit recapitulation, recommendations tracking, and Excel reporting — all with role-based access control.
+> A web-based platform for evaluating organizational performance accountability (SAKIP) across multiple work units. Features self-assessment, inspectorate evaluation, cross-unit recapitulation, recommendations tracking, and Excel reporting — all with role-based access control.
 ---
 
 ## Features
@@ -19,10 +19,10 @@ A web-based platform for evaluating organizational performance accountability (S
 
 ## Roles
 
-Admin — User management, data reset, full system configuration
-Supervisor — (Team Lead, Technical Controller, Quality Controller) | View & edit evaluations across all units, view change history 
-Evaluation Team — Assess assigned work units, score indicators
-Work Unit — Self-assessment input, document upload, follow-up responses
+- Admin — User management, data reset, full system configuration
+- Supervisor — (Team Lead, Technical Controller, Quality Controller) | View & edit evaluations across all units, view change history 
+- Evaluation Team — Assess assigned work units, score indicators
+W- ork Unit — Self-assessment input, document upload, follow-up responses
 ---
 
 ## Project Structure
