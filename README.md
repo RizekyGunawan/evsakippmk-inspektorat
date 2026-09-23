@@ -1,39 +1,33 @@
-# EVSAKIP — Government Performance Accountability Evaluation System
+# 📊 EVSAKIP — Government Performance Accountability Evaluation System
 
-> A web-based platform for evaluating organizational performance accountability (SAKIP) across multiple work units. Features self-assessment, inspectorate evaluation, cross-unit recapitulation, recommendations tracking, and Excel reporting — all with role-based access control.
----
+> A comprehensive web-based platform for evaluating organizational performance accountability across multiple government work units.
 
-## Features
+## 🎯 Project Summary
+EVSAKIP is a centralized evaluation system built for the Inspectorate to assess the Government Agency Performance Accountability System (SAKIP). It streamlines the entire evaluation lifecycle—from unit-level self-assessments to inspectorate evaluations and final cross-unit recapitulations.
 
-- Self-Assessment (PM) — Work units fill in their own performance scores with supporting evidence
-- Inspectorate Evaluation (EV) — Evaluators independently assess each work unit's SAKIP implementation
-- Cross-Unit Recapitulation — Aggregated comparison view of all units with predicate grading (AA to E)
-- Recommendation & Follow-Up — Track inspectorate recommendations and unit-level follow-up actions
-- Document Management — Upload, manage, and track assessment documents per work unit
-- In-App Notifications — Real-time notification system with threaded comments per indicator
-- Excel Export — Export self-assessment, evaluation, and recapitulation data to formatted `.xlsx` files
-- Dashboard Analytics — Visual overview of assessment progress, scores, and completion status
-- Multi-Year Support — Switch between assessment periods without losing historical data
-- 6-Tier Role System — Granular permissions from Admin to Unit Staff
----
+- **Status:** Active / Completed
+- **Tech Stack:** CodeIgniter 3, PHP, MySQL, JavaScript
+- **UI Framework:** AdminLTE, HTML/CSS
+- **Domain:** e-Government / Performance Management
 
-## Roles
+## ✨ Key Features
+*   **Self-Assessment (PM):** Allows individual work units to input performance scores and attach supporting evidence documents.
+*   **Inspectorate Evaluation (EV):** Independent assessment module for evaluators to review, score, and provide feedback on work unit implementations.
+*   **Cross-Unit Recapitulation:** Aggregated comparison dashboard generating automated predicate grading (AA to E).
+*   **Recommendation Tracking:** End-to-end tracking of inspectorate recommendations and unit-level follow-up actions.
+*   **Real-time Collaboration:** In-app notification system featuring threaded comments per performance indicator.
+*   **Data Export & Reporting:** Automated Excel (.xlsx) report generation for assessments, evaluations, and recapitulation data.
 
-- Admin — User management, data reset, full system configuration
-- Supervisor — (Team Lead, Technical Controller, Quality Controller) | View & edit evaluations across all units, view change history 
-- Evaluation Team — Assess assigned work units, score indicators
-W- ork Unit — Self-assessment input, document upload, follow-up responses
----
+## 🔐 Role-Based Access Control (RBAC)
+The system implements a granular, 6-tier permission architecture to maintain data integrity and strict workflow hierarchies:
+1.  **Admin:** Full system configuration, user management, and data resets.
+2.  **Supervisor:** (Team Lead / Technical Controller) Oversees evaluations across all units with access to historical change logs.
+3.  **Evaluation Team:** Assesses assigned work units and inputs official scores.
+4.  **Work Unit (User):** Manages self-assessments, uploads evidence, and responds to follow-up recommendations.
 
-## Project Structure
-
-```
-application/
-├── controllers/      # Auth, Dashboard, PM, EV, Dokumen, Rekomendasi, TL, Users
-├── models/           # Data access layer (PM, EV, Dashboard, Dokumen, etc.)
-├── views/            # Server-rendered pages with AdminLTE layout
-├── core/             # MY_Controller — centralized auth guard & role constants
-├── config/           # Routes, database, autoload configuration
-├── libraries/        # Custom libraries
-├── helpers/          # Custom helper functions
-└── templates/        # Shared layout (header, sidebar, footer)
+## 🏗️ Architecture Overview (MVC)
+The application follows a strict Model-View-Controller pattern using CodeIgniter 3:
+*   `Controllers/`: Handles business logic and routing (Auth, Dashboard, PM, EV, Rekomendasi).
+*   `Models/`: Centralized data access layer for complex relational queries.
+*   `Views/`: Server-rendered pages utilizing the AdminLTE template for a responsive dashboard experience.
+*   `Core/`: Extended `MY_Controller` serving as a centralized authentication guard and role constant manager.
